@@ -1,0 +1,11 @@
+clusters = prod clone test demo
+
+prod = claires-prod.pollenware.com cn-prod.pollenware.com costco-prod.pollenware.com savemart-prod.pollenware.com toysrus-prod.pollenware.com walgreens-prod.pollenware.com wellpoint-prod.pollenware.com westernunion-prod.pollenware.com awg.pollenware.com hy-vee.pollenware.com bnsf.pollenware.com thebrick.pollenware.com sysco.pollenware.com cerner.pollenware.com fastenal.pollenware.com up.pollenware.com
+
+clone = claires-clone.pollenware.com cn-clone.pollenware.com costco-clone.pollenware.com ironmountain-clone.pollenware.com savemart-clone.pollenware.com toysrus-clone.pollenware.com walgreens-clone.pollenware.com wellpoint-clone.pollenware.com westernunion-clone.pollenware.com awg-clone.pollenware.com hy-vee-clone.pollenware.com bnsf-clone.pollenware.com thebrick-clone.pollenware.com sysco-clone.pollenware.com
+
+test = canadiannational-test.pollenware.com costco-test.pollenware.com toysrus-test.pollenware.com walgreens-test.pollenware.com
+
+demo = c2fo.pollenware.com quickpay.pollenware.com
+
+screen = 1
