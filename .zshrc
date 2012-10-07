@@ -6,7 +6,9 @@ ZSH=$HOME/.oh-my-zsh
 # Optionally, if you set this to "random", it'll load a random theme each
 # time that oh-my-zsh is loaded.
 #ZSH_THEME="dpree"
-ZSH_THEME="robbyrussell"
+#ZSH_THEME="robbyrussell"
+#ZSH_THEME="cloud"
+ZSH_THEME="jgchristopher"
 #ZSH_THEME="mortalscumbag"
 
 # Example aliases
@@ -49,4 +51,8 @@ source $ZSH/oh-my-zsh.sh
 NODE_PATH=/usr/local/lib/node_modules
 
 # Customize to your needs...
-export PATH=$NODE_PATH:/usr/local/bin:/usr/local/Cellar/ruby/1.9.3-p194/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/X11/bin
+export PATH=$NODE_PATH:/Applications/Postgres.app/Contents/MacOS/bin:/usr/local/bin:/usr/local/Cellar/ruby/1.9.3-p194/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/X11/bin
+
+
+#some choice node modules
+export PATH=$NODE_PATH/patio/bin:$PATH
