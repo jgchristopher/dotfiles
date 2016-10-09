@@ -70,7 +70,7 @@ module.exports = {
     copyOnSelect: false,
 
     // add this one! 
-    transparentBgAlpha: 0.7
+    transparentBgAlpha: 0.8
 
     // URL to custom bell
     // bellSoundURL: 'http://example.com/bell.mp3',
