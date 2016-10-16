@@ -1,0 +1,18 @@
+{
+  "name": "hyper-electron-highlighter-jc",
+  "version": "0.0.1",
+  "description": "Hyper theme based on Atom Electron Highlighter syntax",
+  "main": "index.js",
+  "keywords": [
+    "hyper",
+    "hyper-theme",
+    "colors",
+    "atom",
+    "electron-highlighter"
+  ],
+  "author": {
+    "name": "John Christopher"
+  },
+  "license": "MIT",
+  "directories": {}  
+}
