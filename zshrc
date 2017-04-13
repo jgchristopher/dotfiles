@@ -1,3 +1,4 @@
+export TERM="xterm-256color"
 # Path to your oh-my-zsh installation.
 export ZSH=$HOME/.oh-my-zsh
 
@@ -18,10 +19,11 @@ export LC_ALL="en_US.UTF-8"
 # time that oh-my-zsh is loaded.
 #ZSH_THEME="jc"
 ZSH_THEME="powerlevel9k/powerlevel9k"
-POWERLEVEL9K_LEFT_PROMPT_ELEMENTS=(context dir  vcs)
-POWERLEVEL9K_RIGHT_PROMPT_ELEMENTS=(node_version time load)
-POWERLEVEL9K_PROMPT_ON_NEWLINE=true
-POWERLEVEL9K_RPROMPT_ON_NEWLINE=true
+POWERLEVEL9K_LEFT_PROMPT_ELEMENTS=(context dir vcs)
+POWERLEVEL9K_DISABLE_RPROMPT=true
+#POWERLEVEL9K_RIGHT_PROMPT_ELEMENTS=(node_version load)
+#POWERLEVEL9K_PROMPT_ON_NEWLINE=true
+#POWERLEVEL9K_RPROMPT_ON_NEWLINE=true
 POWERLEVEL9K_MODE='awesome-fontconfig'
 
 
