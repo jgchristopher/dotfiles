@@ -36,7 +36,7 @@ export UPDATE_ZSH_DAYS=7
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(git mix)
+plugins=(git mix-fast asdf)
 
 source $ZSH/oh-my-zsh.sh
 
@@ -54,8 +54,13 @@ export PATH="/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:$PATH"
 alias zshconfig="code ~/.zshrc"
 alias ohmyzsh="code ~/.oh-my-zsh"
 alias localconfig="code ~/.local-path-vars"
+alias bunchconfig="code ~/Documents/Bunches"
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ -f ~/.p10k.zsh ]] && source ~/.p10k.zsh
 
 source ~/.local-path-vars
+
+export ERL_AFLAGS="-kernel shell_history enabled"
+export EDITOR=/usr/local/bin/code
+
