@@ -1,0 +1,13 @@
+name: emails
+parent: default
+
+matches:
+  # Emails
+  - trigger: ":jgc"
+    replace: "jgchristopher@gmail.com"
+  - trigger: ":j.c"
+    replace: "john@jdotc.xyz"
+  - trigger: ":j2fo"
+    replace: "john.christopher@c2fo.com"
+  - trigger: ":prtn"
+    replace: "https://mail.protonmail.com/inbox"

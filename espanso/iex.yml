@@ -1,0 +1,9 @@
+name: iex
+parent: default
+
+matches:
+  # Elixir commands
+  - trigger: ":psiex"
+    replace: "iex -S mix phx.server"
+  - trigger: ":iexs"
+    replace: "iex -S mix"

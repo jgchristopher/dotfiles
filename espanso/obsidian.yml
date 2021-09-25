@@ -1,0 +1,16 @@
+name: obsidian
+parent: default
+
+matches:
+  # Obsidian commands
+  - trigger: ":date"
+    replace: "&#128197; {{mydate}} {{mytime}} &#8611;"
+    vars:
+      - name: mydate
+        type: date
+        params:
+          format: "%Y-%m-%d"
+      - name: mytime
+        type: date
+        params:
+          format: "%H:%M"

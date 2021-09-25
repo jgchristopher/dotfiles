@@ -1,0 +1,6 @@
+name: c2fo
+parent: default
+
+matches:
+  - trigger: ":confluence"
+    replace: "https://honeycomb.jira.com/wiki/spaces/ENG/overview"
