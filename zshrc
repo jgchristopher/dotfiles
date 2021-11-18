@@ -67,4 +67,5 @@ export PATH="/opt/homebrew/bin:$PATH"
 
 . /opt/homebrew/opt/asdf/asdf.sh
 . /opt/homebrew/opt/asdf/etc/bash_completion.d/asdf.bash
+
 eval "$(starship init zsh)"
