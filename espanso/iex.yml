@@ -3,7 +3,7 @@ parent: default
 
 matches:
   # Elixir commands
-  - trigger: ":piexs"
+  - trigger: ":psiex"
     replace: "iex -S mix phx.server"
   - trigger: ":iexs"
     replace: "iex -S mix"

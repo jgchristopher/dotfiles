@@ -64,3 +64,7 @@ source ~/.local-path-vars
 export ERL_AFLAGS="-kernel shell_history enabled"
 export EDITOR=/usr/local/bin/code
 
+
+. /opt/homebrew/opt/asdf/asdf.sh
+. /opt/homebrew/opt/asdf/etc/bash_completion.d/asdf.bash
+export PATH="/opt/homebrew/bin:$PATH"
