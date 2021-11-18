@@ -72,24 +72,11 @@ require'nvim-tree'.setup {
 
 
 
-
-
-
--- Example config in lua
--- g.nord_contrast = true
--- g.nord_borders = false
--- g.nord_disable_background = false
--- g.nord_italic = false
-
--- Load the colorscheme
--- require('nord').set()
-
--- cmd 'colorscheme nord'
-
 ----------------------------- OPTIONS -------------------------------------------
 
-vim.opt.number = true
 vim.opt.list = true
+vim.opt.number = true
+vim.opt.relativenumber = true
 vim.opt.termguicolors = true
 vim.opt.autoindent = true
 

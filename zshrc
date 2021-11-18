@@ -24,7 +24,7 @@ export LC_ALL="en_US.UTF-8"
 # Look in ~/.oh-my-zsh/themes/
 # Optionally, if you set this to "random", it'll load a random theme each
 # time that oh-my-zsh is loaded.
-ZSH_THEME=powerlevel10k/powerlevel10k
+#ZSH_THEME=powerlevel10k/powerlevel10k
 
 
 zstyle ':completion:*' use-cache yes
@@ -57,14 +57,14 @@ alias localconfig="code ~/.local-path-vars"
 alias bunchconfig="code ~/Documents/Bunches"
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
-[[ -f ~/.p10k.zsh ]] && source ~/.p10k.zsh
+#[[ -f ~/.p10k.zsh ]] && source ~/.p10k.zsh
 
 source ~/.local-path-vars
 
 export ERL_AFLAGS="-kernel shell_history enabled"
 export EDITOR=/usr/local/bin/code
-
+export PATH="/opt/homebrew/bin:$PATH"
 
 . /opt/homebrew/opt/asdf/asdf.sh
 . /opt/homebrew/opt/asdf/etc/bash_completion.d/asdf.bash
-export PATH="/opt/homebrew/bin:$PATH"
+eval "$(starship init zsh)"
