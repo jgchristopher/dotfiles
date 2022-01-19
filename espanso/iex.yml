@@ -1,5 +1,5 @@
 name: iex
-parent: default
+parent: base 
 
 matches:
   # Elixir commands

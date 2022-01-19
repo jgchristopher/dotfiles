@@ -1,5 +1,5 @@
 name: c2fo
-parent: default
+parent: base 
 
 matches:
   - trigger: ":confluence"
