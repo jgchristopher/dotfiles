@@ -51,15 +51,17 @@ export PATH="/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:$PATH"
 # For a full list of active aliases, run `alias`.
 #
 # Example aliases
-alias zshconfig="code ~/.zshrc"
-alias ohmyzsh="code ~/.oh-my-zsh"
-alias localconfig="code ~/.local-path-vars"
-alias bunchconfig="code ~/Documents/Bunches"
+alias zshconfig="nvim ~/.zshrc"
+alias ohmyzsh="nvim ~/.oh-my-zsh"
+alias localconfig="nvim ~/.local-path-vars"
+alias bunchconfig="nvim ~/Documents/Bunches"
 
 export ERL_AFLAGS="-kernel shell_history enabled"
-export EDITOR=/usr/local/bin/code
+export EDITOR=nvim
 export PATH="/opt/homebrew/bin:/opt/homebrew/sbin:$PATH"
 
+# Add this to local and update to match current version of neovim
+# export VIMRUNTIME="/opt/homebrew/Cellar/neovim/HEAD-e07a4b9/share/nvim/runtime"
 
 #eval "$(starship init zsh)"
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
