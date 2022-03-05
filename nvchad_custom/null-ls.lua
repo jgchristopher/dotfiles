@@ -3,7 +3,7 @@ local b = null_ls.builtins
 
 local sources = {
 
-	b.formatting.prettierd.with({ filetypes = { "heex", "html", "markdown", "css", "typescript", "typescriptreact" } }),
+	b.formatting.prettierd.with({ filetypes = { "html", "markdown", "css", "typescript", "typescriptreact" } }),
 	b.formatting.deno_fmt,
 
 	-- Lua
