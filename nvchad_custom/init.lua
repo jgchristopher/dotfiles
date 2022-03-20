@@ -1,5 +1,8 @@
 require("custom.mappings")
 
-vim.opt.foldexpr = "" -- set to "nvim_treesitter#foldexpr()" for treesitter based folding
-vim.opt.foldmethod = "indent" -- folding set to "expr" for treesitter based folding
-vim.opt.foldlevel = 99 -- I don't want folding to be default closed
+-- code folding settings
+vim.opt.foldmethod = "expr"
+vim.opt.foldexpr = "nvim_treesitter#foldexpr()"
+vim.opt.foldlevelstart = 99
+vim.opt.foldnestmax = 10 -- deepest fold is 10 levels
+vim.opt.foldlevel = 1
