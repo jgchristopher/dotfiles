@@ -74,12 +74,6 @@ M.setup_lsp = function(attach, capabilities)
       },
    }
 
-   lspconfig.emmet_ls.setup {
-      -- on_attach = on_attach,
-      capabilities = capabilities,
-      filetypes = { "eelixir", "html-eex", "heex", "html", "css", "typescriptreact", "javascriptreact" },
-   }
-
    -- lspservers with default config
    local servers = { "html", "cssls" }
 
