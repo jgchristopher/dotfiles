@@ -1,30 +1,33 @@
 local M = {}
 
-local plugin_conf = require "custom.plugins.configs"
-local userPlugins = require "custom.plugins"
+local plugin_conf = require("custom.plugins.configs")
+local userPlugins = require("custom.plugins")
 
 M.plugins = {
-   status = {
-      colorizer = true,
-   },
+	status = {
+		colorizer = true,
+	},
 
-   options = {
-      lspconfig = {
-         setup_lspconf = "custom.plugins.lspconfig",
-      },
-   },
+	options = {
+		lspconfig = {
+			setup_lspconf = "custom.plugins.lspconfig",
+		},
+		luasnip = {
+			snippet_path = { "/Users/johnchristopher/.config/nvim/lua/custom/snippets" },
+		},
+	},
 
-   default_plugin_config_replace = {
-      telescope = "custom.telescope",
-      nvim_treesitter = plugin_conf.treesitter,
-      nvim_tree = plugin_conf.nvimtree,
-   },
+	default_plugin_config_replace = {
+		telescope = "custom.telescope",
+		nvim_treesitter = plugin_conf.treesitter,
+		nvim_tree = plugin_conf.nvimtree,
+	},
 
-   install = userPlugins,
+	install = userPlugins,
 }
 
 M.ui = {
-   theme = "tokyonight",
+	theme = "tokyonight",
 }
 
 --  ~/.local/share/nvim/lsp_servers/elixir

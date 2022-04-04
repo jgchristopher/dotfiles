@@ -1,0 +1,11 @@
+{
+  "mount": {
+    "prefix": "mnt",
+    "body": [
+      "def mount(_params, _session, socket) do",
+      "  $0",
+      "end"
+    ],
+    "description": "Liveview Mount Callback"
+  }
+}
