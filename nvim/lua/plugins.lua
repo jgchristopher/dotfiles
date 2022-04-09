@@ -6,9 +6,6 @@ return require('packer').startup(function()
     --- Packer can manage itself
     use 'wbthomason/packer.nvim'
 
-    ---- Nord Color Scheme
-    use 'shaunsingh/nord.nvim'
-
     ----- TreeSitter
     use {
         'nvim-treesitter/nvim-treesitter',
@@ -44,8 +41,8 @@ return require('packer').startup(function()
       'nvim-telescope/telescope.nvim',
       requires = { {'nvim-lua/plenary.nvim'} }
     }
-    use 'EdenEast/nightfox.nvim'
-
+--    use 'EdenEast/nightfox.nvim'
+    use 'folke/tokyonight.nvim'
     use {
       'nvim-lualine/lualine.nvim',
       requires = {'kyazdani42/nvim-web-devicons', opt = true}
