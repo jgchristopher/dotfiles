@@ -1,12 +1,20 @@
-local cmd = vim.cmd
+local fn = vim.fn
+local install_path = fn.stdpath('data')..'/site/pack/packer/start/packer.nvim'
+if fn.empty(fn.glob(install_path)) > 0 then
+  packer_bootstrap = fn.system({'git', 'clone', '--depth', '1', 'https://github.com/wbthomason/packer.nvim', install_path})
+end
 
-cmd([[packadd packer.nvim]])
-
-return require("packer").startup(function(use)
+return require('packer').startup(function(use)
+  
 	--- Packer can manage itself
 	use("wbthomason/packer.nvim")
 
-	----- TreeSitter
+	use({
+		"kyazdani42/nvim-tree.lua",
+		requires = "kyazdani42/nvim-web-devicons",
+	})
+  
+  ----- TreeSitter
 	use({
 		"nvim-treesitter/nvim-treesitter",
 		run = ":TSUpdate",
@@ -78,18 +86,9 @@ return require("packer").startup(function(use)
 	})
 
 	use({
-		"kyazdani42/nvim-tree.lua",
-		requires = "kyazdani42/nvim-web-devicons",
-	})
-
-	use({
 		"akinsho/bufferline.nvim",
-		branch = "main",
-		after = "nvim-web-devicons",
-		-- config = require("user.bufferline").setup,
-		--setup = function()
-		--  require("core.mappings").bufferline()
-		--end,
+		tag = "v1.1.1",
+		requires = "nvim-web-devicons",
 	})
 
 	use({
@@ -115,4 +114,9 @@ return require("packer").startup(function(use)
 			})
 		end,
 	})
+  
+  if packer_bootstrap then
+    require('packer').sync()
+  end
 end)
+
