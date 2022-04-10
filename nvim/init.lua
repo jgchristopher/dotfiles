@@ -3,11 +3,16 @@ local cmd = vim.cmd
 local fn = vim.fn
 local g = vim.g
 local opt = vim.opt
-
-g.mapleader = ' '
+opt.clipboard = "unnamedplus"
 
 require('plugins')
---require('nightfox').load("duskfox")
+require('keymaps')
+require('lspconfigs')
+
+g.tokyonight_style = "night"
+g.tokyonight_italic_functions = true
+g.tokyonight_lualine_bold = true
+
 cmd[[colorscheme tokyonight]]
 require('lualine').setup {
   options = {
@@ -15,8 +20,6 @@ require('lualine').setup {
     theme = "tokyonight"
   }
 }
-
-
 
 -------------------------------------- NVIM Tree -----------------------------------------
 
@@ -105,9 +108,7 @@ treeSitterConfigs.setup {
 vim.api.nvim_set_keymap('n', '<Leader>ff', '<cmd>lua require(\'telescope.builtin\').find_files()<CR>', {noremap = true})
 vim.api.nvim_set_keymap('n', '<Leader>fg', '<cmd>lua require(\'telescope.builtin\').live_grep()<CR>', {noremap = true})
 vim.api.nvim_set_keymap('n', '<Leader>fb', '<cmd>lua require(\'telescope.builtin\').buffers()<CR>', {noremap = true})
--- nnoremap <leader>ff <cmd>lua require('telescope.builtin').find_files()<cr>
--- nnoremap <leader>fg <cmd>lua require('telescope.builtin').live_grep()<cr>
--- nnoremap <leader>fb <cmd>lua require('telescope.builtin').buffers()<cr>
+
 
 --------------------- LSP and Other Stuff --------------------------------------
 
@@ -195,6 +196,13 @@ lspconfig.elixirls.setup({
     }
    }
 })
+
+---------- BufferLine ------------------
+require("bufferline").setup {
+  options = {
+    offsets = { { filetype = "NvimTree", text = "", padding = 1 } }
+  }
+}
 
 --------------------------------- Buffer management ----------------------------
 function closeBuffer()
@@ -308,3 +316,5 @@ end
 
 vim.api.nvim_set_keymap('n', '<Leader>x', '<cmd>lua closeBuffer()<CR>', {noremap = true})
 vim.api.nvim_set_keymap('n', '<Leader>q', ':qa!<CR>', {noremap = true})
+vim.api.nvim_set_keymap('n', '<C-s>', ':w!<CR>', {noremap = true})
+vim.api.nvim_set_keymap('n', '<C-S>', ':wa!<CR>', {noremap = true})
