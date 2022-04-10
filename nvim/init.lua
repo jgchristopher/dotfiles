@@ -6,8 +6,9 @@ local opt = vim.opt
 opt.clipboard = "unnamedplus"
 
 require("plugins")
-require("keymaps")
-require("lspconfigs")
+require("user.keymaps")
+require("user.lspconfigs")
+require("user.bufferline")
 
 g.tokyonight_style = "night"
 g.tokyonight_italic_functions = true

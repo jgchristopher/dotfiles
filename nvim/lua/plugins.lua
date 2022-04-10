@@ -82,7 +82,16 @@ return require("packer").startup(function(use)
 		requires = "kyazdani42/nvim-web-devicons",
 	})
 
-	use({ "akinsho/bufferline.nvim", tag = "*", requires = "kyazdani42/nvim-web-devicons" })
+	use({
+		"akinsho/bufferline.nvim",
+		branch = "main",
+		after = "nvim-web-devicons",
+		-- config = require("user.bufferline").setup,
+		--setup = function()
+		--  require("core.mappings").bufferline()
+		--end,
+	})
+
 	use({
 		"max397574/better-escape.nvim",
 		config = function()
