@@ -3,11 +3,14 @@ local cmd = vim.cmd
 local fn = vim.fn
 local g = vim.g
 local opt = vim.opt
+
 opt.clipboard = "unnamedplus"
+opt.termguicolors = true
 
 require("plugins")
 require("user.keymaps")
 require("user.lspconfigs")
+require("user.bufferline")
 
 
 g.tokyonight_style = "night"
@@ -106,29 +109,7 @@ vim.api.nvim_set_keymap("n", "<Leader>fg", "<cmd>lua require('telescope.builtin'
 vim.api.nvim_set_keymap("n", "<Leader>fb", "<cmd>lua require('telescope.builtin').buffers()<CR>", { noremap = true })
 
 
----------- Bufferline -------------------
-vim.opt.termguicolors = true
-require("bufferline").setup{
-    options = {
-        offsets = { { filetype = "NvimTree", text = "", padding = 1 } },
-        buffer_close_icon = "",
-        modified_icon = "",
-        close_icon = "",
-        show_close_icon = true,
-        left_trunc_marker = "",
-        right_trunc_marker = "",
-        max_name_length = 14,
-        max_prefix_length = 13,
-        tab_size = 20,
-        show_tab_indicators = true,
-        enforce_regular_tabs = false,
-        view = "multiwindow",
-        show_buffer_close_icons = true,
-        separator_style = "thin",
-        always_show_bufferline = true,
-        diagnostics = false,
-    }
-}
+
 
 
 
