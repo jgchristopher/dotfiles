@@ -1,17 +1,16 @@
------------------------------ HELPERS -------------------------------------------
 local cmd = vim.cmd
-local fn = vim.fn
 local g = vim.g
 local opt = vim.opt
 
 opt.clipboard = "unnamedplus"
 opt.termguicolors = true
+opt.mouse = "a"
 
 require("plugins")
 require("user.keymaps")
 require("user.lspconfigs")
 require("user.bufferline")
-
+require("user.telescope")
 
 g.tokyonight_style = "night"
 g.tokyonight_italic_functions = true
@@ -108,17 +107,11 @@ vim.api.nvim_set_keymap("n", "<Leader>ff", "<cmd>lua require('telescope.builtin'
 vim.api.nvim_set_keymap("n", "<Leader>fg", "<cmd>lua require('telescope.builtin').live_grep()<CR>", { noremap = true })
 vim.api.nvim_set_keymap("n", "<Leader>fb", "<cmd>lua require('telescope.builtin').buffers()<CR>", { noremap = true })
 
-
-
-
-
-
 --------------------------------- Buffer management ----------------------------
 function CloseBuffer()
 	local opts = {
 		next = "cycle", -- how to retrieve the next buffer
 		quit = false, -- exit when last buffer is deleted
-		--TODO make this a chadrc flag/option
 	}
 
 	-- ----------------
@@ -161,26 +154,6 @@ function CloseBuffer()
 	end
 
 	if #vim.fn.getbufinfo({ buflisted = 1 }) < 2 then
-		if opts.quit then
-			-- exit when there is only one buffer left
-			if force then
-				vim.cmd("qall!")
-			else
-				vim.cmd("confirm qall")
-			end
-			return
-		end
-
-		local chad_term, _ = pcall(function()
-			return vim.api.nvim_buf_get_var(buf, "term_type")
-		end)
-
-		if chad_term then
-			-- Must be a window type
-			vim.cmd(string.format("setlocal nobl", buf))
-			vim.cmd("enew")
-			return
-		end
 		-- don't exit and create a new empty buffer
 		vim.cmd("enew")
 		vim.cmd("bp")
@@ -190,30 +163,7 @@ function CloseBuffer()
 	local windows = vim.fn.getbufinfo(buf)[1].windows
 
 	-- force deletion of terminal buffers to avoid the prompt
-	if force or vim.fn.getbufvar(buf, "&buftype") == "terminal" then
-		local chad_term, type = pcall(function()
-			return vim.api.nvim_buf_get_var(buf, "term_type")
-		end)
-
-		-- TODO this scope is error prone, make resilient
-		if chad_term then
-			if type == "wind" then
-				-- hide from bufferline
-				vim.cmd(string.format("%d bufdo setlocal nobl", buf))
-				-- switch to another buff
-				-- TODO switch to next buffer, this works too
-				vim.cmd("BufferLineCycleNext")
-			else
-				local cur_win = vim.fn.winnr()
-				-- we can close this window
-				vim.cmd(string.format("%d wincmd c", cur_win))
-				return
-			end
-		else
-			switch_buffer(windows, next_buf)
-			vim.cmd(string.format("bd! %d", buf))
-		end
-	else
+	if vim.fn.getbufvar(buf, "&buftype") == "terminal" then
 		switch_buffer(windows, next_buf)
 		vim.cmd(string.format("silent! confirm bd %d", buf))
 	end
@@ -228,3 +178,9 @@ vim.api.nvim_set_keymap("n", "<Leader>q", ":qa!<CR>", { noremap = true })
 vim.api.nvim_set_keymap("n", "<C-s>", ":w!<CR>", { noremap = true })
 vim.api.nvim_set_keymap("n", "<C-S>", ":wa!<CR>", { noremap = true })
 
+vim.api.nvim_set_keymap("i", "<C-h>", "<Left>", { noremap = true })
+vim.api.nvim_set_keymap("i", "<C-e>", "<End>", { noremap = true })
+vim.api.nvim_set_keymap("i", "<C-l>", "<Right>", { noremap = true })
+vim.api.nvim_set_keymap("i", "<C-j>", "<Down>", { noremap = true })
+vim.api.nvim_set_keymap("i", "<C-k>", "<Up>", { noremap = true })
+vim.api.nvim_set_keymap("i", "<C-a>", "<ESC>^i", { noremap = true })

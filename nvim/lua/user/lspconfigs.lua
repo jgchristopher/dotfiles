@@ -124,6 +124,7 @@ lspconfig.tailwindcss.setup({
 	},
 	init_options = {
 		userLanguages = {
+			elixir = "html",
 			eelixir = "html",
 			heex = "html",
 		},
