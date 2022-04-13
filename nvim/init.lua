@@ -6,15 +6,15 @@ opt.clipboard = "unnamedplus"
 opt.termguicolors = true
 opt.mouse = "a"
 
+g.tokyonight_style = "night"
+g.tokyonight_italic_functions = true
+g.tokyonight_lualine_bold = true
+
 require("plugins")
 require("user.keymaps")
 require("user.lspconfigs")
 require("user.bufferline")
 require("user.telescope")
-
-g.tokyonight_style = "night"
-g.tokyonight_italic_functions = true
-g.tokyonight_lualine_bold = true
 
 cmd([[colorscheme tokyonight]])
 require("lualine").setup({

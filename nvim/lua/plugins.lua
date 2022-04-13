@@ -1,7 +1,7 @@
 local fn = vim.fn
 local install_path = fn.stdpath("data") .. "/site/pack/packer/start/packer.nvim"
 if fn.empty(fn.glob(install_path)) > 0 then
-	packer_bootstrap = fn.system({
+	Packer_Bootstrap = fn.system({
 		"git",
 		"clone",
 		"--depth",
@@ -14,6 +14,15 @@ end
 return require("packer").startup(function(use)
 	--- Packer can manage itself
 	use("wbthomason/packer.nvim")
+	use("folke/tokyonight.nvim")
+
+	use({
+		"NvChad/nvim-base16.lua",
+		after = "packer.nvim",
+		config = function()
+			require("user.colors").init("tokyonight")
+		end,
+	})
 
 	use({
 		"kyazdani42/nvim-tree.lua",
@@ -87,7 +96,6 @@ return require("packer").startup(function(use)
 
 	use({ "nvim-telescope/telescope-fzf-native.nvim", run = "make" })
 	--    use 'EdenEast/nightfox.nvim'
-	use("folke/tokyonight.nvim")
 	use({
 		"nvim-lualine/lualine.nvim",
 		requires = { "kyazdani42/nvim-web-devicons", opt = true },
@@ -123,7 +131,7 @@ return require("packer").startup(function(use)
 		end,
 	})
 
-	if packer_bootstrap then
+	if Packer_Bootstrap then
 		require("packer").sync()
 	end
 end)
