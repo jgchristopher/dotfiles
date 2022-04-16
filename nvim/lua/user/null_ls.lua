@@ -1,8 +1,7 @@
-
 local ok, null_ls = pcall(require("null-ls"))
 if not ok then
-  print(vim.inspect(null_ls))
-  print('not OK')
+	print(vim.inspect(null_ls))
+	print("not OK")
 end
 local b = null_ls.builtins
 
@@ -18,6 +17,7 @@ local sources = {
 	-- Shell
 	b.formatting.shfmt,
 	b.diagnostics.shellcheck.with({ diagnostics_format = "#{m} [#{c}]" }),
+	b.code_actions.gitsigns,
 }
 
 local M = {}

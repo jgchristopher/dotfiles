@@ -11,6 +11,10 @@ if fn.empty(fn.glob(install_path)) > 0 then
 	})
 end
 
+if Packer_Bootstrap then
+	require("packer").sync()
+end
+
 return require("packer").startup(function(use)
 	--- Packer can manage itself
 	use("wbthomason/packer.nvim")
@@ -24,15 +28,12 @@ return require("packer").startup(function(use)
 		end,
 	})
 
-	use({
-		"kyazdani42/nvim-tree.lua",
-		requires = "kyazdani42/nvim-web-devicons",
-	})
+	use("kyazdani42/nvim-web-devicons")
+	use("kyazdani42/nvim-tree.lua")
 
-	----- TreeSitter
 	use({
-		"nvim-treesitter/nvim-treesitter",
-		run = ":TSUpdate",
+		"nvim-lualine/lualine.nvim",
+		requires = { "kyazdani42/nvim-web-devicons", opt = true },
 	})
 
 	------ LSP
@@ -40,6 +41,9 @@ return require("packer").startup(function(use)
 		"neovim/nvim-lspconfig",
 		"williamboman/nvim-lsp-installer",
 	})
+
+	----- TreeSitter
+	use("nvim-treesitter/nvim-treesitter")
 
 	-- autocomplete and snippets
 	use({
@@ -77,34 +81,16 @@ return require("packer").startup(function(use)
 
 	use("onsails/lspkind-nvim")
 
-	use({
-		"folke/trouble.nvim",
-		requires = "kyazdani42/nvim-web-devicons",
-		config = function()
-			require("trouble").setup({
-				-- your configuration comes here
-				-- or leave it empty to use the default settings
-				-- refer to the configuration section below
-			})
-		end,
-	})
+	use("folke/trouble.nvim")
 
-	use({
-		"nvim-telescope/telescope.nvim",
-		requires = { { "nvim-lua/plenary.nvim" } },
-	})
+	use("nvim-lua/plenary.nvim")
+	use("nvim-telescope/telescope.nvim")
 
 	use({ "nvim-telescope/telescope-fzf-native.nvim", run = "make" })
-	--    use 'EdenEast/nightfox.nvim'
-	use({
-		"nvim-lualine/lualine.nvim",
-		requires = { "kyazdani42/nvim-web-devicons", opt = true },
-	})
 
 	use({
 		"akinsho/bufferline.nvim",
 		tag = "v1.1.1",
-		requires = "nvim-web-devicons",
 	})
 
 	use({
@@ -131,7 +117,20 @@ return require("packer").startup(function(use)
 		end,
 	})
 
-	if Packer_Bootstrap then
-		require("packer").sync()
-	end
+	use({ "ellisonleao/glow.nvim", branch = "main" })
+
+	use({
+		"lewis6991/gitsigns.nvim",
+		config = function()
+			require("gitsigns").setup({
+				signs = {
+					add = { hl = "DiffAdd", text = "│", numhl = "GitSignsAddNr" },
+					change = { hl = "DiffChange", text = "│", numhl = "GitSignsChangeNr" },
+					delete = { hl = "DiffDelete", text = "", numhl = "GitSignsDeleteNr" },
+					topdelete = { hl = "DiffDelete", text = "‾", numhl = "GitSignsDeleteNr" },
+					changedelete = { hl = "DiffChangeDelete", text = "~", numhl = "GitSignsChangeNr" },
+				},
+			})
+		end,
+	})
 end)
