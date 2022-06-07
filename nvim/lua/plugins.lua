@@ -20,14 +20,6 @@ return require("packer").startup(function(use)
 	use("wbthomason/packer.nvim")
 	use("folke/tokyonight.nvim")
 
-	use({
-		"NvChad/nvim-base16.lua",
-		after = "packer.nvim",
-		config = function()
-			require("user.colors").init("tokyonight")
-		end,
-	})
-
 	use("kyazdani42/nvim-web-devicons")
 	use("kyazdani42/nvim-tree.lua")
 

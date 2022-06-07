@@ -11,13 +11,8 @@ local sources = {
 	b.formatting.deno_fmt,
 
 	-- Lua
-	b.formatting.stylua,
-	b.diagnostics.luacheck.with({ extra_args = { "--global vim" } }),
-
-	-- Shell
-	b.formatting.shfmt,
-	b.diagnostics.shellcheck.with({ diagnostics_format = "#{m} [#{c}]" }),
-	b.code_actions.gitsigns,
+	--	b.formatting.stylua,
+	--	b.diagnostics.luacheck.with({ extra_args = { "--global vim" } }),
 }
 
 local M = {}

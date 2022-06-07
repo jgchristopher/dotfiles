@@ -75,6 +75,7 @@ local on_attach = function(_, bufnr)
 	local function map(...)
 		vim.api.nvim_buf_set_keymap(bufnr, ...)
 	end
+
 	local map_opts = { noremap = true, silent = true }
 
 	map("n", "df", "<cmd>lua vim.lsp.buf.formatting()<cr>", map_opts)
@@ -153,7 +154,10 @@ local sumneko_binary = sumneko_root_path .. "/extension/server/bin/lua-language-
 
 lspconfig.sumneko_lua.setup({
 	cmd = { sumneko_binary, "-E", sumneko_root_path .. "/extension/server/bin/main.lua" },
-	on_attach = on_attach,
+	-- on_attach = on_attach,
+	on_attach = function(client)
+		client.resolved_capabilities.document_formatting = false
+	end,
 	capabilities = capabilities,
 	settings = {
 		Lua = {
@@ -170,6 +174,38 @@ lspconfig.sumneko_lua.setup({
 			},
 		},
 	},
+})
+
+lspconfig.pylsp.setup({
+	cmd = { "pylsp" },
+	filetypes = { "python" },
+	settings = {
+		pyls = {
+			configurationSources = { "flake8" },
+			plugins = {
+				jedi_completion = { enabled = true },
+				jedi_hover = { enabled = true },
+				jedi_references = { enabled = true },
+				jedi_signature_help = { enabled = true },
+				jedi_symbols = { enabled = true, all_scopes = true },
+				pycodestyle = { enabled = false },
+				flake8 = {
+					enabled = true,
+					ignore = {},
+					maxLineLength = 160,
+				},
+				mypy = { enabled = false },
+				isort = { enabled = false },
+				yapf = { enabled = false },
+				pylint = { enabled = false },
+				pydocstyle = { enabled = false },
+				mccabe = { enabled = false },
+				preload = { enabled = false },
+				rope_completion = { enabled = false },
+			},
+		},
+	},
+	on_attach = on_attach,
 })
 
 -- lspservers with default config
