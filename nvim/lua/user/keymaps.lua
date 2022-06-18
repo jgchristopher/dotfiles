@@ -95,3 +95,6 @@ keymap("i", "<C-l>", "<Right>", { noremap = true })
 keymap("i", "<C-j>", "<Down>", { noremap = true })
 keymap("i", "<C-k>", "<Up>", { noremap = true })
 keymap("i", "<C-a>", "<ESC>^i", { noremap = true })
+
+-- telescope-repo
+keymap("n", "<leader>rl", [[<Cmd>lua require'user.telescope'.repo_list()<CR>]], { noremap = true, silent = true })

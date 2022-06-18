@@ -20,6 +20,11 @@ return require("packer").startup(function(use)
 	use("wbthomason/packer.nvim")
 	use("folke/tokyonight.nvim")
 
+	use({
+		"catppuccin/nvim",
+		as = "catppuccin",
+	})
+
 	use("kyazdani42/nvim-web-devicons")
 	use("kyazdani42/nvim-tree.lua")
 
@@ -125,4 +130,6 @@ return require("packer").startup(function(use)
 			})
 		end,
 	})
+
+	use({ "cljoly/telescope-repo.nvim" })
 end)

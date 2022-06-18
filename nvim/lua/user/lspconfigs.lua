@@ -5,7 +5,8 @@ local opt = vim.opt
 
 --------------------- LSP and Other Stuff --------------------------------------
 
-local path_to_elixirls = fn.expand("~/.local/share/nvim/lsp_servers/elixir/elixir-ls/language_server.sh")
+-- local path_to_elixirls = fn.expand("~/.local/share/nvim/lsp_servers/elixir/elixir-ls/language_server.sh")
+local path_to_elixirls = fn.expand("~/gitprojects/elixir_projects/elixir-ls/release/language_server.sh")
 
 local capabilities = vim.lsp.protocol.make_client_capabilities()
 capabilities.textDocument.completion.completionItem.snippetSupport = true
@@ -72,24 +73,21 @@ cmp.setup({
 	},
 })
 local on_attach = function(_, bufnr)
-	local function map(...)
-		vim.api.nvim_buf_set_keymap(bufnr, ...)
-	end
-
 	local map_opts = { noremap = true, silent = true }
-
-	map("n", "df", "<cmd>lua vim.lsp.buf.formatting()<cr>", map_opts)
-	map("n", "gd", "<cmd>lua vim.lsp.diagnostic.show_line_diagnostics()<cr>", map_opts)
-	map("n", "dt", "<cmd>lua vim.lsp.buf.definition()<cr>", map_opts)
-	map("n", "K", "<cmd>lua vim.lsp.buf.hover()<cr>", map_opts)
-	map("n", "gD", "<cmd>lua vim.lsp.buf.implementation()<cr>", map_opts)
-	map("n", "<c-k>", "<cmd>lua vim.lsp.buf.signature_help()<cr>", map_opts)
-	map("n", "1gD", "<cmd>lua vim.lsp.buf.type_definition()<cr>", map_opts)
-
-	-- These have a different style than above because I was fiddling
-	-- around and never converted them. Instead of converting them
-	-- now, I'm leaving them as they are for this article because this is
-	-- what I actually use, and hey, it works ¯\_(ツ)_/¯.
+	vim.keymap.set("n", "<space>r", vim.lsp.codelens.run, map_opts)
+	vim.keymap.set("n", "df", "<cmd>lua vim.lsp.buf.formatting_seq_sync()<cr>", map_opts)
+	vim.keymap.set("n", "gd", "<cmd>lua vim.diagnostic.open_float()<cr>", map_opts)
+	vim.keymap.set("n", "dt", "<cmd>lua vim.lsp.buf.definition()<cr>", map_opts)
+	vim.keymap.set("n", "K", "<cmd>lua vim.lsp.buf.hover()<cr>", map_opts)
+	vim.keymap.set("n", "gD", "<cmd>lua vim.lsp.buf.implementation()<cr>", map_opts)
+	vim.keymap.set("n", "1gD", "<cmd>lua vim.lsp.buf.type_definition()<cr>", map_opts)
+	-- keybinds for fzf-lsp.nvim: https://github.com/gfanto/fzf-lsp.nvim
+	-- you could also use telescope.nvim: https://github.com/nvim-telescope/telescope.nvim
+	-- there are also core vim.lsp functions that put the same data in the loclist
+	vim.keymap.set("n", "gr", ":References<cr>", map_opts)
+	vim.keymap.set("n", "g0", ":DocumentSymbols<cr>", map_opts)
+	vim.keymap.set("n", "gW", ":WorkspaceSymbols<cr>", map_opts)
+	vim.keymap.set("n", "<leader>d", ":Diagnostics<cr>", map_opts)
 end
 
 local lspconfig = require("lspconfig")
@@ -102,6 +100,8 @@ lspconfig.elixirls.setup({
 		elixirLS = {
 			dialyzerEnabled = true,
 			fetchDeps = false,
+			enableTestLenses = false,
+			suggestSpecs = false,
 		},
 	},
 })

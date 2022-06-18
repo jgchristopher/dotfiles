@@ -7,6 +7,16 @@ local telescope = require("telescope").setup({
 			case_mode = "smart_case", -- or "ignore_case" or "respect_case"
 			-- the default case_mode is "smart_case"
 		},
+		repo = {
+			list = {
+				fd_opts = {
+					"--no-ignore-vcs",
+				},
+				search_dirs = {
+					"~/gitprojects/",
+				},
+			},
+		},
 	},
 	defaults = {
 		prompt_prefix = "   ",
@@ -48,10 +58,21 @@ local telescope = require("telescope").setup({
 })
 -- To get fzf loaded and working with telescope, you need to call
 -- load_extension, somewhere after setup function:
-local extensions = { "themes", "terms", "fzf" }
+local extensions = { "themes", "terms", "fzf", "repo" }
 
 pcall(function()
 	for _, ext in ipairs(extensions) do
 		telescope.load_extension(ext)
 	end
 end)
+
+local M = {}
+
+-- requires repo extension
+function M.repo_list()
+	local opts = {}
+	opts.prompt_title = " Repos"
+	require("telescope").extensions.repo.list(opts)
+end
+
+return M

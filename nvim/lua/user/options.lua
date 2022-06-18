@@ -1,4 +1,3 @@
-local cmd = vim.cmd
 local g = vim.g
 local opt = vim.opt
 
@@ -25,3 +24,8 @@ g.glow_border = "rounded"
 g.tokyonight_style = "night"
 g.tokyonight_italic_functions = true
 g.tokyonight_lualine_bold = true
+
+-- g.catppuccin_flavour = "mocha"
+-- g.catppuccin_flavour = "frappe"
+g.catppuccin_flavour = "macchiato"
+-- g.catppuccin_flavour = "latte"
