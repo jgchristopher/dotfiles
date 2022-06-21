@@ -46,10 +46,6 @@ return require("packer").startup(function(use)
 	use({
 		"hrsh7th/nvim-cmp",
 	})
-	use({
-		"L3MON4D3/LuaSnip",
-		after = "nvim-cmp",
-	})
 
 	use({
 		"saadparwaiz1/cmp_luasnip",
@@ -132,4 +128,16 @@ return require("packer").startup(function(use)
 	})
 
 	use({ "cljoly/telescope-repo.nvim" })
+	use({ "nvim-telescope/telescope-ui-select.nvim" })
+	use({ "nvim-telescope/telescope-file-browser.nvim" })
+	use({ "LinArcX/telescope-command-palette.nvim" })
+	use({
+		"AckslD/nvim-neoclip.lua",
+		config = function()
+			require("neoclip").setup()
+		end,
+	})
+	use("nvim-treesitter/nvim-treesitter-refactor")
+	use("rafamadriz/friendly-snippets")
+	use("L3MON4D3/LuaSnip")
 end)

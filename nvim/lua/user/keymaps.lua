@@ -4,8 +4,7 @@ local term_opts = { silent = true }
 
 -- Shorten function name
 local keymap = vim.api.nvim_set_keymap
-vim.g.mapleader = ' '
-
+vim.g.mapleader = " "
 
 --------------------------------- Buffer management ----------------------------
 function CloseBuffer()
@@ -73,9 +72,6 @@ function CloseBuffer()
 	end
 end
 
-
-
-
 -- Navigate buffers
 keymap("n", "<S-l>", ":bnext<CR>", opts)
 keymap("n", "<S-h>", ":bprevious<CR>", opts)
@@ -98,3 +94,15 @@ keymap("i", "<C-a>", "<ESC>^i", { noremap = true })
 
 -- telescope-repo
 keymap("n", "<leader>rl", [[<Cmd>lua require'user.telescope'.repo_list()<CR>]], { noremap = true, silent = true })
+keymap(
+	"n",
+	"<leader>k",
+	[[<Cmd>lua require('telescope').extensions.command_palette.command_palette()<CR>]],
+	{ noremap = true, silent = true }
+)
+keymap(
+	"n",
+	"<leader>n",
+	[[<Cmd>lua require('telescope').extensions.neoclip.default()<CR>]],
+	{ noremap = true, silent = true }
+)
