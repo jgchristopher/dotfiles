@@ -93,16 +93,17 @@ keymap("i", "<C-k>", "<Up>", { noremap = true })
 keymap("i", "<C-a>", "<ESC>^i", { noremap = true })
 
 -- telescope-repo
-keymap("n", "<leader>rl", [[<Cmd>lua require'user.telescope'.repo_list()<CR>]], { noremap = true, silent = true })
-keymap(
+vim.keymap.set("n", "<leader>rl", ":lua require'user.telescope'.repo_list()")
+vim.keymap.set(
 	"n",
 	"<leader>k",
-	[[<Cmd>lua require('telescope').extensions.command_palette.command_palette()<CR>]],
-	{ noremap = true, silent = true }
+	":lua require'telescope'.extensions.command_palette.command_palette()"
 )
-keymap(
+vim.keymap.set(
 	"n",
 	"<leader>n",
-	[[<Cmd>lua require('telescope').extensions.neoclip.default()<CR>]],
-	{ noremap = true, silent = true }
+	":lua require'telescope'.extensions.neoclip.default()"
 )
+
+-- Debugging
+vim.keymap.set("n", "<leader>b", ":lua require'dap'.toggle_breakpoint()<CR>")
