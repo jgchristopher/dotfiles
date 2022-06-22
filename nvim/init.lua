@@ -7,6 +7,7 @@ require("user.telescope")
 require("user.lualine")
 require("user.nvim-tree")
 require("user.treesitter")
+require("user.luasnip")
 
 --vim.cmd([[colorscheme tokyonight]])
 vim.cmd([[colorscheme catppuccin]])
