@@ -140,4 +140,14 @@ return require("packer").startup(function(use)
 	use("nvim-treesitter/nvim-treesitter-refactor")
 	use("rafamadriz/friendly-snippets")
 	use("L3MON4D3/LuaSnip")
+
+	-- CheatSheet
+	use({
+		"sudormrfbin/cheatsheet.nvim",
+		requires = {
+			{ "nvim-telescope/telescope.nvim" },
+			{ "nvim-lua/popup.nvim" },
+			{ "nvim-lua/plenary.nvim" },
+		},
+	})
 end)
