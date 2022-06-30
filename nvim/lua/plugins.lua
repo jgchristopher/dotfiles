@@ -93,22 +93,7 @@ return require("packer").startup(function(use)
 		end,
 	})
 	use({ "lukas-reineke/indent-blankline.nvim" })
-	use({
-		"jose-elias-alvarez/null-ls.nvim",
-		after = "nvim-lspconfig",
-		config = function()
-			require("null-ls").setup({
-				sources = {
-					require("null-ls").builtins.formatting.stylua,
-				},
-				on_attach = function(client)
-					if client.resolved_capabilities.document_formatting then
-						vim.cmd("autocmd BufWritePre <buffer> lua vim.lsp.buf.formatting_sync()")
-					end
-				end,
-			})
-		end,
-	})
+	
 
 	use({ "ellisonleao/glow.nvim", branch = "main" })
 
@@ -150,9 +135,21 @@ return require("packer").startup(function(use)
 			{ "nvim-lua/plenary.nvim" },
 		},
 	})
- 	 --debugging
+	--debugging
 	use("mfussenegger/nvim-dap")
 	use("rcarriga/nvim-dap-ui")
 	use("theHamsta/nvim-dap-virtual-text")
 	use("nvim-telescope/telescope-dap.nvim")
+
+	-- Comment
+	use({
+		"numToStr/Comment.nvim",
+		config = function()
+			require("Comment").setup()
+		end,
+	})
+
+	-- Database
+use { 'tpope/vim-dadbod' }
+use { 'kristijanhusak/vim-dadbod-ui' }
 end)
