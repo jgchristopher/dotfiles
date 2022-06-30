@@ -151,7 +151,7 @@ return require("packer").startup(function(use)
 	})
 
 	-- Database
-use { 'tpope/vim-dadbod' }
-use { 'kristijanhusak/vim-dadbod-ui' }
+	use { 'tpope/vim-dadbod' }
+	use { 'kristijanhusak/vim-dadbod-ui' }
 
 end)
