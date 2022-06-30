@@ -86,7 +86,8 @@ lspconfig.tailwindcss.setup({
 
 -- lua lsp!
 -- sumneko_lua/extension/server/bin/lua-language-server
-local sumneko_root_path = "/Users/johnchristopher/.local/share/nvim/lsp_servers/sumneko_lua"
+local user = fn.expand('$USER')
+local sumneko_root_path = "/Users/" .. user .. "/.local/share/nvim/lsp_servers/sumneko_lua"
 local sumneko_binary = sumneko_root_path .. "/extension/server/bin/lua-language-server"
 
 lspconfig.sumneko_lua.setup({
