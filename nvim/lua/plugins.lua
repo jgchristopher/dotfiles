@@ -154,4 +154,7 @@ return require("packer").startup(function(use)
 	use { 'tpope/vim-dadbod' }
 	use { 'kristijanhusak/vim-dadbod-ui' }
 
+  -- Neogit
+  use { 'TimUntersberger/neogit', requires = 'nvim-lua/plenary.nvim' }
+
 end)
