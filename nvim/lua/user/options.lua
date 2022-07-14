@@ -29,3 +29,7 @@ g.tokyonight_lualine_bold = true
 -- g.catppuccin_flavour = "frappe"
 g.catppuccin_flavour = "macchiato"
 -- g.catppuccin_flavour = "latte"
+--
+opt.foldmethod = "expr"
+opt.foldexpr = "nvim_treesitter#foldexpr()"
+opt.foldlevel = 10
