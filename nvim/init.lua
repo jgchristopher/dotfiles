@@ -9,6 +9,7 @@ require("user.nvim-tree")
 require("user.treesitter")
 require("user.luasnip")
 require("user.completion")
+require("user.dap")
 
 --vim.cmd([[colorscheme tokyonight]])
 vim.cmd([[colorscheme catppuccin]])

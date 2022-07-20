@@ -107,3 +107,4 @@ vim.keymap.set(
 
 -- Debugging
 vim.keymap.set("n", "<leader>b", ":lua require'dap'.toggle_breakpoint()<CR>")
+vim.keymap.set("n", "<leader>5", ":lua require'dap'.continue()<CR>")

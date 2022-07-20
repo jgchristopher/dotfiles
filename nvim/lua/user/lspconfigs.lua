@@ -25,6 +25,7 @@ local on_attach = function(_, bufnr)
 	map("n", "gD", "<cmd>lua vim.lsp.buf.implementation()<cr>", map_opts)
 	map("n", "<c-k>", "<cmd>lua vim.lsp.buf.signature_help()<cr>", map_opts)
 	map("n", "1gD", "<cmd>lua vim.lsp.buf.type_definition()<cr>", map_opts)
+  map("n", "<space>r", "<cmd>vim.lsp.codelens.run()<cr>", map_opts)
 end
 
 local lspconfig = require("lspconfig")
@@ -37,7 +38,7 @@ lspconfig.elixirls.setup({
 		elixirLS = {
 			dialyzerEnabled = true,
 			fetchDeps = false,
-			enableTestLenses = false,
+			enableTestLenses = true,
 			suggestSpecs = false,
 		},
 	},
