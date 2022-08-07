@@ -60,7 +60,7 @@ javascript: (async function() {
   try {
     const {
       default: Turndown
-    } = await import('https://unpkg.com/turndown@6.0.0?module')
+    } = await import('https://unpkg.com/turndown@7.1.1?module')
 
     const markdownBody = new Turndown({
       headingStyle: 'atx',
