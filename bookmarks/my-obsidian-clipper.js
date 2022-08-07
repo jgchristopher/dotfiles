@@ -69,15 +69,11 @@ javascript: (async function() {
       codeBlockStyle: 'fenced',
       emDelimiter: '*',
     }).turndown(markdownify);
-    const content = `- [${document.title}](${document.URL}) ${tags}\n --- \n ${markdownBody}\n`;
-    const new_location = `obsidian://new?file=${encodeURIComponent(daily_notes + today)}&content=${encodeURIComponent(content)}&append=true${vaultName}`;
-    document.location.href = new_location
+    sendToObsidian(`- [${document.title}](${document.URL}) ${tags}\n --- \n ${markdownBody}\n`);
   }
   catch (e) {
     console.log(e);
-    const content = `- [${document.title}](${document.URL}) ${tags}\n`;
-    const new_location = `obsidian://new?file=${encodeURIComponent(daily_notes + today)}&content=${encodeURIComponent(content)}&append=true${vaultName}`;
-    document.location.href = new_location
+    sendToObsidian(`- [${document.title}](${document.URL}) ${tags}\n`);
   }
 
 })();
