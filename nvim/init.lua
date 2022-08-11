@@ -10,6 +10,7 @@ require("user.treesitter")
 require("user.luasnip")
 require("user.completion")
 require("user.dap")
+require("user.dadbod")
 
 --vim.cmd([[colorscheme tokyonight]])
 vim.cmd([[colorscheme catppuccin]])

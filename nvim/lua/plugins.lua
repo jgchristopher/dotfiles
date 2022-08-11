@@ -153,6 +153,7 @@ return require("packer").startup(function(use)
 	-- Database
 	use { 'tpope/vim-dadbod' }
 	use { 'kristijanhusak/vim-dadbod-ui' }
+  use { 'kristijanhusak/vim-dadbod-completion' }
 
   -- Neogit
   use { 'TimUntersberger/neogit', requires = 'nvim-lua/plenary.nvim' }
