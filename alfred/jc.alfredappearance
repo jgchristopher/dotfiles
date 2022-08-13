@@ -1,65 +1,65 @@
 {
   "alfredtheme" : {
     "result" : {
-      "textSpacing" : 6,
+      "textSpacing" : 5,
       "subtext" : {
-        "size" : 20,
+        "size" : 12,
         "colorSelected" : "#50FA7BA8",
-        "font" : "Lucida Grande",
+        "font" : "System",
         "color" : "#BD93F9BF"
       },
       "shortcut" : {
-        "size" : 20,
+        "size" : 16,
         "colorSelected" : "#61ABFDFF",
-        "font" : "Lucida Grande",
+        "font" : "System",
         "color" : "#8BE9FD4C"
       },
       "backgroundSelected" : "#444759E4",
       "text" : {
-        "size" : 27,
+        "size" : 18,
         "colorSelected" : "#FFFFFFFF",
-        "font" : "Lucida Grande",
+        "font" : "System",
         "color" : "#B7B7B7FF"
       },
-      "iconPaddingHorizontal" : 13,
-      "roundness" : 0,
-      "paddingVertical" : 9,
-      "iconSize" : 53
+      "iconPaddingHorizontal" : 7,
+      "roundness" : 8,
+      "paddingVertical" : 3,
+      "iconSize" : 40
     },
     "search" : {
       "backgroundSelected" : "#A3CCFEFF",
-      "paddingHorizontal" : 8,
-      "spacing" : 4,
+      "paddingHorizontal" : 7,
+      "spacing" : 9,
       "text" : {
-        "size" : 64,
+        "size" : 36,
         "colorSelected" : "#000000FF",
         "font" : "Lucida Grande",
         "color" : "#F8F8F2FF"
       },
       "background" : "#282A3600",
-      "roundness" : 0,
-      "paddingVertical" : 6
+      "roundness" : 8,
+      "paddingVertical" : 5
     },
     "window" : {
       "color" : "#282A36BF",
-      "paddingHorizontal" : 0,
-      "width" : 1024,
+      "paddingHorizontal" : 9,
+      "width" : 700,
       "borderPadding" : 0,
       "borderColor" : "#0000007F",
       "blur" : 0,
-      "roundness" : 20,
-      "paddingVertical" : 0
+      "roundness" :15,
+      "paddingVertical" : 9
     },
-    "credit" : "pseudometa",
+    "credit" : "JC",
     "visualEffectMode" : 2,
     "separator" : {
       "color" : "#6171A369",
-      "thickness" : 3
+      "thickness" : 3 
     },
     "scrollbar" : {
       "color" : "#6171A3FF",
-      "thickness" : 11
+      "thickness" : 2
     },
-    "name" : "Dracula"
+    "name" : "JC"
   }
 }
