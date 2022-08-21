@@ -1,6 +1,6 @@
 javascript: (async function() {
   /* Optional vault name */
-  const vault = "Personal";
+  const vault = "";
 
   const daily_notes = "daily_notes/";
 
@@ -69,7 +69,7 @@ javascript: (async function() {
       codeBlockStyle: 'fenced',
       emDelimiter: '*',
     }).turndown(markdownify);
-    sendToObsidian(`- [${document.title}](${document.URL}) ${tags}\n --- \n ${markdownBody}\n`);
+    sendToObsidian(`- [${document.title}](${document.URL}) ${tags}\n${markdownBody}\n\n---\n\n`);
   }
   catch (e) {
     console.log(e);
@@ -77,4 +77,3 @@ javascript: (async function() {
   }
 
 })();
-
