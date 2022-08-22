@@ -1,158 +1,159 @@
 local fn = vim.fn
 local install_path = fn.stdpath("data") .. "/site/pack/packer/start/packer.nvim"
 if fn.empty(fn.glob(install_path)) > 0 then
-	Packer_Bootstrap = fn.system({
-		"git",
-		"clone",
-		"--depth",
-		"1",
-		"https://github.com/wbthomason/packer.nvim",
-		install_path,
-	})
+  Packer_Bootstrap = fn.system({
+    "git",
+    "clone",
+    "--depth",
+    "1",
+    "https://github.com/wbthomason/packer.nvim",
+    install_path,
+  })
 end
 
 if Packer_Bootstrap then
-	require("packer").sync()
+  require("packer").sync()
 end
 
 return require("packer").startup(function(use)
-	--- Packer can manage itself
-	use("wbthomason/packer.nvim")
-	use("folke/tokyonight.nvim")
+  --- Packer can manage itself
+  use("wbthomason/packer.nvim")
+  use("folke/tokyonight.nvim")
 
-	use({
-		"catppuccin/nvim",
-		as = "catppuccin",
-	})
+  use({
+    "catppuccin/nvim",
+    as = "catppuccin",
+  })
 
-	use("kyazdani42/nvim-web-devicons")
-	use("kyazdani42/nvim-tree.lua")
+  use("kyazdani42/nvim-web-devicons")
+  use("kyazdani42/nvim-tree.lua")
 
-	use({
-		"nvim-lualine/lualine.nvim",
-		requires = { "kyazdani42/nvim-web-devicons", opt = true },
-	})
+  use({
+    "nvim-lualine/lualine.nvim",
+    requires = { "kyazdani42/nvim-web-devicons", opt = true },
+  })
 
-	------ LSP
-	use({
-		"neovim/nvim-lspconfig",
-		"williamboman/nvim-lsp-installer",
-	})
+  ------ LSP
+  use({
+    "neovim/nvim-lspconfig",
+    "williamboman/nvim-lsp-installer",
+  })
 
-	----- TreeSitter
-	use("nvim-treesitter/nvim-treesitter")
+  ----- TreeSitter
+  use("nvim-treesitter/nvim-treesitter")
 
-	-- autocomplete and snippets
-	use({
-		"hrsh7th/nvim-cmp",
-	})
+  -- autocomplete and snippets
+  use({
+    "hrsh7th/nvim-cmp",
+  })
 
-	use({
-		"saadparwaiz1/cmp_luasnip",
-		after = "LuaSnip",
-	})
+  use({
+    "saadparwaiz1/cmp_luasnip",
+    after = "LuaSnip",
+  })
 
-	use({
-		"hrsh7th/cmp-nvim-lua",
-		after = "cmp_luasnip",
-	})
+  use({
+    "hrsh7th/cmp-nvim-lua",
+    after = "cmp_luasnip",
+  })
 
-	use({
-		"hrsh7th/cmp-nvim-lsp",
-		after = "cmp-nvim-lua",
-	})
+  use({
+    "hrsh7th/cmp-nvim-lsp",
+    after = "cmp-nvim-lua",
+  })
 
-	use({
-		"hrsh7th/cmp-buffer",
-		after = "cmp-nvim-lsp",
-	})
+  use({
+    "hrsh7th/cmp-buffer",
+    after = "cmp-nvim-lsp",
+  })
 
-	use({
-		"hrsh7th/cmp-path",
-		after = "cmp-buffer",
-	})
+  use({
+    "hrsh7th/cmp-path",
+    after = "cmp-buffer",
+  })
 
-	use("onsails/lspkind-nvim")
+  use("onsails/lspkind-nvim")
 
-	use("folke/trouble.nvim")
+  use("folke/trouble.nvim")
 
-	use("nvim-lua/plenary.nvim")
-	use("nvim-telescope/telescope.nvim")
+  use("nvim-lua/plenary.nvim")
+  use("nvim-telescope/telescope.nvim")
 
-	use({ "nvim-telescope/telescope-fzf-native.nvim", run = "make" })
+  use({ "nvim-telescope/telescope-fzf-native.nvim", run = "make" })
 
-	use({
-		"akinsho/bufferline.nvim",
-		tag = "v1.1.1",
-	})
+  use({
+    "akinsho/bufferline.nvim",
+    tag = "v1.1.1",
+  })
+  use({ use 'famiu/bufdelete.nvim' })
 
-	use({
-		"max397574/better-escape.nvim",
-		config = function()
-			require("better_escape").setup()
-		end,
-	})
-	use({ "lukas-reineke/indent-blankline.nvim" })
-	
+  use({
+    "max397574/better-escape.nvim",
+    config = function()
+      require("better_escape").setup()
+    end,
+  })
+  use({ "lukas-reineke/indent-blankline.nvim" })
 
-	use({ "ellisonleao/glow.nvim", branch = "main" })
 
-	use({
-		"lewis6991/gitsigns.nvim",
-		config = function()
-			require("gitsigns").setup({
-				signs = {
-					add = { hl = "DiffAdd", text = "│", numhl = "GitSignsAddNr" },
-					change = { hl = "DiffChange", text = "│", numhl = "GitSignsChangeNr" },
-					delete = { hl = "DiffDelete", text = "", numhl = "GitSignsDeleteNr" },
-					topdelete = { hl = "DiffDelete", text = "‾", numhl = "GitSignsDeleteNr" },
-					changedelete = { hl = "DiffChangeDelete", text = "~", numhl = "GitSignsChangeNr" },
-				},
-			})
-		end,
-	})
+  use({ "ellisonleao/glow.nvim", branch = "main" })
 
-	use({ "cljoly/telescope-repo.nvim" })
-	use({ "nvim-telescope/telescope-ui-select.nvim" })
-	use({ "nvim-telescope/telescope-file-browser.nvim" })
-	use({ "LinArcX/telescope-command-palette.nvim" })
-	use({
-		"AckslD/nvim-neoclip.lua",
-		config = function()
-			require("neoclip").setup()
-		end,
-	})
-	use("nvim-treesitter/nvim-treesitter-refactor")
-	use("rafamadriz/friendly-snippets")
-	use("L3MON4D3/LuaSnip")
+  use({
+    "lewis6991/gitsigns.nvim",
+    config = function()
+      require("gitsigns").setup({
+        signs = {
+          add = { hl = "DiffAdd", text = "│", numhl = "GitSignsAddNr" },
+          change = { hl = "DiffChange", text = "│", numhl = "GitSignsChangeNr" },
+          delete = { hl = "DiffDelete", text = "", numhl = "GitSignsDeleteNr" },
+          topdelete = { hl = "DiffDelete", text = "‾", numhl = "GitSignsDeleteNr" },
+          changedelete = { hl = "DiffChangeDelete", text = "~", numhl = "GitSignsChangeNr" },
+        },
+      })
+    end,
+  })
 
-	-- CheatSheet
-	use({
-		"sudormrfbin/cheatsheet.nvim",
-		requires = {
-			{ "nvim-telescope/telescope.nvim" },
-			{ "nvim-lua/popup.nvim" },
-			{ "nvim-lua/plenary.nvim" },
-		},
-	})
+  use({ "cljoly/telescope-repo.nvim" })
+  use({ "nvim-telescope/telescope-ui-select.nvim" })
+  use({ "nvim-telescope/telescope-file-browser.nvim" })
+  use({ "LinArcX/telescope-command-palette.nvim" })
+  use({
+    "AckslD/nvim-neoclip.lua",
+    config = function()
+      require("neoclip").setup()
+    end,
+  })
+  use("nvim-treesitter/nvim-treesitter-refactor")
+  use("rafamadriz/friendly-snippets")
+  use("L3MON4D3/LuaSnip")
 
-	--debugging
-	use("mfussenegger/nvim-dap")
-	use("rcarriga/nvim-dap-ui")
-	use("theHamsta/nvim-dap-virtual-text")
-	use("nvim-telescope/telescope-dap.nvim")
+  -- CheatSheet
+  use({
+    "sudormrfbin/cheatsheet.nvim",
+    requires = {
+      { "nvim-telescope/telescope.nvim" },
+      { "nvim-lua/popup.nvim" },
+      { "nvim-lua/plenary.nvim" },
+    },
+  })
 
-	-- Comment
-	use({
-		"numToStr/Comment.nvim",
-		config = function()
-			require("Comment").setup()
-		end,
-	})
+  --debugging
+  use("mfussenegger/nvim-dap")
+  use("rcarriga/nvim-dap-ui")
+  use("theHamsta/nvim-dap-virtual-text")
+  use("nvim-telescope/telescope-dap.nvim")
 
-	-- Database
-	use { 'tpope/vim-dadbod' }
-	use { 'kristijanhusak/vim-dadbod-ui' }
+  -- Comment
+  use({
+    "numToStr/Comment.nvim",
+    config = function()
+      require("Comment").setup()
+    end,
+  })
+
+  -- Database
+  use { 'tpope/vim-dadbod' }
+  use { 'kristijanhusak/vim-dadbod-ui' }
   use { 'kristijanhusak/vim-dadbod-completion' }
 
   -- Neogit

@@ -17,6 +17,8 @@ opt.tabstop = 2
 opt.softtabstop = 2
 opt.shiftwidth = 2
 opt.expandtab = true
+opt.splitbelow = true
+opt.splitright = true
 
 -- g.glow_style = "/Users/johnchristopher/gitprojects/dotfiles/glow/dracula.json"
 g.glow_border = "rounded"
@@ -33,3 +35,6 @@ g.catppuccin_flavour = "macchiato"
 opt.foldmethod = "expr"
 opt.foldexpr = "nvim_treesitter#foldexpr()"
 opt.foldlevel = 10
+
+--vim.cmd([[colorscheme tokyonight]])
+vim.cmd([[colorscheme catppuccin]])
