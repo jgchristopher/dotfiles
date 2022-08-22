@@ -7,7 +7,7 @@ dap.adapters.mix_task = {
   args = {}
 }
 
-vim.fn.sign_define('DapBreakpoint', { text = '🛑', texthl = '', linehl = '', numhl = '' })
+vim.fn.sign_define('DapBreakpoint', { text = '⛑️j', texthl = '', linehl = '', numhl = '' })
 vim.fn.sign_define('DapStopped', {text='⭐️', texthl='', linehl='', numhl=''})
 
 local dapui = require("dapui")
