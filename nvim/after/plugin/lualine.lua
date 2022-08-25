@@ -8,9 +8,9 @@ require("lualine").setup({
     lualine_a = {},
     lualine_b = {},
     lualine_c = {},
-    lualine_x = {},
+    --lualine_x = { { 'filename', path = 1 } },
     lualine_y = {},
-    lualine_z = { { 'filename', path = 1 } }
+    lualine_z = {}
   }
 
 })

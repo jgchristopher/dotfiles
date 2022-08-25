@@ -38,3 +38,5 @@ opt.foldlevel = 10
 
 --vim.cmd([[colorscheme tokyonight]])
 vim.cmd([[colorscheme catppuccin]])
+
+vim.o.winbar = "%=%m %f"
