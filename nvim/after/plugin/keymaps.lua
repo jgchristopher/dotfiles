@@ -2,6 +2,10 @@
 local set = vim.keymap.set
 vim.g.mapleader = " "
 
+
+-- Don't yank with x
+set("n", 'x', '"_x')
+
 -- Navigate buffers
 set("n", "<S-l>", ":bnext<CR>")
 set("n", "<S-h>", ":bprevious<CR>")
