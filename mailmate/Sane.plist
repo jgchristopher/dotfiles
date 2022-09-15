@@ -1,4 +1,3 @@
 {
-  "^b" = ( "moveToMailbox:", "imap://john.christopher%40c2fo.com@outlook.office365.com/@SaneBlackHole");
-  "^g" = ( "moveToMailbox:", "imap://jgchristopher%40gmail.com@imap.gmail.com/@SaneBlackHole");
+  "^b" = ( "moveToMailbox:", "imap://jgchristopher%40gmail.com@imap.gmail.com/@SaneBlackHole");
 }
