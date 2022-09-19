@@ -1,29 +1,10 @@
 -- Shorten function name
 local set = vim.keymap.set
-vim.g.mapleader = " "
 
-
--- Don't yank with x
-set("n", 'x', '"_x')
-
--- Navigate buffers
-set("n", "<S-l>", ":bnext<CR>")
-set("n", "<S-h>", ":bprevious<CR>")
+--Nvim-Tree
 set("n", "<C-n>", ":NvimTreeToggle<CR>")
 set("n", "<Leader>e", ":NvimTreeFocus<CR>")
-set("n", "<leader>ff", function() require('telescope.builtin').find_files() end)
-set("n", "<leader>fg", "<cmd>lua require('telescope.builtin').live_grep()<cr>")
-set("n", "<leader>fb", "<cmd>lua require('telescope.builtin').buffers()<cr>")
---set("n", "<Leader>x", "<cmd>lua CloseBuffer()<CR>")
-set("n", "<Leader>q", ":qa!<CR>")
-set("n", "<C-s>", ":w!<CR>")
-set("n", "<C-S>", ":wa!<CR>")
-set("i", "<C-h>", "<Left>")
-set("i", "<C-e>", "<End>")
-set("i", "<C-l>", "<Right>")
-set("i", "<C-j>", "<Down>")
-set("i", "<C-k>", "<Up>")
-set("i", "<C-a>", "<ESC>^i")
+
 
 -- telescope-repo
 vim.keymap.set("n", "<leader>rl", ":lua require'user.telescope'.repo_list()")
@@ -37,6 +18,9 @@ vim.keymap.set(
   "<leader>n",
   ":lua require'telescope'.extensions.neoclip.default()"
 )
+set("n", "<leader>ff", function() require('telescope.builtin').find_files() end)
+set("n", "<leader>fg", "<cmd>lua require('telescope.builtin').live_grep()<cr>")
+set("n", "<leader>fb", "<cmd>lua require('telescope.builtin').buffers()<cr>")
 
 -- Debugging
 --

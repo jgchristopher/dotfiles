@@ -1,4 +1,15 @@
-local telescope = require("telescope").setup({
+local status, telescope = pcall(require, 'telescope')
+if (not status) then return end
+
+local actions = require('telescope.actions')
+
+local function telescope_buffer_dir()
+  return vim.fn.expand('%:p:h')
+end
+
+local fb_actions = require 'telescope'.extensions.file_browser.actions
+
+telescope.setup({
   extensions = {
     fzf = {
       fuzzy = true, -- false will only do exact matching
@@ -8,7 +19,11 @@ local telescope = require("telescope").setup({
       -- the default case_mode is "smart_case"
     },
     file_browser = {
-      hidden = true,
+      theme = 'dropdown',
+      hijack_netrw = true,
+      mappings = {
+
+      }
     },
     ["ui-select"] = {
       require("telescope.themes").get_cursor(),
@@ -67,6 +82,11 @@ local telescope = require("telescope").setup({
     },
   },
   defaults = {
+    mappings = {
+      n = {
+        ['q'] = actions.close
+      }
+    },
     prompt_prefix = "   ",
     selection_caret = "  ",
     entry_prefix = "  ",
