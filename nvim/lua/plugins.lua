@@ -45,6 +45,9 @@ function M.setup()
     use({ 'feline-nvim/feline.nvim' })
 
     ------ LSP
+    use { "williamboman/mason.nvim" }
+    use { "williamboman/mason-lspconfig.nvim" }
+    use({ 'glepnir/lspsaga.nvim' })
     use({
       "neovim/nvim-lspconfig",
       "williamboman/nvim-lsp-installer",
@@ -57,6 +60,9 @@ function M.setup()
     })
     use({ 'windwp/nvim-autopairs' })
     use({ 'windwp/nvim-ts-autotag' })
+
+    use({ 'jose-elias-alvarez/null-ls.nvim' })
+    use({ 'MunifTanjim/prettier.nvim' })
 
     -- autocomplete and snippets
     use({
@@ -119,20 +125,7 @@ function M.setup()
 
     use({ "ellisonleao/glow.nvim", branch = "main" })
 
-    use({
-      "lewis6991/gitsigns.nvim",
-      config = function()
-        require("gitsigns").setup({
-          signs = {
-            add = { hl = "DiffAdd", text = "│", numhl = "GitSignsAddNr" },
-            change = { hl = "DiffChange", text = "│", numhl = "GitSignsChangeNr" },
-            delete = { hl = "DiffDelete", text = "", numhl = "GitSignsDeleteNr" },
-            topdelete = { hl = "DiffDelete", text = "‾", numhl = "GitSignsDeleteNr" },
-            changedelete = { hl = "DiffChangeDelete", text = "~", numhl = "GitSignsChangeNr" },
-          },
-        })
-      end,
-    })
+    use({ "lewis6991/gitsigns.nvim" })
 
     use({ "cljoly/telescope-repo.nvim" })
     use({ "nvim-telescope/telescope-ui-select.nvim" })

@@ -18,14 +18,14 @@ local on_attach = function(client, bufnr)
   local map_opts = { noremap = true, silent = true } -- --   local map_opts = { noremap = true, silent = true }
 
 
-  map("n", "df", "<cmd>lua vim.lsp.buf.formatting_seq_sync()<cr>", map_opts)
-  map("n", "gd", "<cmd>lua vim.lsp.diagnostic.show_line_diagnostics()<cr>", map_opts)
-  map("n", "dt", "<cmd>lua vim.lsp.buf.definition()<cr>", map_opts)
-  map("n", "K", "<cmd>lua vim.lsp.buf.hover()<cr>", map_opts)
-  map("n", "gD", "<cmd>lua vim.lsp.buf.implementation()<cr>", map_opts)
-  map("n", "<c-k>", "<cmd>lua vim.lsp.buf.signature_help()<cr>", map_opts)
-  map("n", "1gD", "<cmd>lua vim.lsp.buf.type_definition()<cr>", map_opts)
-  map("n", "<space>r", "<cmd>vim.lsp.codelens.run()<cr>", map_opts)
+  -- map("n", "df", "<cmd>lua vim.lsp.buf.formatting_seq_sync()<cr>", map_opts)
+  -- map("n", "gd", "<cmd>lua vim.lsp.diagnostic.show_line_diagnostics()<cr>", map_opts)
+  -- map("n", "dt", "<cmd>lua vim.lsp.buf.definition()<cr>", map_opts)
+  -- map("n", "K", "<cmd>lua vim.lsp.buf.hover()<cr>", map_opts)
+  -- map("n", "gD", "<cmd>lua vim.lsp.buf.implementation()<cr>", map_opts)
+  -- map("n", "<c-k>", "<cmd>lua vim.lsp.buf.signature_help()<cr>", map_opts)
+  -- map("n", "1gD", "<cmd>lua vim.lsp.buf.type_definition()<cr>", map_opts)
+  -- map("n", "<space>r", "<cmd>vim.lsp.codelens.run()<cr>", map_opts)
 
 end
 
@@ -49,6 +49,34 @@ nvim_lsp.sumneko_lua.setup {
     }
   }
 }
+
+nvim_lsp.tailwindcss.setup {
+  cmd = { "tailwindcss-language-server", "--stdio" },
+  filetypes = { "eelixir", "html", "heex", "html-eex", "javascript", "javascriptreact", "reason", "rescript",
+    "typescript", "typescriptreact", "vue", "svelte" },
+  init_options = {
+    userLanguages = {
+      eelixir = "html",
+      heex = "html"
+    }
+  },
+  root_dir = nvim_lsp.util.root_pattern('**/tailwind.config.js'),
+  settings = {
+    tailwindCSS = {
+      lint = {
+        cssConflict = "warning",
+        invalidApply = "error",
+        invalidConfigPath = "error",
+        invalidScreen = "error",
+        invalidTailwindDirective = "error",
+        invalidVariant = "error",
+        recommendedVariantOrder = "warning"
+      },
+      validate = true
+    }
+  }
+}
+
 
 local path_to_elixirls = vim.fn.expand("~/gitprojects/elixir_projects/elixir-ls/release/language_server.sh")
 nvim_lsp.elixirls.setup({
