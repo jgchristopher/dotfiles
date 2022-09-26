@@ -97,6 +97,7 @@ function M.setup()
     use("onsails/lspkind-nvim")
 
     use("folke/trouble.nvim")
+    use({ 'norcalli/nvim-colorizer.lua' })
 
     -- Telescope
     use("nvim-lua/plenary.nvim")
