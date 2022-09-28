@@ -2,3 +2,4 @@
 
 db_ui/
 nvim/plugin/packer_compiled.lua
+nvim-clean/plugin/packer_compiled.lua
