@@ -1,7 +1,11 @@
 local status, cmp = pcall(require, 'cmp')
 if (not status) then return end
-local lspkind = require("lspkind")
-local cmp_autopairs = require('nvim-autopairs.completion.cmp')
+
+local status2, lspkind = pcall(require, 'lspkind')
+if (not status2) then return end
+
+local status3, cmp_autopairs = pcall(require, 'nvim-autopairs.completion.cmp')
+if (not status3) then return end
 
 cmp.setup({
   snippet = {
