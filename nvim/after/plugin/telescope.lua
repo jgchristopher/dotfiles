@@ -82,7 +82,7 @@ telescope.setup({
 })
 -- To get fzf loaded and working with telescope, you need to call
 -- load_extension, somewhere after setup function:
-local extensions = { "fzf", "repo", "file_browser", "neoclip" }
+local extensions = { "fzf", "repo", "file_browser", --[[ "neoclip" --]] }
 
 pcall(function()
   for _, ext in ipairs(extensions) do
@@ -98,11 +98,11 @@ vim.keymap.set(
   "<leader>k",
   ":lua require'telescope'.extensions.command_palette.command_palette()"
 )
-vim.keymap.set(
-  "n",
-  "<leader>n",
-  ":lua require'telescope'.extensions.neoclip.default()"
-)
+-- vim.keymap.set(
+--   "n",
+--   "<leader>n",
+--   ":lua require'telescope'.extensions.neoclip.default()"
+-- )
 vim.keymap.set("n", "<leader>ff", function() require('telescope.builtin').find_files({
     initial_mode = "normal"
   })
