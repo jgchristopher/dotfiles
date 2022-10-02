@@ -103,9 +103,7 @@ vim.keymap.set(
 --   "<leader>n",
 --   ":lua require'telescope'.extensions.neoclip.default()"
 -- )
-vim.keymap.set("n", "<leader>ff", function() require('telescope.builtin').find_files({
-    initial_mode = "normal"
-  })
+vim.keymap.set("n", "<leader>ff", function() require('telescope.builtin').find_files()
 end)
 vim.keymap.set("n", "<leader>fb", function() telescope.extensions.file_browser.file_browser({
     initial_mode = "normal"

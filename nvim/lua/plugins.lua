@@ -32,17 +32,17 @@ function M.setup()
   local function plugins(use)
     -- plugins
     use("wbthomason/packer.nvim")
-    -- use("folke/tokyonight.nvim")
 
-    use({
-      "catppuccin/nvim",
-      as = "catppuccin",
-    })
     use("kyazdani42/nvim-web-devicons")
+
+    use("folke/tokyonight.nvim")
+
+    --    use({ "catppuccin/nvim", as = "catppuccin" })
 
     use("kyazdani42/nvim-tree.lua")
 
     use({ 'feline-nvim/feline.nvim' })
+    --use { 'nvim-lualine/lualine.nvim', requires = { 'kyazdani42/nvim-web-devicons' } }
 
     ------ LSP
     use { "williamboman/mason.nvim" }
@@ -87,20 +87,18 @@ function M.setup()
     use({ "nvim-telescope/telescope-fzf-native.nvim", run = "make" })
     use({ "nvim-telescope/telescope-file-browser.nvim" })
 
---[[
+    --[[
     use({ "cljoly/telescope-repo.nvim" })
     use({ "nvim-telescope/telescope-ui-select.nvim" })
 --]]
 
 
-    use({
-      "akinsho/bufferline.nvim",
-      tag = "v1.1.1",
-    })
-   -- use({ use 'famiu/bufdelete.nvim' })
+    -- using packer.nvim
+    -- use { 'akinsho/bufferline.nvim', tag = "v2.*", requires = 'kyazdani42/nvim-web-devicons' }
+    -- use({ 'famiu/bufdelete.nvim' })
 
-    use({"max397574/better-escape.nvim"})
-    
+    use({ "max397574/better-escape.nvim" })
+
     use({ "lukas-reineke/indent-blankline.nvim" })
 
 
@@ -110,9 +108,9 @@ function M.setup()
     use { 'TimUntersberger/neogit', requires = 'nvim-lua/plenary.nvim' }
 
     -- Comment
-    use({"numToStr/Comment.nvim"})
+    use({ "numToStr/Comment.nvim" })
 
---[[
+    --[[
     -- Vim clipboard manager
     use({
       "AckslD/nvim-neoclip.lua",
