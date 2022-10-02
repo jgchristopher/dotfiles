@@ -112,5 +112,5 @@ vim.keymap.set("n", "<leader>fb", function() telescope.extensions.file_browser.f
   })
 end)
 vim.keymap.set("n", "<leader>fg", "<cmd>lua require('telescope.builtin').live_grep()<cr>")
-vim.keymap.set("n", "<leader>sb", "<cmd>lua require('telescope.builtin').buffers()<cr>")
+vim.keymap.set("n", "<leader>sb", function() require('telescope.builtin').buffers({ initial_mode = "normal"})end)
 vim.keymap.set("n", "<leader>di", function() builtin.diagnostics() end)
