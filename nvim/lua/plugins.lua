@@ -110,6 +110,8 @@ function M.setup()
     -- Comment
     use({ "numToStr/Comment.nvim" })
 
+    use({ 'github/copilot.vim' })
+
     --[[
     -- Vim clipboard manager
     use({

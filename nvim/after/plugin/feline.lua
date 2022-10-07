@@ -18,6 +18,7 @@ if (status_tokio) then
   feline.setup {
     -- tokyonight theme integration
     components = tky_feline.get(),
+    feline.winbar.setup()
   }
   return
 end
