@@ -24,9 +24,9 @@ opt.expandtab = true
 opt.splitbelow = true
 opt.splitright = true
 
---opt.foldmethod = "expr"
---opt.foldexpr = "nvim_treesitter#foldexpr()"
---opt.foldlevel = 10
+opt.foldmethod = "expr"
+opt.foldexpr = "nvim_treesitter#foldexpr()"
+opt.foldlevel = 10
 
 -- experimental
 opt.backspace = 'start,eol,indent'

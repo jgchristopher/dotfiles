@@ -86,6 +86,7 @@ nvim_lsp.tailwindcss.setup {
   }
 }
 
+--]]
 
 local path_to_elixirls = vim.fn.expand("~/gitprojects/elixir_projects/elixir-ls/release/language_server.sh")
 nvim_lsp.elixirls.setup({
@@ -101,4 +102,3 @@ nvim_lsp.elixirls.setup({
     },
   },
 })
---]]
