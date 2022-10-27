@@ -6,12 +6,12 @@ if (status_tokio) then
 
   local tyc = tokyonight_colors.setup { style = 'night' }
   local util = require("tokyonight.util")
-  vim.api.nvim_set_hl(0, 'IndentBlanklineIndent1', { fg = util.lighten(tyc.red, 0.6) })
-  vim.api.nvim_set_hl(0, 'IndentBlanklineIndent2', { fg = util.lighten(tyc.yellow, 0.6) })
-  vim.api.nvim_set_hl(0, 'IndentBlanklineIndent3', { fg = util.lighten(tyc.green, 0.6) })
-  vim.api.nvim_set_hl(0, 'IndentBlanklineIndent4', { fg = util.lighten(tyc.cyan, 0.6) })
-  vim.api.nvim_set_hl(0, 'IndentBlanklineIndent5', { fg = util.lighten(tyc.blue, 0.6) })
-  vim.api.nvim_set_hl(0, 'IndentBlanklineIndent6', { fg = util.lighten(tyc.purple, 0.6) })
+  vim.api.nvim_set_hl(0, 'IndentBlanklineIndent1', { fg = util.lighten(tyc.red, 0.4) })
+  vim.api.nvim_set_hl(0, 'IndentBlanklineIndent2', { fg = util.lighten(tyc.yellow, 0.4) })
+  vim.api.nvim_set_hl(0, 'IndentBlanklineIndent3', { fg = util.lighten(tyc.green, 0.4) })
+  vim.api.nvim_set_hl(0, 'IndentBlanklineIndent4', { fg = util.lighten(tyc.cyan, 0.4) })
+  vim.api.nvim_set_hl(0, 'IndentBlanklineIndent5', { fg = util.lighten(tyc.blue, 0.4) })
+  vim.api.nvim_set_hl(0, 'IndentBlanklineIndent6', { fg = util.lighten(tyc.purple, 0.4) })
 
 else
   vim.cmd [[highlight IndentBlanklineIndent1 guifg=#E06C75 gui=nocombine]]
@@ -23,7 +23,7 @@ else
 end
 
 ibl.setup {
-  show_end_of_line = true,
+  show_end_of_line = false,
   space_char_blankline = " ",
   char_highlight_list = {
     "IndentBlanklineIndent1",
@@ -36,5 +36,5 @@ ibl.setup {
 }
 
 vim.opt.list = true
--- vim.opt.listchars:append "space:⋅"
+--vim.opt.listchars:append "space:⋅"
 vim.opt.listchars:append "eol:↴"

@@ -1,5 +1,5 @@
 local status, neogit = pcall(require, 'neogit')
-if (not status) then return end
+if (not status) then print('Neogit failed to load') return end
 
 neogit.setup {
   disable_signs = false,

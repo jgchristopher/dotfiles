@@ -27,7 +27,6 @@ local on_attach = function(client, bufnr)
   map("n", "<c-k>", "<cmd>lua vim.lsp.buf.signature_help()<cr>", map_opts)
   map("n", "1gD", "<cmd>lua vim.lsp.buf.type_definition()<cr>", map_opts)
   map("n", "<space>r", "<cmd>vim.lsp.codelens.run()<cr>", map_opts)
-
 end
 
 vim.diagnostic.config({
@@ -58,11 +57,9 @@ nvim_lsp.sumneko_lua.setup {
     }
   }
 }
---[[
 nvim_lsp.tailwindcss.setup {
   cmd = { "tailwindcss-language-server", "--stdio" },
-  filetypes = { "eelixir", "html", "heex", "html-eex", "javascript", "javascriptreact", "reason", "rescript",
-    "typescript", "typescriptreact", "vue", "svelte" },
+  filetypes = { "eelixir", "html", "heex", "html-eex", "typescriptreact", "vue", "svelte" },
   init_options = {
     userLanguages = {
       eelixir = "html",
@@ -86,7 +83,18 @@ nvim_lsp.tailwindcss.setup {
   }
 }
 
---]]
+-- nvim_lsp.serverlesside.setup {
+--   cmd = { "/Users/johnchristopher/.asdf/installs/nodejs/16.17.1/.npm/lib/node_modules/@serverless-ide/language-server/dist/server.js", "--stdio"},
+--   name = 'serverless ide',
+--   filetypes = {"yaml"},
+--   on_attach = on_attach,
+--   root_dir = nvim_lsp.util.root_pattern('serverless.yml'),
+-- }
+
+nvim_lsp.graphql.setup {
+  on_attach = on_attach,
+
+}
 
 local path_to_elixirls = vim.fn.expand("~/gitprojects/elixir_projects/elixir-ls/release/language_server.sh")
 nvim_lsp.elixirls.setup({

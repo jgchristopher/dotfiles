@@ -3,20 +3,20 @@ local set = vim.keymap.set
 
 
 -- telescope-repo
-vim.keymap.set("n", "<leader>rl", ":lua require'user.telescope'.repo_list()")
-vim.keymap.set(
-  "n",
-  "<leader>k",
-  ":lua require'telescope'.extensions.command_palette.command_palette()"
-)
-vim.keymap.set(
-  "n",
-  "<leader>n",
-  ":lua require'telescope'.extensions.neoclip.default()"
-)
-set("n", "<leader>ff", function() require('telescope.builtin').find_files() end)
-set("n", "<leader>fg", "<cmd>lua require('telescope.builtin').live_grep()<cr>")
-set("n", "<leader>fb", "<cmd>lua require('telescope.builtin').buffers()<cr>")
+--vim.keymap.set("n", "<leader>rl", ":lua require'user.telescope'.repo_list()")
+-- vim.keymap.set(
+--   "n",
+--   "<leader>k",
+--   ":lua require'telescope'.extensions.command_palette.command_palette()"
+-- )
+-- vim.keymap.set(
+--   "n",
+--   "<leader>n",
+--   ":lua require'telescope'.extensions.neoclip.default()"
+-- )
+-- set("n", "<leader>ff", function() require('telescope.builtin').find_files() end)
+-- set("n", "<leader>fg", "<cmd>lua require('telescope.builtin').live_grep()<cr>")
+-- set("n", "<leader>fb", "<cmd>lua require('telescope.builtin').buffers()<cr>")
 
 -- Debugging
 --
