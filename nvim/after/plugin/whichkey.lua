@@ -1,7 +1,9 @@
 local status, wk = pcall(require, 'which-key')
 local status2, tl_builtin = pcall(require, 'telescope.builtin')
+local status3, tl = pcall(require, 'telescope')
 if (not status) then return end
 if (not status2) then return end
+if (not status3) then return end
 
 wk.setup {
   plugins = {
@@ -26,10 +28,8 @@ wk.register({
     name = "file", -- optional group name
     f = { "<cmd>Telescope find_files<cr>", "Find File" }, -- create a binding with label
     g = { function() tl_builtin.live_grep() end, "Live Grep" }, -- create a binding with label
-    b = { function() tl_builtin.buffers() end, "Buffers" }, -- create a binding with label
-    r = { "<cmd>Telescope oldfiles<cr>", "Open Recent File"}, -- additional options for creating the keymap
-    n = { "New File" }, -- just a label. don't create any mapping
-    e = "Edit File", -- same as above
-    ["1"] = "which_key_ignore",  -- special label to hide it in the popup
+    s = { function() tl_builtin.buffers() end, "Buffers" }, -- create a binding with label
+    r = { "<cmd>Telescope oldfiles<cr>", "Open Recent File" }, -- additional options for creating the keymap
+    b = { function() tl.extensions.file_browser.file_browser({ initial_mode = "normal" }) end, "File Browser" },
   },
 }, { prefix = "<leader>" })

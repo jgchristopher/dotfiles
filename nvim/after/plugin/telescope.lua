@@ -83,7 +83,7 @@ telescope.setup({
 })
 -- To get fzf loaded and working with telescope, you need to call
 -- load_extension, somewhere after setup function:
-local extensions = { "fzf", "repo", "file_browser", --[[ "neoclip" --]] }
+local extensions = { "fzf", "file_browser", --[[ "neoclip",  "repo" --]] }
 
 pcall(function()
   for _, ext in ipairs(extensions) do
@@ -93,23 +93,22 @@ end)
 
 -- Telescope Key Bindings
 -- -- telescope-repo
-vim.keymap.set("n", "<leader>rl", ":lua require'user.telescope'.repo_list()")
-vim.keymap.set(
-  "n",
-  "<leader>k",
-  ":lua require'telescope'.extensions.command_palette.command_palette()"
-)
+--vim.keymap.set("n", "<leader>rl", ":lua require'user.telescope'.repo_list()")
+-- vim.keymap.set(
+--   "n",
+--   "<leader>k",
+--   ":lua require'telescope'.extensions.command_palette.command_palette()"
+-- )
 -- vim.keymap.set(
 --   "n",
 --   "<leader>n",
 --   ":lua require'telescope'.extensions.neoclip.default()"
 -- )
-vim.keymap.set("n", "<leader>ff", function() require('telescope.builtin').find_files()
-end)
-vim.keymap.set("n", "<leader>fb", function() telescope.extensions.file_browser.file_browser({
-    initial_mode = "normal"
-  })
-end)
-vim.keymap.set("n", "<leader>fg", "<cmd>lua require('telescope.builtin').live_grep()<cr>")
-vim.keymap.set("n", "<leader>sb", function() require('telescope.builtin').buffers({ initial_mode = "normal" }) end)
+-- vim.keymap.set("n", "<leader>ff", function() require('telescope.builtin').find_files()end)
+-- vim.keymap.set("n", "<leader>fb", function() telescope.extensions.file_browser.file_browser({
+--     initial_mode = "normal"
+--   })
+-- end)
+-- vim.keymap.set("n", "<leader>fg", "<cmd>lua require('telescope.builtin').live_grep()<cr>")
+-- vim.keymap.set("n", "<leader>sb", function() require('telescope.builtin').buffers({ initial_mode = "normal" }) end)
 vim.keymap.set("n", "<leader>di", function() builtin.diagnostics() end)
