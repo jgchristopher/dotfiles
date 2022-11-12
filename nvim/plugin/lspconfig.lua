@@ -29,9 +29,16 @@ local on_attach = function(client, _)
       name = "lsp",
       f = { "<cmd>lua vim.lsp.buf.format()<cr>", "Format Code" },
       i = { "<cmd>lua vim.lsp.buf.implementation()<cr>", "Go to implementation" },
-      r = { "<cmd>vim.lsp.codelens.run()<cr>", "Run Code Lens" },
+      r = { "<cmd>Lspsaga rename<cr>", "Rename Variable" },
+      d = { "<cmd>Lspsaga lsp_finder<CR>", "Lsp Saga Finder" },
+      p = { "<cmd>Lspsaga peek_definition<cr>", "Peek Definition" },
+      a = { "<cmd>Lspsaga code_action<cr>", "Code Action" },
     }
   }, { prefix = "<leader>" })
+
+  wk.register({
+    e = { "<cmd>Lspsaga diagnostic_jump_prev<CR>", "Diagnostic Jump Previous" }
+  }, { prefix = "[" })
   --map("n", "df", "<cmd>lua vim.lsp.buf.format()<cr>", map_opts)
   --map("n", "gd", "<cmd>lua vim.lsp.diagnostic.show_line_diagnostics()<cr>", map_opts)
   -- map("n", "dt", "<cmd>lua vim.lsp.buf.definition()<cr>", map_opts)

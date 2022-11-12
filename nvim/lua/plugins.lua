@@ -115,6 +115,8 @@ function M.setup()
     -- Which Key
     use({ 'folke/which-key.nvim' })
 
+    use({ 'voldikss/vim-floaterm' })
+
     --[[
     -- Vim clipboard manager
     use({
