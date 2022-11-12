@@ -69,3 +69,6 @@ export PATH="/opt/homebrew/bin:/opt/homebrew/sbin:$PATH"
 
 source ~/.local-path-vars
 
+export PATH=/Users/johnchristopher/.meteor:$PATH
+
+
