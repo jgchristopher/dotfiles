@@ -32,4 +32,8 @@ wk.register({
     r = { "<cmd>Telescope oldfiles<cr>", "Open Recent File" }, -- additional options for creating the keymap
     b = { function() tl.extensions.file_browser.file_browser({ initial_mode = "normal" }) end, "File Browser" },
   },
+  b = {
+    n = { "<cmd>bnext<cr>", "Next Buffer" },
+    p = { "<cmd>bprevious<cr>", "Previous Buffer" },
+  }
 }, { prefix = "<leader>" })

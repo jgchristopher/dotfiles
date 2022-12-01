@@ -114,7 +114,7 @@ function M.setup()
     use({ 'folke/which-key.nvim' })
 
     use({ 'voldikss/vim-floaterm' })
-
+    use({ 'kylechui/nvim-surround' })
     --[[
     -- Vim clipboard manager
     use({
