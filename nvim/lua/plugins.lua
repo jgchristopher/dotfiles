@@ -55,8 +55,8 @@ function M.setup()
       "nvim-treesitter/nvim-treesitter",
       run = ':TSUpdate'
     })
-    use("nvim-treesitter/nvim-treesitter-refactor")
-
+    use({ "nvim-treesitter/nvim-treesitter-refactor" })
+    use({ "nvim-treesitter/nvim-treesitter-context" })
 
     use({ 'windwp/nvim-autopairs' })
     use({ 'windwp/nvim-ts-autotag' })

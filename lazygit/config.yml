@@ -1,0 +1,18 @@
+os:
+  editCommand: "floatterm"
+
+keybinding:
+  universal:
+    return: '<c-\>'
+
+gui:
+  theme:
+    selecteLineBgColor:
+      - underline
+    selectedRangeBgColor:
+      - underline
+
+git:
+  paging:
+    colorArg: never
+    pager: delta --dark --paging=never
