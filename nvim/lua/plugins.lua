@@ -108,8 +108,6 @@ function M.setup()
     -- Comment
     use({ "numToStr/Comment.nvim" })
 
-    use({ 'github/copilot.vim' })
-
     -- Which Key
     use({ 'folke/which-key.nvim' })
 
