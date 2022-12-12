@@ -31,6 +31,7 @@ wk.register({
     s = { function() tl_builtin.buffers() end, "Buffers" }, -- create a binding with label
     r = { "<cmd>Telescope oldfiles<cr>", "Open Recent File" }, -- additional options for creating the keymap
     b = { function() tl.extensions.file_browser.file_browser({ initial_mode = "normal" }) end, "File Browser" },
+    c = { function() tl_builtin.git_status() end, "Changed Files" },
   },
   b = {
     n = { "<cmd>bnext<cr>", "Next Buffer" },
