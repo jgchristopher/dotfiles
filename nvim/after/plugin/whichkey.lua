@@ -31,10 +31,16 @@ wk.register({
     s = { function() tl_builtin.buffers() end, "Buffers" }, -- create a binding with label
     r = { "<cmd>Telescope oldfiles<cr>", "Open Recent File" }, -- additional options for creating the keymap
     b = { function() tl.extensions.file_browser.file_browser({ initial_mode = "normal" }) end, "File Browser" },
-    c = { function() tl_builtin.git_status() end, "Changed Files" },
   },
   b = {
+    name = "buffer",
     n = { "<cmd>bnext<cr>", "Next Buffer" },
     p = { "<cmd>bprevious<cr>", "Previous Buffer" },
-  }
+  },
+  g = {
+    name = "git",
+    c = { function() tl_builtin.git_status() end, "Changed Files" },
+    b = { function() tl_builtin.git_branches() end, "Git Branches" },
+    l = { "<cmd>:FloatermNew lazygit<CR>", "Lazy Git" },
+  },
 }, { prefix = "<leader>" })
