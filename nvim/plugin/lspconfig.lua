@@ -112,29 +112,36 @@ nvim_lsp.tailwindcss.setup {}
   }
 } ]]
 
--- nvim_lsp.serverlesside.setup {
---   cmd = { "/Users/johnchristopher/.asdf/installs/nodejs/16.17.1/.npm/lib/node_modules/@serverless-ide/language-server/dist/server.js", "--stdio"},
---   name = 'serverless ide',
---   filetypes = {"yaml"},
---   on_attach = on_attach,
---   root_dir = nvim_lsp.util.root_pattern('serverless.yml'),
--- }
-
 nvim_lsp.graphql.setup {
   on_attach = on_attach,
 }
 
-local path_to_elixirls = vim.fn.expand("~/gitprojects/elixir_projects/elixir-ls/release/language_server.sh")
-nvim_lsp.elixirls.setup({
-  cmd = { path_to_elixirls },
+nvim_lsp.elixirls.setup {
   capabilities = protocol.make_client_capabilities(),
   on_attach = on_attach,
   settings = {
-    elixirLS = {
-      dialyzerEnabled = true,
-      fetchDeps = false,
-      enableTestLenses = true,
-      suggestSpecs = false,
-    },
-  },
-})
+    dialyzerEnabled        = true,
+    dialyzerFormat         = "dialyxir_long",
+    enableTestLenses       = false,
+    fetchDeps              = false,
+    mixEnv                 = "test",
+    projectDir             = "",
+    signatureAfterComplete = true,
+    suggestSpecs           = true,
+  }
+}
+
+-- local path_to_elixirls = vim.fn.expand("~/gitprojects/elixir_projects/elixir-ls/release/language_server.sh")
+-- nvim_lsp.elixirls.setup({
+--   cmd = { path_to_elixirls },
+--   capabilities = protocol.make_client_capabilities(),
+--   on_attach = on_attach,
+--   settings = {
+--     elixirLS = {
+--       dialyzerEnabled = true,
+--       fetchDeps = false,
+--       enableTestLenses = true,
+--       suggestSpecs = false,
+--     },
+--   },
+--})

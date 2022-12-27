@@ -36,8 +36,8 @@ export UPDATE_ZSH_DAYS=7
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(git mix-fast asdf)
-
+plugins=(git asdf)
+fpath+=${ZSH_CUSTOM:-${ZSH:-~/.oh-my-zsh}/custom}/plugins/zsh-completions/src
 source $ZSH/oh-my-zsh.sh
 
 # User configuration
@@ -55,6 +55,7 @@ alias zshconfig="nvim ~/.zshrc"
 alias ohmyzsh="nvim ~/.oh-my-zsh"
 alias localconfig="nvim ~/.local-path-vars"
 alias bunchconfig="nvim ~/Documents/Bunches"
+alias lsplog="tail -f ~/.local/state/nvim/lsp.log"
 
 export ERL_AFLAGS="-kernel shell_history enabled"
 export EDITOR=nvim
