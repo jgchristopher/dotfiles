@@ -66,7 +66,7 @@ function M.setup()
 
     -- autocomplete and snippets
     use("L3MON4D3/LuaSnip")
-    --use("rafamadriz/friendly-snippets")
+    use("rafamadriz/friendly-snippets")
 
 
     use("onsails/lspkind-nvim")
@@ -113,6 +113,11 @@ function M.setup()
 
     use({ 'voldikss/vim-floaterm' })
     use({ 'kylechui/nvim-surround' })
+    -- Database
+    use { 'tpope/vim-dadbod' }
+    use { 'kristijanhusak/vim-dadbod-ui' }
+    use { 'kristijanhusak/vim-dadbod-completion' }
+
     --[[
     -- Vim clipboard manager
     use({
@@ -129,11 +134,7 @@ function M.setup()
     use("theHamsta/nvim-dap-virtual-text")
     use("nvim-telescope/telescope-dap.nvim")
 
-    -- Database
-    use { 'tpope/vim-dadbod' }
-    use { 'kristijanhusak/vim-dadbod-ui' }
-    use { 'kristijanhusak/vim-dadbod-completion' }
-
+    
 --]]
     if packer_bootstrap then
       print "Restart Neovim required after installation!"

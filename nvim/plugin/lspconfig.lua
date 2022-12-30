@@ -9,6 +9,8 @@ if (not mason_status) then return end
 if (not ms_config_status) then return end
 
 local protocol = require('vim.lsp.protocol')
+local capabilities = protocol.make_client_capabilities()
+capabilities.textDocument.completion.completionItem.snippetSupport = true
 
 local on_attach = function(client, _)
   if client.server_capabilities.documentFormattingProvider then
@@ -33,6 +35,7 @@ local on_attach = function(client, _)
       d = { "<cmd>Lspsaga lsp_finder<CR>", "Lsp Saga Finder" },
       p = { "<cmd>Lspsaga peek_definition<cr>", "Peek Definition" },
       a = { "<cmd>Lspsaga code_action<cr>", "Code Action" },
+      h = { "<cmd>lua vim.lsp.buf.hover()<CR>", "Hover Doc" },
     }
   }, { prefix = "<leader>" })
 
@@ -65,8 +68,6 @@ mason_config.setup {
 
 nvim_lsp.tsserver.setup {
   on_attach = on_attach,
-  filetypes = { "typescript", "typescriptreact", "typescript.tsx" },
-  cmd = { "typescript-language-server", "--stdio" }
 }
 
 nvim_lsp.sumneko_lua.setup {
@@ -84,7 +85,18 @@ nvim_lsp.sumneko_lua.setup {
   }
 }
 
-nvim_lsp.tailwindcss.setup {}
+nvim_lsp.tailwindcss.setup {
+  on_attach = on_attach,
+  init_options = {
+    userLanguages = {
+      eelixir = "html", -- These are required if I won't to have tailwindcss suggestions in elixir heex templates
+      heex = "html"
+    }
+  },
+  tailwindCSS = {
+    emmetCompletions = true
+  }
+}
 
 --[[ nvim_lsp.tailwindcss.setup {
   cmd = { "tailwindcss-language-server", "--stdio" },
@@ -113,35 +125,42 @@ nvim_lsp.tailwindcss.setup {}
 } ]]
 
 nvim_lsp.graphql.setup {
-  on_attach = on_attach,
-}
-
-nvim_lsp.elixirls.setup {
-  capabilities = protocol.make_client_capabilities(),
-  on_attach = on_attach,
-  settings = {
-    dialyzerEnabled        = true,
-    dialyzerFormat         = "dialyxir_long",
-    enableTestLenses       = false,
-    fetchDeps              = false,
-    mixEnv                 = "test",
-    projectDir             = "",
-    signatureAfterComplete = true,
-    suggestSpecs           = true,
+  tailwindCSS = {
+    hovers = true,
+    suggestions = true,
+    codeActions = true
   }
 }
 
--- local path_to_elixirls = vim.fn.expand("~/gitprojects/elixir_projects/elixir-ls/release/language_server.sh")
--- nvim_lsp.elixirls.setup({
---   cmd = { path_to_elixirls },
---   capabilities = protocol.make_client_capabilities(),
---   on_attach = on_attach,
---   settings = {
---     elixirLS = {
---       dialyzerEnabled = true,
---       fetchDeps = false,
---       enableTestLenses = true,
---       suggestSpecs = false,
---     },
---   },
---})
+
+-- The Mason installed version of elixir ls seems to be old. Suggestions and stuff don't work with the same settings
+local path_to_elixirls = vim.fn.expand("~/gitprojects/elixir_projects/elixir-ls/release/language_server.sh")
+nvim_lsp.elixirls.setup {
+  capabilities = capabilities,
+  on_attach = on_attach,
+  cmd = { path_to_elixirls }, -- uncomment the local path above and this if you want to use that instead of the mason installed version
+  -- settings = {
+  --   elixirLS = {
+  --     dialyzerEnabled        = true,
+  --     dialyzerFormat         = "dialyxir_long",
+  --     enableTestLenses       = false,
+  --     fetchDeps              = false,
+  --     mixEnv                 = "test",
+  --     projectDir             = "",
+  --     signatureAfterComplete = true,
+  --     suggestSpecs           = true,
+  --   }
+  -- }
+}
+
+nvim_lsp.emmet_ls.setup({
+  capabilities = capabilities,
+  filetypes = { 'html', 'heex', 'eelixir', 'css' },
+  init_options = {
+    html = {
+      options = {
+        ["bem.enabled"] = true
+      }
+    }
+  }
+})
