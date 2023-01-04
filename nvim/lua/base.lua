@@ -30,3 +30,6 @@ opt.foldlevel = 10
 
 -- experimental
 opt.backspace = 'start,eol,indent'
+
+-- Globals
+vim.cmd([[ let g:neo_tree_remove_legacy_commands = 1 ]])
