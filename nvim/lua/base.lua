@@ -28,6 +28,8 @@ opt.foldmethod = "expr"
 opt.foldexpr = "nvim_treesitter#foldexpr()"
 opt.foldlevel = 10
 
+opt.swapfile = false
+
 -- experimental
 opt.backspace = 'start,eol,indent'
 
