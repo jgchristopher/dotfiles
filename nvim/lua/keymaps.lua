@@ -17,3 +17,9 @@ set("i", "<C-j>", "<Down>")
 set("i", "<C-k>", "<Up>")
 set("i", "<C-a>", "<ESC>^i")
 
+set("n", "<C-d>", "<C-d>zz")
+set("n", "<C-u>", "<C-u>zz")
+
+
+set("v", "J", ":m '>+1<CR>gv=gv")
+set("v", "K", ":m '<-2<CR>gv=gv")

@@ -35,9 +35,9 @@ function M.setup()
 
     use("kyazdani42/nvim-web-devicons")
 
-    use("folke/tokyonight.nvim")
+    -- use("folke/tokyonight.nvim")
 
-    --    use({ "catppuccin/nvim", as = "catppuccin" })
+    use({ "catppuccin/nvim", as = "catppuccin" })
 
     use {
       "nvim-neo-tree/neo-tree.nvim",
@@ -126,7 +126,7 @@ function M.setup()
     use { 'tpope/vim-dadbod' }
     use { 'kristijanhusak/vim-dadbod-ui' }
     use { 'kristijanhusak/vim-dadbod-completion' }
-
+    use { 'mbbill/undotree' }
     --[[
     -- Vim clipboard manager
     use({

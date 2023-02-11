@@ -51,25 +51,25 @@ catppuccin.setup({
     coc_nvim = false,
     lsp_trouble = true,
     cmp = true,
-    lsp_saga = false,
+    lsp_saga = true,
     gitgutter = false,
     gitsigns = true,
     leap = false,
     telescope = true,
-    nvimtree = true,
+    nvimtree = false,
     neotree = {
-      enabled = false,
+      enabled = true,
       show_root = true,
-      transparent_panel = false,
+      transparent_panel = true,
     },
     dap = {
       enabled = true,
       enable_ui = true,
     },
-    which_key = false,
+    which_key = true,
     indent_blankline = {
-      enabled = false,
-      colored_indent_levels = false,
+      enabled = true,
+      colored_indent_levels = true,
     },
     dashboard = false,
     neogit = true,
@@ -104,5 +104,4 @@ catppuccin.setup({
   },
 })
 
-vim.cmd[[colorscheme catppuccin]]
-
+vim.cmd [[colorscheme catppuccin]]
