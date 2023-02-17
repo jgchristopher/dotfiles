@@ -88,7 +88,9 @@ function M.setup()
 
 
     use("folke/trouble.nvim")
-    use({ 'norcalli/nvim-colorizer.lua' })
+
+    --use({ 'norcalli/nvim-colorizer.lua' })
+    use({ 'NvChad/nvim-colorizer.lua' })
 
     -- Telescope
     use("nvim-lua/plenary.nvim")
@@ -100,8 +102,6 @@ function M.setup()
     use({ "cljoly/telescope-repo.nvim" })
     use({ "nvim-telescope/telescope-ui-select.nvim" })
 --]]
-
-
     -- using packer.nvim
     -- use { 'akinsho/bufferline.nvim', tag = "v2.*", requires = 'kyazdani42/nvim-web-devicons' }
     -- use({ 'famiu/bufdelete.nvim' })
@@ -143,7 +143,7 @@ function M.setup()
     use("theHamsta/nvim-dap-virtual-text")
     use("nvim-telescope/telescope-dap.nvim")
 
-    
+
 --]]
     if packer_bootstrap then
       print "Restart Neovim required after installation!"
