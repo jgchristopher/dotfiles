@@ -108,6 +108,10 @@ nvim_lsp.astro.setup {
 
 }
 
+nvim_lsp.svelte.setup {
+
+}
+
 --[[ nvim_lsp.tailwindcss.setup {
   cmd = { "tailwindcss-language-server", "--stdio" },
   filetypes = { "eelixir", "html", "heex", "html-eex", "typescriptreact", "vue", "svelte" },
