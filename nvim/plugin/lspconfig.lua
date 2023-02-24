@@ -66,7 +66,7 @@ vim.diagnostic.config({
 mason.setup {}
 
 mason_config.setup {
-  ensure_installed = { "tsserver", "tailwindcss", "lua_ls", }
+  ensure_installed = { "astro", "emmet_ls", "eslint", "svelte", "tsserver", "tailwindcss", "lua_ls", "stylua" }
 }
 
 nvim_lsp.tsserver.setup {
