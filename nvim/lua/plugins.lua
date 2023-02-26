@@ -1,130 +1,102 @@
-local M = {}
+local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
+if not vim.loop.fs_stat(lazypath) then
+	vim.fn.system({
+		"git",
+		"clone",
+		"--filter=blob:none",
+		"https://github.com/folke/lazy.nvim.git",
+		"--branch=stable", -- latest stable release
+		lazypath,
+	})
+end
+vim.opt.rtp:prepend(lazypath)
 
-function M.setup()
-	local packer_bootstrap = false
+require("lazy").setup({
 
-	local conf = {
-		display = {
-			open_fn = function()
-				return require("packer.util").float({ border = "rounded" })
-			end,
+	--"folke/tokyonight.nvim",
+	{ "catppuccin/nvim", name = "catppuccin" },
+	{
+		"nvim-neo-tree/neo-tree.nvim",
+		branch = "v2.x",
+		dependencies = {
+			"nvim-lua/plenary.nvim",
+			"nvim-tree/nvim-web-devicons", -- not strictly required, but recommended
+			"MunifTanjim/nui.nvim",
 		},
-	}
+	},
 
-	local function packer_init()
-		local fn = vim.fn
-		local cmd = vim.cmd
-		local install_path = fn.stdpath("data") .. "/site/pack/packer/start/packer.nvim"
-		if fn.empty(fn.glob(install_path)) > 0 then
-			packer_bootstrap = fn.system({
-				"git",
-				"clone",
-				"--depth",
-				"1",
-				"https://github.com/wbthomason/packer.nvim",
-				install_path,
-			})
-			cmd([[packadd packer.nvim]])
-		end
-		cmd("autocmd BufWritePost plugins.lua source <afile> | PackerCompile")
-	end
+	"feline-nvim/feline.nvim",
+	"williamboman/mason.nvim",
+	"williamboman/mason-lspconfig.nvim",
+	"WhoIsSethDaniel/mason-tool-installer.nvim",
+	"glepnir/lspsaga.nvim",
+	"neovim/nvim-lspconfig",
 
-	local function plugins(use)
-		-- plugins
-		use("wbthomason/packer.nvim")
+	----- TreeSitter
+	{
+		"nvim-treesitter/nvim-treesitter",
+		build = ":TSUpdate",
+	},
+	"nvim-treesitter/nvim-treesitter-refactor",
+	"nvim-treesitter/nvim-treesitter-context",
+	"windwp/nvim-autopairs",
+	"windwp/nvim-ts-autotag",
+	"jose-elias-alvarez/null-ls.nvim",
+	"MunifTanjim/prettier.nvim",
 
-		use("kyazdani42/nvim-web-devicons")
+	-- autocomplete and snippets
+	{
+		"L3MON4D3/LuaSnip",
+		dependencies = {
+			"saadparwaiz1/cmp_luasnip",
+		},
+	},
+	"rafamadriz/friendly-snippets",
+	"onsails/lspkind-nvim",
+	"hrsh7th/nvim-cmp",
+	"hrsh7th/cmp-nvim-lua",
+	"hrsh7th/cmp-nvim-lsp",
+	"hrsh7th/cmp-buffer",
+	"hrsh7th/cmp-path",
 
-		-- use("folke/tokyonight.nvim")
+	"folke/trouble.nvim",
 
-		use({ "catppuccin/nvim", as = "catppuccin" })
+	-- 'norcalli/nvim-colorizer.lua',
+	"NvChad/nvim-colorizer.lua",
 
-		use({
-			"nvim-neo-tree/neo-tree.nvim",
-			branch = "v2.x",
-			requires = {
-				"nvim-lua/plenary.nvim",
-				"nvim-tree/nvim-web-devicons", -- not strictly required, but recommended
-				"MunifTanjim/nui.nvim",
-			},
-		})
-		--use("kyazdani42/nvim-tree.lua")
+	-- Telescope
+	"nvim-lua/plenary.nvim",
+	"nvim-telescope/telescope.nvim",
+	{ "nvim-telescope/telescope-fzf-native.nvim", build = "make" },
+	"nvim-telescope/telescope-file-browser.nvim",
 
-		use({ "feline-nvim/feline.nvim" })
-		--use { 'nvim-lualine/lualine.nvim', requires = { 'kyazdani42/nvim-web-devicons' } }
-
-		------ LSP
-		use({ "williamboman/mason.nvim" })
-		use({ "williamboman/mason-lspconfig.nvim" })
-		use({ "WhoIsSethDaniel/mason-tool-installer.nvim" })
-		use({ "glepnir/lspsaga.nvim" })
-		use({ "neovim/nvim-lspconfig" })
-
-		----- TreeSitter
-		use({
-			"nvim-treesitter/nvim-treesitter",
-			run = ":TSUpdate",
-		})
-		use({ "nvim-treesitter/nvim-treesitter-refactor" })
-		use({ "nvim-treesitter/nvim-treesitter-context" })
-
-		use({ "windwp/nvim-autopairs" })
-		use({ "windwp/nvim-ts-autotag" })
-
-		use({ "jose-elias-alvarez/null-ls.nvim" })
-		use({ "MunifTanjim/prettier.nvim" })
-
-		-- autocomplete and snippets
-		use("L3MON4D3/LuaSnip")
-		use("rafamadriz/friendly-snippets")
-
-		use("onsails/lspkind-nvim")
-		use({ "hrsh7th/nvim-cmp" })
-		use({ "saadparwaiz1/cmp_luasnip", after = "LuaSnip" })
-		use({ "hrsh7th/cmp-nvim-lua", after = "cmp_luasnip" })
-		use({ "hrsh7th/cmp-nvim-lsp", after = "cmp-nvim-lua" })
-		use({ "hrsh7th/cmp-buffer", after = "cmp-nvim-lsp" })
-		use({ "hrsh7th/cmp-path", after = "cmp-buffer" })
-
-		use("folke/trouble.nvim")
-
-		--use({ 'norcalli/nvim-colorizer.lua' })
-		use({ "NvChad/nvim-colorizer.lua" })
-
-		-- Telescope
-		use("nvim-lua/plenary.nvim")
-		use("nvim-telescope/telescope.nvim")
-		use({ "nvim-telescope/telescope-fzf-native.nvim", run = "make" })
-		use({ "nvim-telescope/telescope-file-browser.nvim" })
-
-		--[[
-    use({ "cljoly/telescope-repo.nvim" })
-    use({ "nvim-telescope/telescope-ui-select.nvim" })
+	--[[
+    "cljoly/telescope-repo.nvim",
+    "nvim-telescope/telescope-ui-select.nvim",
+    { 'akinsho/bufferline.nvim', tag = "v2.*", requires = 'kyazdani42/nvim-web-devicons' },
+    'famiu/bufdelete.nvim',
 --]]
-		-- using packer.nvim
-		-- use { 'akinsho/bufferline.nvim', tag = "v2.*", requires = 'kyazdani42/nvim-web-devicons' }
-		-- use({ 'famiu/bufdelete.nvim' })
+	--
+	"max397574/better-escape.nvim",
 
-		use({ "max397574/better-escape.nvim" })
+	"lukas-reineke/indent-blankline.nvim",
 
-		use({ "lukas-reineke/indent-blankline.nvim" })
+	"lewis6991/gitsigns.nvim",
 
-		use({ "lewis6991/gitsigns.nvim" })
+	-- Comment
+	"numToStr/Comment.nvim",
 
-		-- Comment
-		use({ "numToStr/Comment.nvim" })
+	-- Which Key
+	"folke/which-key.nvim",
 
-		-- Which Key
-		use({ "folke/which-key.nvim" })
-
-		use({ "voldikss/vim-floaterm" })
-		use({ "kylechui/nvim-surround" })
-		-- Database
-		use({ "tpope/vim-dadbod" })
-		use({ "kristijanhusak/vim-dadbod-ui" })
-		use({ "kristijanhusak/vim-dadbod-completion" })
-		use({ "mbbill/undotree" })
-		--[[
+	"voldikss/vim-floaterm",
+	"kylechui/nvim-surround",
+	-- Database
+	"tpope/vim-dadbod",
+	"kristijanhusak/vim-dadbod-ui",
+	"kristijanhusak/vim-dadbod-completion",
+	"mbbill/undotree",
+	--[[
     -- Vim clipboard manager
     use({
       "AckslD/nvim-neoclip.lua",
@@ -135,24 +107,11 @@ function M.setup()
     })
 
     --debugging
-    use("mfussenegger/nvim-dap")
-    use("rcarriga/nvim-dap-ui")
-    use("theHamsta/nvim-dap-virtual-text")
-    use("nvim-telescope/telescope-dap.nvim")
+    "mfussenegger/nvim-dap",
+    "rcarriga/nvim-dap-ui",
+    "theHamsta/nvim-dap-virtual-text",
+    "nvim-telescope/telescope-dap.nvim",
 
 
 --]]
-		if packer_bootstrap then
-			print("Restart Neovim required after installation!")
-			require("packer").sync()
-		end
-	end
-
-	packer_init()
-
-	local packer = require("packer")
-	packer.init(conf)
-	packer.startup(plugins)
-end
-
-return M
+})
