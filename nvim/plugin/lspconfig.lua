@@ -29,12 +29,6 @@ local on_attach = function(client, _)
 		vim.api.nvim_command([[augroup END]])
 	end
 
-	-- local function map(...)
-	--   vim.api.nvim_buf_set_keymap(bufnr, ...) -- --     vim.api.nvim_buf_set_keymap(bufnr, ...)
-	-- end
-	--
-	-- local map_opts = { noremap = true, silent = true } -- --   local map_opts = { noremap = true, silent = true }
-
 	wk.register({
 		l = {
 			name = "lsp",
