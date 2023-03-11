@@ -9,7 +9,6 @@ ts.setup({
 		"elixir",
 		"python",
 		"erlang",
-		"gleam",
 		"surface",
 		"eex",
 		"css",
