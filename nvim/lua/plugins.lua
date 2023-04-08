@@ -98,6 +98,27 @@ require("lazy").setup({
 	"kristijanhusak/vim-dadbod-ui",
 	"kristijanhusak/vim-dadbod-completion",
 	"mbbill/undotree",
+	{
+		"utilyre/barbecue.nvim",
+		name = "barbecue",
+		version = "*",
+		dependencies = {
+			"SmiteshP/nvim-navic",
+			"nvim-tree/nvim-web-devicons", -- optional dependency
+		},
+		opts = {},
+	},
+	{
+		"mawkler/modicator.nvim",
+		dependencies = "mawkler/onedark.nvim", -- Add your colorscheme plugin here
+		init = function()
+			-- These are required for Modicator to work
+			vim.o.cursorline = true
+			vim.o.number = true
+			vim.o.termguicolors = true
+		end,
+		opts = {},
+	},
 	--[[
     -- Vim clipboard manager
     use({

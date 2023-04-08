@@ -25,7 +25,7 @@ local on_attach = function(client, _)
 	if client.server_capabilities.documentFormattingProvider then
 		vim.api.nvim_command([[augroup Format]])
 		vim.api.nvim_command([[autocmd! * <buffer>]])
-		vim.api.nvim_command([[autocmd BufWritePre <buffer> lua vim.lsp.buf.formatting_seq_sync()]])
+		vim.api.nvim_command([[autocmd BufWritePre <buffer> lua vim.lsp.buf.format()]])
 		vim.api.nvim_command([[augroup END]])
 	end
 
@@ -76,10 +76,6 @@ mason_config.setup_handlers({
 		})
 	end,
 	-- Next, you can provide a dedicated handler for specific servers.
-	-- For example, a handler override for the `rust_analyzer`:
-	-- ["rust_analyzer"] = function()
-	-- 	require("rust-tools").setup({})
-	-- end,
 	["elixirls"] = function()
 		local path_to_elixirls = vim.fn.expand("~/gitprojects/elixir_projects/elixir-ls/release/language_server.sh")
 		nvim_lsp.elixirls.setup({
