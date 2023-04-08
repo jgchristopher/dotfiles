@@ -12,13 +12,13 @@ alt - s: yabai -m display --focus west
 alt - g: yabai -m display --focus east
 
 # rotate layout clockwise
-hyper - r : yabai -m space --rotate 270
+hyper - r : yabai -m space --rotate 90 
 
 # flip along y-axis
-#hyper - y : yabai -m space --mirror y-axis
+hyper - y : yabai -m space --mirror y-axis
 
 # flip along x-axis
-#hyper - x : yabai -m space --mirror x-axis
+hyper - x : yabai -m space --mirror x-axis
 
 # toggle window float
 hyper - t : yabai -m window --toggle float --grid 4:4:1:1:2:2
