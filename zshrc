@@ -56,6 +56,7 @@ alias ohmyzsh="nvim ~/.oh-my-zsh"
 alias localconfig="nvim ~/.local-path-vars"
 alias bunchconfig="nvim ~/Documents/Bunches"
 alias lsplog="tail -f ~/.local/state/nvim/lsp.log"
+alias cdga="cd ~/gitprojects/arbol/"
 
 export ERL_AFLAGS="-kernel shell_history enabled"
 export EDITOR=nvim
