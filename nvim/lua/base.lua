@@ -1,5 +1,5 @@
 local opt = vim.opt
-local g = vim.g
+local api = vim.api
 
 opt.title = true
 opt.cmdheight = 1
@@ -34,7 +34,7 @@ opt.undodir = os.getenv("HOME") .. "/.vim/undodir"
 opt.undofile = true
 
 -- experimental
-opt.backspace = 'start,eol,indent'
+opt.backspace = "start,eol,indent"
 
 -- Globals
 vim.cmd([[ let g:neo_tree_remove_legacy_commands = 1 ]])
