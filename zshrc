@@ -57,7 +57,8 @@ alias localconfig="nvim ~/.local-path-vars"
 alias bunchconfig="nvim ~/Documents/Bunches"
 alias lsplog="tail -f ~/.local/state/nvim/lsp.log"
 alias cdga="cd ~/gitprojects/arbol/"
-alias cdlp="cd ~/gitprojects/obsidian-plugin/obsidian-clipper-projects/"
+alias cdlp="cd ~/gitprojects/obsidian-plugins/obsidian-clipper-projects"
+alias gitlog="git log --graph --pretty=format:'%Cred%h%Creset %C(bold blue)%an%C(reset) - %s - %Creset %C(yellow)%d%Creset %Cgreen(%cr)%Creset' --abbrev-commit --date=relative"
 
 export ERL_AFLAGS="-kernel shell_history enabled"
 export EDITOR=nvim

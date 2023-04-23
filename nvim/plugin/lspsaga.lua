@@ -1,10 +1,13 @@
-local status, saga = pcall(require, 'lspsaga')
-if (not status) then return end
+local status, saga = pcall(require, "lspsaga")
+if not status then
+	return
+end
 
-saga.setup {
-  server_filetype_map = {
-  }
-}
+saga.setup({
+	lightbulb = {
+		enable = false,
+	},
+})
 
 local opts = { noremap = true, silent = true }
 -- -- map("n", "df", "<cmd>lua vim.lsp.buf.formatting_seq_sync()<cr>", map_opts)

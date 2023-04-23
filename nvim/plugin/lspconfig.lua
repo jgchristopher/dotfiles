@@ -45,14 +45,6 @@ local on_attach = function(client, _)
 	wk.register({
 		e = { "<cmd>Lspsaga diagnostic_jump_prev<CR>", "Diagnostic Jump Previous" },
 	}, { prefix = "[" })
-	--map("n", "df", "<cmd>lua vim.lsp.buf.format()<cr>", map_opts)
-	--map("n", "gd", "<cmd>lua vim.lsp.diagnostic.show_line_diagnostics()<cr>", map_opts)
-	-- map("n", "dt", "<cmd>lua vim.lsp.buf.definition()<cr>", map_opts)
-	-- map("n", "K", "<cmd>lua vim.lsp.buf.hover()<cr>", map_opts)
-	-- map("n", "gD", "<cmd>lua vim.lsp.buf.implementation()<cr>", map_opts)
-	-- map("n", "<c-k>", "<cmd>lua vim.lsp.buf.signature_help()<cr>", map_opts)
-	-- map("n", "1gD", "<cmd>lua vim.lsp.buf.type_definition()<cr>", map_opts)
-	-- map("n", "<space>r", "<cmd>vim.lsp.codelens.run()<cr>", map_opts)
 end
 
 vim.diagnostic.config({
