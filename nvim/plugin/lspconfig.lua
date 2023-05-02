@@ -69,11 +69,12 @@ mason_config.setup_handlers({
 	end,
 	-- Next, you can provide a dedicated handler for specific servers.
 	["elixirls"] = function()
-		local path_to_elixirls = vim.fn.expand("~/gitprojects/elixir_projects/elixir-ls/release/language_server.sh")
+		-- local path_to_elixirls = vim.fn.expand("~/gitprojects/elixir_projects/elixir-ls/release/language_server.sh")
 		nvim_lsp.elixirls.setup({
 			capabilities = capabilities,
 			on_attach = on_attach,
-			cmd = { path_to_elixirls }, -- uncomment the local path above and this if you want to use that instead of the mason installed version
+			-- cmd = { path_to_elixirls }, -- uncomment the local path above and this if you want to use that instead of the mason installed version
+			cmd = { "elixir-ls" },
 		})
 	end,
 	["lua_ls"] = function()
