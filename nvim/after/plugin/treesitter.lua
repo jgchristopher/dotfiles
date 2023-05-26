@@ -3,6 +3,8 @@ if not status then
 	return
 end
 
+vim.treesitter.language.register("markdown", { "mdx" })
+
 ts.setup({
 	ensure_installed = {
 		"lua",
