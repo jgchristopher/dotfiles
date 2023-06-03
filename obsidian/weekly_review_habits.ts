@@ -1,27 +1,28 @@
 const whenDate = "<% tp.date.now('YYYY-MM-DD')%>";
-const quarterStart = moment(whenDate).startOf("quarter");
-const quarterEnd = moment(whenDate).endOf("quarter");
+const weekStart = moment(whenDate).day(1);
+const weekEnd = moment(whenDate).day(7);
+
 
 function getFrontmatterData(file) {
   let info = null;
   if (file.frontmatter) {
-    if (file.frontmatter.weight) {
-      info = {
-        x: moment(file.name).toDate(),
-        y: file.frontmatter.weight,
-        y2: file.frontmatter.happiness,
-      };
-    }
+
+    info = {
+      x: moment(file.name).toDate(),
+      y: file.frontmatter.weight,
+      y2: file.frontmatter.happiness,
+    };
   }
-  return info;
+}
+return info;
 }
 
 const dataInfo = dv
   .pages('"daily_notes"')
   .where(
     (b) =>
-      b.file.ctime >= quarterStart &&
-      b.file.cday <= quarterEnd &&
+      b.file.ctime >= weekStart &&
+      b.file.cday <= weekEnd &&
       getFrontmatterData(b.file) != null
   )
   .sort((b) => b.file.cday, "ascending")
@@ -90,8 +91,8 @@ const config = {
         time: {
           unit: "day",
         },
-        min: quarterStart.toDate(),
-        max: quarterEnd.toDate(),
+        min: weekStart.toDate(),
+        max: weekEnd.toDate(),
       },
     },
   },
