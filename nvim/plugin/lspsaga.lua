@@ -7,6 +7,22 @@ saga.setup({
 	lightbulb = {
 		enable = false,
 	},
+	outline = {
+		win_position = "right",
+		win_with = "",
+		win_width = 30,
+		preview_width = 0.4,
+		show_detail = true,
+		auto_preview = true,
+		auto_refresh = true,
+		auto_close = true,
+		auto_resize = false,
+		custom_sort = nil,
+		keys = {
+			expand_or_jump = "o",
+			quit = "q",
+		},
+	},
 })
 
 local opts = { noremap = true, silent = true }
