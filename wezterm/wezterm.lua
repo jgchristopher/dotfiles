@@ -99,7 +99,7 @@ config.keys = {
 }
 
 -- Tab Stuff
-config.enable_tab_bar = true
+config.enable_tab_bar = false
 config.use_fancy_tab_bar = false
 
 -- The filled in variant of the < symbol
