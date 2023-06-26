@@ -11,5 +11,7 @@ gui:
       - underline
     selectedRangeBgColor:
       - underline
-
+git: 
+  autoFetch: false
+  autoRefresh: false
 
