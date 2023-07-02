@@ -30,6 +30,9 @@ local wk = require("which-key")
 -- and hide <leader>1
 
 wk.register({
+	{
+		{ "<leader>:", "<cmd>Telescope command_history<cr>", desc = "Command History" },
+	},
 	f = {
 		name = "file", -- optional group name
 		f = { "<cmd>Telescope find_files<cr>", "Find File" }, -- create a binding with label
