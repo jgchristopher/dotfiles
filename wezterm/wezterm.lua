@@ -1,7 +1,15 @@
 -- Pull in the wezterm API
 local wezterm = require("wezterm")
-
--- This table will hold the configuration.
+local isDark = wezterm.gui.get_appearance():find("Dark")
+local function scheme_for_appearance()
+	if isDark then
+		return "Catppuccin Macchiato"
+	else
+		return "Catppuccin Latte"
+	end
+end
+--
+--This table will hold the configuration.
 local config = {}
 
 -- In newer versions of wezterm, use the config_builder which will
@@ -13,7 +21,7 @@ end
 -- This is where you actually apply your config choices
 
 -- For example, changing the color scheme:
-config.color_scheme = "Catppuccin Macchiato"
+config.color_scheme = scheme_for_appearance() -- "Catppuccin Macchiato"
 -- config.color_scheme = "Catppuccin Latte"
 
 config.font = wezterm.font("MonoLisa")
@@ -25,24 +33,26 @@ config.window_decorations = "RESIZE"
 config.font = wezterm.font("MonoLisa", { weight = "Medium" })
 config.native_macos_fullscreen_mode = true
 
-config.window_background_gradient = {
-	orientation = "Horizontal",
-	colors = {
-		-- "#0f0c29",
-		-- "#1e1e2d",
-		-- "#302b63",
-		"#00000C",
-		-- "#00003F",
-		"#000026",
-		"#00000C",
-		-- "#24243e",
-		-- "#1e1e2d",
-		-- "#0f0c29",
-	},
-	interpolation = "CatmullRom",
-	blend = "Rgb",
-	noise = 0,
-}
+if isDark then
+	config.window_background_gradient = {
+		orientation = "Horizontal",
+		colors = {
+			-- "#0f0c29",
+			-- "#1e1e2d",
+			-- "#302b63",
+			"#00000C",
+			-- "#00003F",
+			"#000026",
+			"#00000C",
+			-- "#24243e",
+			-- "#1e1e2d",
+			-- "#0f0c29",
+		},
+		interpolation = "CatmullRom",
+		blend = "Rgb",
+		noise = 0,
+	}
+end
 
 config.keys = {
 	{
