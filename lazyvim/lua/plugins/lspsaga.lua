@@ -10,9 +10,10 @@ return {
     end,
   },
   {
-    "glepnir/lspsaga.nvim",
+    "nvimdev/lspsaga.nvim",
+    event = "LspAttach",
     keys = {
-      { "<leader>cd", "<cmd>Lspsaga lsp_finder<cr>", desc = "LspSaga Finder" },
+      { "<leader>cd", "<cmd>Lspsaga finder<cr>", desc = "LspSaga Finder" },
       { "<leader>cp", "<cmd>Lspsaga peek_definition<cr>", desc = "LspSaga Peek Definition" },
     },
     config = {

@@ -1,0 +1,28 @@
+body {
+  --font-text-theme: "MonoLisa", "Vollkorn", -apple-system, blinkmacsystemfont,
+    "Segoe UI", "Microsoft YaHei Light", roboto, inter, sans-serif;
+  --font-interface-theme: "Nunito Sans", -apple-system, blinkmacsystemfont,
+    "Segoe UI", "Microsoft YaHei Light", roboto, inter, sans-serif;
+}
+
+.markdown-rendered mark,
+.cm-s-obsidian span.cm-formatting-highlight,
+.cm-s-obsidian span.cm-highlight {
+  background-color: rgb(var(--ctp-sapphire));
+  color: var(--text-on-accent);
+}
+
+.markdown-source-view.mod-cm6 .cm-link .cm-underline:hover,
+.markdown-source-view.mod-cm6 .cm-url .cm-underline:hover {
+  color: rgb(var(--ctp-maroon));
+  text-decoration-line: var(--link-external-decoration-hover);
+}
+
+.external-link {
+  color: rgb(var(--ctp-mauve));
+}
+body.fancy-cursor .markdown-source-view.mod-cm6 .cm-content,
+body .markdown-source-view.mod-cm6 .cm-content,
+body.fancy-cursor .mod-cm6 .cm-line {
+  caret-color: var(--ctp-red);
+}
