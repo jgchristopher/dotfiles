@@ -7,7 +7,7 @@ source ~/.asdf/asdf.fish
 
 starship init fish | source
 
-
+set -gx DOTFILES ~/gitprojects/dotfiles/
 fish_add_path ~/gitprojects/dotfiles/bin
 fish_add_path /opt/homebrew/bin
 fish_add_path /opt/homebrew/sbin
