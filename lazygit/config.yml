@@ -1,17 +1,12 @@
 os:
   editPreset: "nvim"
 
-keybinding:
-  universal:
-    return: '<c-\>'
-
 gui:
   theme:
     selecteLineBgColor:
       - underline
     selectedRangeBgColor:
       - underline
-git: 
+git:
   autoFetch: false
   autoRefresh: false
-
