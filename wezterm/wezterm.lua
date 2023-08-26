@@ -1,5 +1,8 @@
 -- Pull in the wezterm API
 local wezterm = require("wezterm")
+
+local wezdir = os.getenv("HOME") .. "/.config/wezterm"
+
 local isDark = wezterm.gui.get_appearance():find("Dark")
 local function scheme_for_appearance()
 	if isDark then
@@ -34,23 +37,39 @@ config.font = wezterm.font("MonoLisa", { weight = "Medium" })
 config.native_macos_fullscreen_mode = true
 
 if isDark then
-	config.window_background_gradient = {
-		orientation = "Horizontal",
-		colors = {
-			-- "#0f0c29",
-			-- "#1e1e2d",
-			-- "#302b63",
-			"#00000C",
-			-- "#00003F",
-			"#000026",
-			"#00000C",
-			-- "#24243e",
-			-- "#1e1e2d",
-			-- "#0f0c29",
+	config.background = {
+		{
+			source = {
+				Gradient = {
+					orientation = "Horizontal",
+					colors = {
+						"#00000C",
+						"#000026",
+						"#00000C",
+					},
+					interpolation = "CatmullRom",
+					blend = "Rgb",
+					noise = 0,
+				},
+			},
+			width = "100%",
+			height = "100%",
+			opacity = 0.95,
 		},
-		interpolation = "CatmullRom",
-		blend = "Rgb",
-		noise = 0,
+		-- {
+		-- 	source = {
+		-- 		File = { path = wezdir .. "/stars.gif", speed = 0.3 },
+		-- 	},
+		-- 	repeat_x = "Mirror",
+		-- 	-- width = "100%",
+		-- 	height = "100%",
+		-- 	opacity = 0.95,
+		-- 	hsb = {
+		-- 		hue = 0.5,
+		-- 		saturation = 0.9,
+		-- 		brightness = 0.3,
+		-- 	},
+		-- },
 	}
 end
 
