@@ -5,3 +5,5 @@ nvim/plugin/packer_compiled.lua
 nvim-old/plugin/packer_compiled.lua
 
 node_modules
+tmux/*.log
+fish/fish_variables
