@@ -155,6 +155,8 @@ return {
         "typescript",
         "vim",
         "yaml",
+        "elixir",
+        "heex",
       },
     },
   },
