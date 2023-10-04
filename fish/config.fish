@@ -3,7 +3,7 @@ if status is-interactive
 end
 
 source ~/.config/fish/conf.d/abbr.fish
-source ~/.asdf/asdf.fish
+#source ~/.asdf/asdf.fish
 
 starship init fish | source
 
@@ -18,3 +18,5 @@ function __auto_add_local_node_bin --on-event fish_postexec
         addpaths $node_modules_path
     end
 end
+
+source /opt/homebrew/opt/asdf/libexec/asdf.fish
