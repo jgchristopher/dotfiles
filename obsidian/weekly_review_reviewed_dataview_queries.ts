@@ -1,20 +1,16 @@
-import moment from "moment";
+const whenDate = "<% tp.date.now('YYYY-MM-DD')%>";
+const weekStart = moment(whenDate).day(1);
+const weekEnd = moment(whenDate).day(7);
 
-const nextSunday = moment("<% tp.date.now('YYYY-MM-DD')%>")
-  .day(7)
-  .set({ hour: 23, minute: 59, second: 59, millisecond: 0 });
-const lastMonday = moment("<% tp.date.now('YYYY-MM-DD')%>")
-  .day(1)
-  .set({ hour: 0, minute: 0, second: 0, millisecond: 0 });
-dv.header(2, "All Unreviewed Clippings");
+dv.header(2, "All Reviewed Clippings");
 dv.taskList(
   dv
     .pages('"daily_notes"')
-    .where((b) => b.file.ctime >= lastMonday && b.file.cday <= nextSunday)
+    .where((b) => b.file.ctime >= weekStart && b.file.cday <= weekEnd)
     .file.tasks.where(
       (t) =>
         (t.text.includes("#obsidian-clipper") ||
           t.text.includes("#bookmark-clipper")) &&
-        t.completed
-    )
+        t.completed,
+    ),
 );

@@ -2,19 +2,18 @@ const whenDate = "<% tp.date.now('YYYY-MM-DD')%>";
 const weekStart = moment(whenDate).day(1);
 const weekEnd = moment(whenDate).day(7);
 
-
 function getFrontmatterData(file) {
   let info = null;
   if (file.frontmatter) {
-
-    info = {
-      x: moment(file.name).toDate(),
-      y: file.frontmatter.weight,
-      y2: file.frontmatter.happiness,
-    };
+    if (file.frontmatter.weight) {
+      info = {
+        x: moment(file.name).toDate(),
+        y: file.frontmatter.weight,
+        y2: file.frontmatter.happiness,
+      };
+    }
   }
-}
-return info;
+  return info;
 }
 
 const dataInfo = dv
@@ -23,7 +22,7 @@ const dataInfo = dv
     (b) =>
       b.file.ctime >= weekStart &&
       b.file.cday <= weekEnd &&
-      getFrontmatterData(b.file) != null
+      getFrontmatterData(b.file) != null,
   )
   .sort((b) => b.file.cday, "ascending")
   .map((d) => getFrontmatterData(d.file));
