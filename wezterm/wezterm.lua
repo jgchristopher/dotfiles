@@ -27,7 +27,15 @@ end
 config.color_scheme = scheme_for_appearance() -- "Catppuccin Macchiato"
 -- config.color_scheme = "Catppuccin Latte"
 
-config.font = wezterm.font("MonoLisa")
+config.font = wezterm.font("Monaspace Neon", { weight = "Regular" })
+config.font_rules = {
+	{
+		italic = true,
+		font = wezterm.font("Monaspace Radon", { weight = "Medium" }),
+	},
+}
+config.harfbuzz_features = { "calt", "dlig", "clig=1", "ss01", "ss02", "ss03", "ss04", "ss05", "ss06", "ss07", "ss08" }
+-- config.font = wezterm.font("MonoLisa")
 config.font_size = 13.0
 
 -- and finally, return the configuration to wezterm
