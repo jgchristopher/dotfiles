@@ -10,3 +10,6 @@ gui:
 git:
   autoFetch: false
   autoRefresh: false
+  paging:
+    colorArg: always
+    pager: delta --dark --paging=never
