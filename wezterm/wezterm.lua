@@ -1,17 +1,11 @@
 -- Pull in the wezterm API
 local wezterm = require("wezterm")
+local h = require("utils.helpers")
+local color_scheme = require("utils.colorscheme")
+local w = require("utils/wallpaper")
+local b = require("utils.background")
+local fonts = require("utils.fonts")
 
-local wezdir = os.getenv("HOME") .. "/.config/wezterm"
-
-local isDark = wezterm.gui.get_appearance():find("Dark")
-local function scheme_for_appearance()
-	if isDark then
-		return "Catppuccin Macchiato"
-	else
-		return "Catppuccin Latte"
-	end
-end
---
 --This table will hold the configuration.
 local config = {}
 
@@ -21,65 +15,65 @@ if wezterm.config_builder then
 	config = wezterm.config_builder()
 end
 
--- This is where you actually apply your config choices
+config.color_scheme = color_scheme.get_color_scheme()
 
--- For example, changing the color scheme:
-config.color_scheme = scheme_for_appearance() -- "Catppuccin Macchiato"
--- config.color_scheme = "Catppuccin Latte"
-
-config.font = wezterm.font("Monaspace Neon", { weight = "Regular" })
+config.font = fonts.get_font() -- wezterm.font("Monaspace Neon", { weight = "Regular" })
 config.font_rules = {
 	{
 		italic = true,
-		font = wezterm.font("Monaspace Radon", { weight = "Medium" }),
+		font = wezterm.font("Monaspace Radon", { weight = "Bold" }),
 	},
 }
 config.harfbuzz_features = { "calt", "dlig", "clig=1", "ss01", "ss02", "ss03", "ss04", "ss05", "ss06", "ss07", "ss08" }
--- config.font = wezterm.font("MonoLisa")
-config.font_size = 13.0
+config.font_size = 14.0
 
 -- and finally, return the configuration to wezterm
-config.window_background_opacity = 0.95
 config.window_decorations = "RESIZE"
-config.font = wezterm.font("MonoLisa", { weight = "Medium" })
 config.native_macos_fullscreen_mode = true
 
-if isDark then
-	config.background = {
-		{
-			source = {
-				Gradient = {
-					orientation = "Horizontal",
-					colors = {
-						"#00000C",
-						"#000026",
-						"#00000C",
-					},
-					interpolation = "CatmullRom",
-					blend = "Rgb",
-					noise = 0,
-				},
-			},
-			width = "100%",
-			height = "100%",
-			opacity = 0.95,
-		},
-		-- {
-		-- 	source = {
-		-- 		File = { path = wezdir .. "/stars.gif", speed = 0.3 },
-		-- 	},
-		-- 	repeat_x = "Mirror",
-		-- 	-- width = "100%",
-		-- 	height = "100%",
-		-- 	opacity = 0.95,
-		-- 	hsb = {
-		-- 		hue = 0.5,
-		-- 		saturation = 0.9,
-		-- 		brightness = 0.3,
-		-- 	},
-		-- },
-	}
-end
+-- local wallpaper = "/Users/johnchristopher/Documents/3 - Resources/Wallpapers/simon-spring-PR3GfTli3J4-unsplash.jpg"
+config.background = {
+	w.get_wallpaper(),
+
+	b.get_background(),
+}
+
+-- if h.is_dark() then
+-- 	config.background = {
+-- 		{
+-- 			source = {
+-- 				Gradient = {
+-- 					orientation = "Horizontal",
+-- 					colors = {
+-- 						"#00000C",
+-- 						"#000026",
+-- 						"#00000C",
+-- 					},
+-- 					interpolation = "CatmullRom",
+-- 					blend = "Rgb",
+-- 					noise = 0,
+-- 				},
+-- 			},
+-- 			width = "100%",
+-- 			height = "100%",
+-- 			opacity = 0.95,
+-- 		},
+-- 		-- {
+-- 		-- 	source = {
+-- 		-- 		File = { path = wezdir .. "/stars.gif", speed = 0.3 },
+-- 		-- 	},
+-- 		-- 	repeat_x = "Mirror",
+-- 		-- 	-- width = "100%",
+-- 		-- 	height = "100%",
+-- 		-- 	opacity = 0.95,
+-- 		-- 	hsb = {
+-- 		-- 		hue = 0.5,
+-- 		-- 		saturation = 0.9,
+-- 		-- 		brightness = 0.3,
+-- 		-- 	},
+-- 		-- },
+-- 	}
+-- end
 
 config.keys = {
 	{
@@ -133,6 +127,7 @@ config.keys = {
 		mods = "CTRL|SHIFT",
 		action = wezterm.action.AdjustPaneSize({ "Right", 4 }),
 	},
+	{ key = "L", mods = "CTRL", action = wezterm.action.ShowDebugOverlay },
 }
 
 -- Tab Stuff
