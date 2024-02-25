@@ -18,3 +18,10 @@ set -Ux FZF_TMUX_OPTS "-p 55%,60%"
 
 fish_add_path $HOME/.config/bin
 fish_add_path $HOME/.config/tmux/plugins/t-smart-tmux-session-manager/bin
+
+# pnpm
+set -gx PNPM_HOME "/Users/johnchristopher/Library/pnpm"
+if not string match -q -- $PNPM_HOME $PATH
+  set -gx PATH "$PNPM_HOME" $PATH
+end
+# pnpm end
