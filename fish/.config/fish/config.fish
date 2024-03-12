@@ -1,7 +1,6 @@
 eval (/opt/homebrew/bin/brew shellenv)
-zoxide init fish | source
-starship init fish | source
-
+set -U fish_greeting # disable fish greeting
+set -Ux EDITOR nvim
 
 
 function __auto_add_local_node_bin --on-event fish_postexec
@@ -13,15 +12,18 @@ end
 
 source /opt/homebrew/opt/asdf/libexec/asdf.fish
 
-
 set -Ux FZF_TMUX_OPTS "-p 55%,60%"
 
 fish_add_path $HOME/.config/bin
-fish_add_path $HOME/.config/tmux/plugins/t-smart-tmux-session-manager/bin
 
 # pnpm
-set -gx PNPM_HOME "/Users/johnchristopher/Library/pnpm"
+set -gx PNPM_HOME /Users/johnchristopher/Library/pnpm
 if not string match -q -- $PNPM_HOME $PATH
-  set -gx PATH "$PNPM_HOME" $PATH
+    set -gx PATH "$PNPM_HOME" $PATH
 end
 # pnpm end
+#
+
+zoxide init fish | source
+starship init fish | source
+atuin init fish | source
