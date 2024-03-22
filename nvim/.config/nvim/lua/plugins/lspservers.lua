@@ -28,16 +28,16 @@ return {
       vim.list_extend(opts.ensure_installed, {})
     end,
   },
-  {
-    "nvim-neotest/neotest",
-    optional = true,
-    dependencies = {
-      "jfpedroza/neotest-elixir",
-    },
-    opts = {
-      adapters = {
-        ["neotest-elixir"] = {},
-      },
-    },
-  },
+  -- {
+  --   "nvim-neotest/neotest",
+  --   optional = true,
+  --   dependencies = {
+  --     "jfpedroza/neotest-elixir",
+  --   },
+  --   opts = {
+  --     adapters = {
+  --       ["neotest-elixir"] = {},
+  --     },
+  --   },
+  -- },
 }
