@@ -16,7 +16,6 @@ function __auto_add_local_node_bin --on-event fish_postexec
     end
 end
 
-source /opt/homebrew/opt/asdf/libexec/asdf.fish
 
 set -Ux FZF_TMUX_OPTS "-p 55%,60%"
 
@@ -28,8 +27,9 @@ if not string match -q -- $PNPM_HOME $PATH
     set -gx PATH "$PNPM_HOME" $PATH
 end
 # pnpm end
-#
 
 zoxide init fish | source
 starship init fish | source
 atuin init fish | source
+
+source /opt/homebrew/opt/asdf/libexec/asdf.fish
