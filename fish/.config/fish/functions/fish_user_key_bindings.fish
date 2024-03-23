@@ -2,3 +2,4 @@ function fish_user_key_bindings
 end
 
 fzf_key_bindings
+atuin_key_bindings
