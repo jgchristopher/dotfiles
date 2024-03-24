@@ -6,26 +6,5 @@ nvim-old/plugin/packer_compiled.lua
 
 node_modules
 tmux/*.log
-fish/fish_variables
-fish/completions/fisher.fish
-fish/completions/fzf_configure_bindings.fish
-fish/conf.d/fzf.fish
-fish/functions/_fzf_configure_bindings_help.fish
-fish/functions/_fzf_extract_var_info.fish
-fish/functions/_fzf_preview_changed_file.fish
-fish/functions/_fzf_preview_file.fish
-fish/functions/_fzf_report_diff_type.fish
-fish/functions/_fzf_report_file_type.fish
-fish/functions/_fzf_search_directory.fish
-fish/functions/_fzf_search_git_log.fish
-fish/functions/_fzf_search_git_status.fish
-fish/functions/_fzf_search_history.fish
-fish/functions/_fzf_search_processes.fish
-fish/functions/_fzf_search_variables.fish
-fish/functions/_fzf_wrapper.fish
-fish/functions/fisher.fish
-fish/functions/fzf_configure_bindings.fish
-fish/themes/Catppuccin Frappe.theme
-fish/themes/Catppuccin Latte.theme
-fish/themes/Catppuccin Macchiato.theme
-fish/themes/Catppuccin Mocha.theme
+
+fish/.config/fish/fish_variables
