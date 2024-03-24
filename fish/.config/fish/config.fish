@@ -21,6 +21,8 @@ set -Ux FZF_TMUX_OPTS "-p 55%,60%"
 
 fish_add_path $HOME/.config/bin
 
+elixir_exports
+
 # pnpm
 set -gx PNPM_HOME /Users/johnchristopher/Library/pnpm
 if not string match -q -- $PNPM_HOME $PATH
