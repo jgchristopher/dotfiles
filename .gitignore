@@ -8,3 +8,4 @@ node_modules
 tmux/*.log
 
 fish/.config/fish/fish_variables
+fish/.config/fish/fisher
