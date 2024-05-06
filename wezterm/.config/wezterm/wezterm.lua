@@ -128,6 +128,11 @@ config.keys = {
 		action = wezterm.action.AdjustPaneSize({ "Right", 4 }),
 	},
 	{ key = "L", mods = "CTRL", action = wezterm.action.ShowDebugOverlay },
+	{
+		key = "p",
+		mods = "CTRL|SHIFT|CMD",
+		action = wezterm.action.ReloadConfiguration,
+	},
 }
 
 -- Tab Stuff
