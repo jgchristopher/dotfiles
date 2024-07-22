@@ -18,6 +18,7 @@ set -Ux EDITOR nvim
 
 
 set -Ux FZF_TMUX_OPTS "-p 55%,60%"
+set -gx DOTFILES /Users/johnchristopher/gitprojects/dotfiles/
 
 fish_add_path $HOME/.config/bin
 
