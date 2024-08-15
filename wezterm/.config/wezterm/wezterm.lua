@@ -21,7 +21,7 @@ config.font = fonts.get_font() -- wezterm.font("Monaspace Neon", { weight = "Reg
 config.font_rules = {
 	{
 		italic = true,
-		font = wezterm.font("Monaspace Radon", { weight = "Bold" }),
+		font = wezterm.font("Monaspace Krypton", { weight = "Bold" }),
 	},
 }
 config.harfbuzz_features = { "calt", "dlig", "clig=1", "ss01", "ss02", "ss03", "ss04", "ss05", "ss06", "ss07", "ss08" }

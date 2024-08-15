@@ -31,7 +31,9 @@ if not string match -q -- $PNPM_HOME $PATH
 end
 # pnpm end
 
+#homebrew
 source /opt/homebrew/opt/asdf/libexec/asdf.fish
+
 zoxide init fish | source
 starship init fish | source
 atuin init fish | source
