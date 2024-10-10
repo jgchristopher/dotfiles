@@ -38,6 +38,16 @@ config.background = {
 	b.get_background(),
 }
 
+if h.is_dark() then
+	config.set_environment_variables = {
+		THEME_FLAVOUR = "macchiato",
+	}
+else
+	config.set_environment_variables = {
+		THEME_FLAVOUR = "latte",
+	}
+end
+
 -- if h.is_dark() then
 -- 	config.background = {
 -- 		{

@@ -10,9 +10,7 @@ local get_colors = function()
 		}
 	else
 		return {
-			"hsla(278, 52%, 82%, 1)",
-			"hsla(278, 52%, 85%, 1)",
-			"hsla(278, 52%, 82%, 1)",
+			"#ffffff",
 		}
 	end
 end
@@ -30,7 +28,8 @@ M.get_background = function()
 		},
 		width = "100%",
 		height = "100%",
-		opacity = h.is_dark() and 0.95 or 0.7,
+		-- opacity = h.is_dark() and 0.95 or 0.95,
+		opacity = 0.95,
 	}
 end
 
