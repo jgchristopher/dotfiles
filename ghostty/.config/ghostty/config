@@ -29,16 +29,18 @@ clipboard-read = allow
 clipboard-write = allow
 clipboard-trim-trailing-spaces = true
 
+keybind = global:cmd+8=toggle_quick_terminal
+
 # splits
-# keybind = cmd+s>\=new_split:right
-# keybind = cmd+s>-=new_split:down
-#
-# keybind = cmd+s>j=goto_split:bottom
-# keybind = cmd+s>k=goto_split:top
-# keybind = cmd+s>h=goto_split:left
-# keybind = cmd+s>l=goto_split:right
-#
-# keybind = cmd+s>z=toggle_split_zoom
-# keybind = cmd+s>e=equalize_splits
+keybind = ctrl+b>\=new_split:right
+keybind = ctrl+b>-=new_split:down
+
+keybind = ctrl+b>j=goto_split:bottom
+keybind = ctrl+b>k=goto_split:top
+keybind = ctrl+b>h=goto_split:left
+keybind = ctrl+b>l=goto_split:right
+
+keybind = ctrl+b>z=toggle_split_zoom
+keybind = ctrl+b>e=equalize_splits
 
 
