@@ -1,0 +1,44 @@
+#theme = dark:catppuccin-mocha,light:catppuccin-latte
+theme = dark:catppuccin-mocha,light:catppuccin-latte
+#background = 1c2021
+
+macos-titlebar-style = hidden
+bold-is-bright = true
+background-opacity = 0.90
+window-decoration = false
+window-theme = auto
+window-padding-color = background
+window-padding-x = 0
+window-padding-y = 0
+window-padding-balance = false
+window-colorspace = "display-p3"
+adjust-cell-height = 10%
+
+shell-integration-features = no-cursor,sudo
+
+#font-family = "Monaspace Neon"
+#font-family = "Monaspace Argon"
+font-family = "Monaspace Xenon"
+font-size = 15
+cursor-color = #FFA500
+font-feature = +liga
+cursor-style = bar 
+
+
+clipboard-read = allow
+clipboard-write = allow
+clipboard-trim-trailing-spaces = true
+
+# splits
+# keybind = cmd+s>\=new_split:right
+# keybind = cmd+s>-=new_split:down
+#
+# keybind = cmd+s>j=goto_split:bottom
+# keybind = cmd+s>k=goto_split:top
+# keybind = cmd+s>h=goto_split:left
+# keybind = cmd+s>l=goto_split:right
+#
+# keybind = cmd+s>z=toggle_split_zoom
+# keybind = cmd+s>e=equalize_splits
+
+
