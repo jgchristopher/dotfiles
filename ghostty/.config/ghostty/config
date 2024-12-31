@@ -29,7 +29,7 @@ clipboard-read = allow
 clipboard-write = allow
 clipboard-trim-trailing-spaces = true
 
-keybind = global:cmd+8=toggle_quick_terminal
+keybind = global:cmd+/=toggle_quick_terminal
 
 # splits
 keybind = ctrl+b>\=new_split:right
