@@ -222,3 +222,31 @@ shift-down = ['volume set 0', 'mode main']
 [[on-window-detected]]
 if.app-id = 'com.apple.finder'
 run = ['layout floating']
+
+[[on-window-detected]]
+if.app-id = 'com.apple.Photos'
+run = ['layout floating']
+
+[[on-window-detected]]
+if.app-id = 'com.apple.AppStore'
+run = ['layout floating']
+
+[[on-window-detected]]
+if.app-id = 'com.1password.1password'
+run = ['layout floating']
+
+[[on-window-detected]]
+if.app-id = 'com.apple.Music'
+run = ['layout floating']
+
+[[on-window-detected]]
+if.app-id = 'com.apple.Preview'
+run = ['layout floating']
+
+[[on-window-detected]]
+if.app-id = 'com.apple.MobileSMS'
+run = ['layout floating']
+
+[[on-window-detected]]
+if.app-id = 'md.obsidian'
+run = ['layout floating']
