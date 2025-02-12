@@ -70,6 +70,11 @@ outer.right = 0
 # Fallback value (if you omit the key): mode.main.binding = {}
 [mode.main.binding]
 
+
+cmd-h = []     # Disable "hide application"
+cmd-alt-h = [] # Disable "hide others"
+
+
 # All possible keys:
 # - Letters.        a, b, c, ..., z
 # - Numbers.        0, 1, 2, ..., 9
@@ -212,3 +217,8 @@ alt-shift-l = ['join-with right', 'mode main']
 down = 'volume down'
 up = 'volume up'
 shift-down = ['volume set 0', 'mode main']
+
+
+[[on-window-detected]]
+if.app-id = 'com.apple.finder'
+run = ['layout floating']
