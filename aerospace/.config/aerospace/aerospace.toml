@@ -247,6 +247,10 @@ run = ['move-node-to-workspace C']
 if.app-id = 'com.tinyspeck.slackmacgap'
 run = ['move-node-to-workspace C']
 
+[[on-window-detected]]
+if.app-id = 'com.hnc.Discord'
+run = ['move-node-to-workspace C']
+
 
 # Development - D
 [[on-window-detected]]
@@ -332,4 +336,8 @@ run = 'layout floating'
 
 [[on-window-detected]]
 if.app-id = 'FortiToken-Mobile'
+run = 'layout floating'
+
+[[on-window-detected]]
+if.app-id = 'io.zsa.keymapp'
 run = 'layout floating'
