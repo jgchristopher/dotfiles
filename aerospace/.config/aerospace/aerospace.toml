@@ -263,10 +263,14 @@ run = ['move-node-to-workspace D']
 if.app-id = 'com.flexibits.fantastical2.mac'
 run = ['move-node-to-workspace P']
 
-# Productivity - P
 [[on-window-detected]]
 if.app-id = 'com.freron.MailMate'
 run = ['move-node-to-workspace P']
+
+[[on-window-detected]]
+if.app-id = 'com.omnigroup.OmniFocus4'
+run = ['move-node-to-workspace P']
+
 
 # Zoom - Z
 [[on-window-detected]]
