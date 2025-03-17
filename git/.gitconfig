@@ -1,0 +1,83 @@
+# This is Git's per-user configuration file.
+[user]
+# Please adapt and uncomment the following lines:
+	name = John Christopher
+	email = john@jdotc.xyz 
+[init]
+	defaultBranch = main
+
+[core]
+    pager = delta
+    editor = vim
+    whitespace = cr-at-eol
+
+[color]
+    diff = auto
+    status = auto
+    branch = auto
+    interactive = auto
+    ui = auto
+
+[color "branch"]
+    current = green bold
+    local = green
+    remote = red bold
+
+[color "diff"]
+    meta = yellow bold
+    frag = magenta bold
+    old = red bold
+    new = green bold
+
+[color "status"]
+    added = green bold
+    changed = yellow bold
+    untracked = red
+
+[color "sh"]
+    branch = yellow
+
+[push]
+    # push will only do the current branch, not all branches
+    default = current
+
+[branch]
+    # set up 'git pull' to rebase instead of merge
+    autosetuprebase = always
+
+[pull]
+    rebase = true
+
+[interactive]
+    diffFilter = delta --color-only
+
+[delta]
+    navigate = true    # use n and N to move between diff sections
+    features = unobtrusive-line-numbers decorations
+    whitespace-error-style = 22 reverse
+    syntax-theme = base16-256
+
+[delta "unobtrusive-line-numbers"]
+    line-numbers = true
+    # line-numbers-minus-style = "#444444"
+    # line-numbers-zero-style = "#444444"
+    # line-numbers-plus-style = "#444444"
+    line-numbers-left-format = "{nm:>4}┊"
+    line-numbers-right-format = "{np:>4}│"
+    line-numbers-left-style = blue
+    line-numbers-right-style = blue
+
+[delta "decorations"]
+    commit-decoration-style = bold yellow box ul
+    file-style = bold yellow ul
+    file-decoration-style = none
+    hunk-header-decoration-style = yellow box
+
+[merge]
+    conflictstyle = diff3
+
+[diff]
+    colorMoved = default
+[rebase]
+    instructionFormat = "[%an - %ar] %s"
+    autoStash = true
