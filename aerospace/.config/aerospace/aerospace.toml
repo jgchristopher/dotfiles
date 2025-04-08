@@ -343,3 +343,7 @@ run = 'layout floating'
 [[on-window-detected]]
 if.app-id = 'io.zsa.keymapp'
 run = 'layout floating'
+
+[[on-window-detected]]
+if.app-id = 'com.stairways.keyboardmaestro.editor'
+run = 'layout floating'
