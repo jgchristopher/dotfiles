@@ -347,3 +347,11 @@ run = 'layout floating'
 [[on-window-detected]]
 if.app-id = 'com.stairways.keyboardmaestro.editor'
 run = 'layout floating'
+
+[[on-window-detected]]
+if.app-id = 'info.eurocomp.Timing-setapp'
+run = 'layout floating'
+
+[[on-window-detected]]
+if.app-id = 'com.tinyapp.TablePlus-setapp'
+run = 'layout floating'
