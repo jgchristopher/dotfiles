@@ -355,3 +355,7 @@ run = 'layout floating'
 [[on-window-detected]]
 if.app-id = 'com.tinyapp.TablePlus-setapp'
 run = 'layout floating'
+
+[[on-window-detected]]
+if.app-id = 'com.mongodb.compass'
+run = 'layout floating'
