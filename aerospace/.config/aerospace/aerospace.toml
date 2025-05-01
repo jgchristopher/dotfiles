@@ -375,3 +375,11 @@ run = 'layout floating'
 [[on-window-detected]]
 if.app-id = 'com.agiletortoise.Drafts-OSX'
 run = 'layout floating'
+
+[[on-window-detected]]
+if.app-id = 'com.apple.ScreenSharing'
+run = 'layout floating'
+
+[[on-window-detected]]
+if.app-id = 'com.luckymarmot.Paw-setapp'
+run = 'layout floating'
