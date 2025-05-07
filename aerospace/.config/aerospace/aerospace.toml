@@ -271,6 +271,15 @@ run = ['move-node-to-workspace P']
 if.app-id = 'com.omnigroup.OmniFocus4'
 run = ['move-node-to-workspace P']
 
+# VPN - V
+[[on-window-detected]]
+if.app-id = 'com.fortinet.FortiClient'
+run = ['layout floating', 'move-node-to-workspace V']
+
+[[on-window-detected]]
+if.app-id = 'FortiToken-Mobile'
+run = ['layout floating', 'move-node-to-workspace V']
+
 
 # Zoom - Z
 [[on-window-detected]]
