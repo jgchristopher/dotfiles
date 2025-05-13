@@ -20,3 +20,5 @@ vim.filetype.add({
 })
 
 opt.laststatus = 0
+
+vim.g.snacks_animate = false
