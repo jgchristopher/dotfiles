@@ -288,6 +288,10 @@ run = ['layout floating', 'move-node-to-workspace V']
 if.app-id = 'FortiToken-Mobile'
 run = ['layout floating', 'move-node-to-workspace V']
 
+[[on-window-detected]]
+if.app-id = 'com.anthropic.claudefordesktop'
+run = ['layout floating', 'move-node-to-workspace C']
+
 
 # Zoom - Z
 [[on-window-detected]]
