@@ -392,3 +392,7 @@ run = 'layout floating'
 [[on-window-detected]]
 if.app-id = 'com.luckymarmot.Paw-setapp'
 run = 'layout floating'
+
+[[on-window-detected]]
+if.app-id = 'com.apple.Maps'
+run = 'layout floating'
