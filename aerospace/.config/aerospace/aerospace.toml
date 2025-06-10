@@ -284,7 +284,7 @@ run = ['layout floating', 'move-node-to-workspace V']
 # Zoom - Z
 [[on-window-detected]]
 if.app-id = 'us.zoom.xos'
-run = ['move-node-to-workspace Z']
+run = ['layout floating', 'move-node-to-workspace Z']
 
 # Excel - X
 [[on-window-detected]]
