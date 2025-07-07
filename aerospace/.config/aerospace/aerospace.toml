@@ -271,6 +271,14 @@ run = ['move-node-to-workspace P']
 if.app-id = 'com.omnigroup.OmniFocus4'
 run = ['move-node-to-workspace P']
 
+[[on-window-detected]]
+if.app-id = 'com.readdle.SparkDesktop-setapp'
+run = ['move-node-to-workspace P']
+
+[[on-window-detected]]
+if.app-id = 'com.culturedcode.ThingsMac'
+run = ['layout floating', 'move-node-to-workspace P']
+
 # VPN - V
 [[on-window-detected]]
 if.app-id = 'com.fortinet.FortiClient'
