@@ -1,0 +1,20 @@
+[[session]]
+name = "Downloads 📥"
+path = "~/Downloads"
+startup_command = "ls"
+
+[[session]]
+name = "dotfiles"
+path = "~/gitprojects/dotfiles"
+startup_command = "nvim"
+preview_command = "bat --color=always ~/gitprojects/dotfiles/tmux/.config/tmux/tmux.conf"
+
+[[session]]
+name = "BuildMas"
+path = "~/gitprojects/devdilemmas/BuildMas/buildmas-node/"
+startup_command = "nvim"
+
+[[session]]
+name = "Lilypad ETL"
+path = "~/gitprojects/arbol/lilypad/data_etl"
+startup_command = "nvim"
