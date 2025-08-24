@@ -21,6 +21,7 @@ set -Ux FZF_TMUX_OPTS "-p 55%,60%"
 set -gx DOTFILES /Users/johnchristopher/gitprojects/dotfiles/
 
 fish_add_path $HOME/.config/bin
+fish_add_path $HOME/bin
 
 elixir_exports
 

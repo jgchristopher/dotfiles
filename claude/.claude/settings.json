@@ -1,0 +1,34 @@
+{
+  "includeCoAuthoredBy": false,
+  "permissions": {
+    "allow": [
+      "Bash(cat:*)",
+      "Bash(docker compose exec:*)",
+      "Bash(docker run:*)",
+      "Bash(find:*)",
+      "Bash(gh pr view:*)",
+      "Bash(gh run view:*)",
+      "Bash(git branch:*)",
+      "Bash(git checkout:*)",
+      "Bash(git fetch:*)",
+      "Bash(git rebase:*)",
+      "Bash(git stash:*)",
+      "Bash(git switch:*)",
+      "Bash(grep:*)",
+      "Bash(ls:*)",
+      "Bash(mkdir:*)",
+      "Bash(node:*)",
+      "Bash(npm run build:*)",
+      "Bash(rg:*)",
+      "Fetch(https://docs.anthropic.com/*)",
+      "Fetch(https://github.com/*)",
+      "Read(~/gitprojects/**)"
+    ]
+  },
+
+  "model": "opus",
+  "statusLine": {
+    "type": "command",
+    "command": "claude-statusline"
+  }
+}

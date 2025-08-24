@@ -15,6 +15,8 @@
     "lazyvim.plugins.extras.lang.elixir",
     "lazyvim.plugins.extras.lang.json",
     "lazyvim.plugins.extras.lang.markdown",
+    "lazyvim.plugins.extras.lang.ocaml",
+    "lazyvim.plugins.extras.lang.omnisharp",
     "lazyvim.plugins.extras.lang.python",
     "lazyvim.plugins.extras.lang.svelte",
     "lazyvim.plugins.extras.lang.tailwind",
