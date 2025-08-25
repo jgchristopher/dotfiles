@@ -106,17 +106,12 @@ create_section() {
   fi
 }
 
-# Tunes component
-create_tunes_section() {
-  local tunes_result="$(current-song)"
-  if [[ -n "$tunes_result" ]]; then
-    echo "$(create_section "right" " " "${tunes_result}" "${thm_blue7}" "${thm_blue6}")"
-  fi
-}
+
 
 # Tunes component
-# tm_tunes_display="$(create_tunes_section)"
-tm_tunes_display="#(song=\$(current-song); if [[ -n \"\$song\" ]]; then echo \"#[bg=default]#[fg=${thm_blue7}]${tm_separator_right}#[bg=${thm_blue7}]#[fg=${thm_blue6}] ${tm_music_icon}  \$song #[bg=default]#[fg=${thm_blue7}]${tm_separator_left}#[bg=default,fg=default]\"; fi)"
+tm_tunes="#(osascript -l JavaScript $DOTFILES/applescripts/tunes.js)"
+# tm_tunes_display="#(song=\${tm_tunes}); if [[ -n \"\$song\" ]]; then echo \"#[bg=default]#[fg=${thm_blue7}]${tm_separator_right}#[bg=${thm_blue7}]#[fg=${thm_blue6}] ${tm_music_icon}  \$song #[bg=default]#[fg=${thm_blue7}]${tm_separator_left}#[bg=default,fg=default]\"; fi)"
+tm_tunes_display="#(song=\$(osascript -l JavaScript $DOTFILES/applescripts/tunes.js); if [[ -n \"\$song\" ]]; then echo \"#[bg=default]#[fg=${thm_blue7}]${tm_separator_right}#[bg=${thm_blue7}]#[fg=${thm_blue6}] ${tm_music_icon}  \$song #[bg=default]#[fg=${thm_blue7}]${tm_separator_left}#[bg=default,fg=default]\"; fi)"
 
 # Status line components
 session="$(create_section "left" "$tm_icon" "#S" "${thm_purple}" "${thm_bg}" "no-start")"
@@ -125,9 +120,7 @@ tm_git_status="$(create_section "right" "" "#(tmux-git-status '#{pane_current
 
 # Status left and right - using the exact original syntax
 tmux set -g status-left "$session"
-# tmux set -g status-right "${tm_claude_display}#{?$tm_tunes,${tm_tunes_display},}${tm_git_status}"
 tmux set -g status-right "${tm_claude_display}${tm_tunes_display}${tm_git_status}"
-# tmux set -g status-right "${tm_tunes_display}${tm_git_status}"
 
 # Window status formats
 tmux setw -g window-status-format "#[fg=${thm_black4}] #{?#{window_name},#W,#{b:pane_current_path}} "
