@@ -303,6 +303,13 @@ run = ['layout floating', 'move-node-to-workspace Z']
 if.app-id = 'com.microsoft.Excel'
 run = ['move-node-to-workspace X']
 
+
+# Scratch - S
+[[on-window-detected]]
+if.app-id = 'com.agiletortoise.Drafts-OSX'
+run = ['layout floating', 'move-node-to-workspace S']
+
+
 # Floating
 
 [[on-window-detected]]
@@ -393,9 +400,9 @@ run = 'layout floating'
 if.app-id = 'com.binarynights.forklift-setapp'
 run = 'layout floating'
 
-[[on-window-detected]]
-if.app-id = 'com.agiletortoise.Drafts-OSX'
-run = 'layout floating'
+# [[on-window-detected]]
+# if.app-id = 'com.agiletortoise.Drafts-OSX'
+# run = 'layout floating'
 
 [[on-window-detected]]
 if.app-id = 'com.apple.ScreenSharing'

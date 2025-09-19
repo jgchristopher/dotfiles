@@ -1,7 +1,7 @@
 return {
   {
-    "echasnovski/mini.indentscope",
+    "nvim-mini/mini.indentscope",
     opts = { symbol = "╎" },
   },
-  { "echasnovski/mini.move", version = "*" },
+  { "nvim-mini/mini.move", version = "*" },
 }
