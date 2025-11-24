@@ -10,9 +10,9 @@ startup_command = "nvim"
 preview_command = "bat --color=always ~/gitprojects/dotfiles/tmux/.config/tmux/tmux.conf"
 
 [[session]]
-name = "BuildMas"
-path = "~/gitprojects/devdilemmas/BuildMas/buildmas-node/"
-startup_command = "nvim"
+name = "Arbol"
+path = "~/gitprojects/arbol/"
+startup_command = "ls -latr"
 
 [[session]]
 name = "Lilypad ETL"

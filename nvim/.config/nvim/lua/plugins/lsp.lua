@@ -1,10 +1,18 @@
 return {
-  -- {
-  --   "neovim/nvim-lspconfig",
-  --   opts = {
-  --     inlay_hints = { enabled = false },
-  --   },
-  -- },
+  {
+    "neovim/nvim-lspconfig",
+    opts = {
+      inlay_hints = { enabled = false },
+      servers = {
+        ["*"] = {
+          keys = {
+            { "<leader>cd", false },
+            { "<c-k>", mode = "i", false },
+          },
+        },
+      },
+    },
+  },
   -- {
   --   "neovim/nvim-lspconfig",
   --   opts = function()

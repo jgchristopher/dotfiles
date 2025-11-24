@@ -1,35 +1,12 @@
 let output = "";
-try {
-  const musicApp = Application("Music");
-  if (musicApp.running()) {
-    try {
-      const track = musicApp.currentTrack;
-      const artist = track.artist();
-      const title = track.name();
-      output = `${title} - ${artist}`.substr(0, 50);
-    } catch (e) {
-      // Handle case where track info can't be accessed
-    }
-  }
-} catch (e) {
-  // Music app not found, try Spotify
-}
-
-if (output === "") {
+if (Application("Music").running()) {
   try {
-    const spotifyApp = Application("Spotify");
-    if (spotifyApp.running()) {
-      try {
-        const track = spotifyApp.currentTrack;
-        const artist = track.artist();
-        const title = track.name();
-        output = `${title} - ${artist}`.substr(0, 50);
-      } catch (e) {
-        // Handle case where track info can't be accessed
-      }
-    }
+    const track = Application("Music").currentTrack;
+    const artist = track.artist();
+    const title = track.name();
+    output = `${title} - ${artist}`.substr(0, 50);
   } catch (e) {
-    // Spotify app not found
+    // Handle case where track info can't be accessed
   }
 }
 

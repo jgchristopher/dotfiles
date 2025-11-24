@@ -1,14 +1,14 @@
 return {
   -- edit lsp keymaps
-  {
-    "neovim/nvim-lspconfig",
-    init = function()
-      local keys = require("lazyvim.plugins.lsp.keymaps").get()
-      -- change a keymap
-      keys[#keys + 1] = { "<leader>cd", false }
-      keys[#keys + 1] = { "<c-k>", mode = "i", false }
-    end,
-  },
+  -- {
+  --   "neovim/nvim-lspconfig",
+  --   init = function()
+  --     local keys = require("lazyvim.plugins.lsp.keymaps").get()
+  --     -- change a keymap
+  --     keys[#keys + 1] = { "<leader>cd", false }
+  --     keys[#keys + 1] = { "<c-k>", mode = "i", false }
+  --   end,
+  -- },
   {
     "nvimdev/lspsaga.nvim",
     event = "LspAttach",
