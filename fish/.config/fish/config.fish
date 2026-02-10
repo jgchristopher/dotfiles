@@ -65,3 +65,5 @@ if type -q atuin
         atuin init fish 2>/dev/null | source
     end
 end
+
+fish_add_path "/Applications/Obsidian.app/Contents/MacOS"
