@@ -28,5 +28,7 @@
   "statusLine": {
     "type": "command",
     "command": "claude-statusline"
-  }
+  },
+  "alwaysThinkingEnabled": true,
+  "effortLevel": "medium"
 }

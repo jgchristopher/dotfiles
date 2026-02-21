@@ -67,3 +67,4 @@ if type -q atuin
 end
 
 fish_add_path "/Applications/Obsidian.app/Contents/MacOS"
+export PATH="$HOME/.local/bin:$PATH"
