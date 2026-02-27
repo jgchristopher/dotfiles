@@ -31,5 +31,8 @@
     "command": "claude-statusline"
   },
   "alwaysThinkingEnabled": true,
-  "effortLevel": "medium"
+  "effortLevel": "medium",
+  "enabledPlugins": {
+    "superpowers@claude-plugins-official": true
+  }
 }

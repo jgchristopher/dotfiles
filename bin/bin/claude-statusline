@@ -8,30 +8,138 @@ BLUE='\033[0;34m'
 MAGENTA='\033[0;35m'
 CYAN='\033[0;36m'
 WHITE='\033[0;37m'
+DIM='\033[2m'
 RESET='\033[0m'
+
+# Separator (minimal style)
+SEP="${DIM}│${RESET}"
+
+# Emoji icons
+ICON_PROJECT="📁"
+ICON_BRANCH="🌿"
+ICON_CONTEXT="📊"
+ICON_COST="💰"
+ICON_STYLE="🎨"
+
+# Feature flags (set env vars to 0 to disable)
+SHOW_CONTEXT_TOKENS="${CLAUDE_STATUSLINE_TOKENS:-1}"
 
 # Read JSON input from stdin
 input=$(cat)
 
-# Extract information from JSON input
-model=$(echo "$input" | jq -r '.model.display_name // "Unknown Model"')
-output_style=$(echo "$input" | jq -r '.output_style.name // "default"')
-current_dir=$(echo "$input" | jq -r '.workspace.current_dir // "."')
+# Helper functions for extracting data
+get_model_name() { echo "$input" | jq -r '.model.display_name // "Unknown Model"'; }
 
-# Get project name (current directory name)
-project=$(basename "$current_dir")
+# Get model-specific icon based on model name
+get_model_icon() {
+  local model_name=$(get_model_name)
+  case "$model_name" in
+  *[Oo]pus*) echo "🎭" ;;   # Theater masks for the dramatic, powerful model
+  *[Ss]onnet*) echo "🎵" ;; # Musical note for the balanced, harmonious model
+  *[Hh]aiku*) echo "🍃" ;;  # Leaf for the light, quick model
+  *) echo "🧠" ;;           # Default brain icon
+  esac
+}
+get_output_style() { echo "$input" | jq -r '.output_style.name // "default"'; }
+get_current_dir() { echo "$input" | jq -r '.workspace.current_dir // "."'; }
+get_project_dir() { echo "$input" | jq -r '.workspace.project_dir // "."'; }
+get_cost() {
+  local cost=$(echo "$input" | jq -r '.cost.total_cost_usd // 0')
+  printf "\$%.2f" "$cost"
+}
+
+get_context_percent() {
+  # Use pre-calculated percentage from Claude Code (recommended approach)
+  local percent=$(echo "$input" | jq -r '.context_window.used_percentage // 0')
+  # Round to integer for display
+  printf "%.0f" "$percent"
+}
+
+get_context_used() {
+  # Calculate tokens from percentage and window size (most accurate)
+  local percent=$(echo "$input" | jq -r '.context_window.used_percentage // 0')
+  local window=$(echo "$input" | jq -r '.context_window.context_window_size // 200000')
+  local used=$(echo "$percent * $window / 100" | bc)
+  if [ "$used" -ge 1000 ]; then
+    printf "%.0fK" "$(echo "scale=0; $used / 1000" | bc)"
+  else
+    printf "%d" "$used"
+  fi
+}
+
+# Build a progress bar with color based on percentage
+build_context_bar() {
+  local percent=$(get_context_percent)
+  local bar_width=10
+  local filled=$((percent * bar_width / 100))
+  local empty=$((bar_width - filled))
+
+  # Cap filled at bar_width
+  if [ "$filled" -gt "$bar_width" ]; then
+    filled=$bar_width
+    empty=0
+  fi
+
+  # Choose color based on percentage thresholds
+  local bar_color
+  if [ "$percent" -lt 40 ]; then
+    bar_color="$WHITE"
+  elif [ "$percent" -lt 80 ]; then
+    bar_color="$YELLOW"
+  else
+    bar_color="$RED"
+  fi
+
+  # Build the bar
+  local bar=""
+  for ((i = 0; i < filled; i++)); do
+    bar+="█"
+  done
+  for ((i = 0; i < empty; i++)); do
+    bar+="░"
+  done
+
+  if [ "$SHOW_CONTEXT_TOKENS" = "1" ]; then
+    local used=$(get_context_used)
+    printf "%s%s%s %d%% ${DIM}(%s)${RESET}" "$bar_color" "$bar" "$RESET" "$percent" "$used"
+  else
+    printf "%s%s%s %d%%" "$bar_color" "$bar" "$RESET" "$percent"
+  fi
+}
+
+# Extract values
+model=$(get_model_name)
+model_icon=$(get_model_icon)
+output_style=$(get_output_style)
+current_dir=$(get_current_dir)
+project_dir=$(get_project_dir)
+cost_display=$(get_cost)
+context_bar=$(build_context_bar)
+
+# Get project name and handle subdirectory display
+project=$(basename "$project_dir")
+if [ "$current_dir" != "$project_dir" ]; then
+  subdir=$(basename "$current_dir")
+  project="${project} (CWD: ${subdir}/)"
+fi
 
 # Get git branch
 git_branch=$(git rev-parse --abbrev-ref HEAD 2>/dev/null || echo "no-git")
 
-# Build statusline with colors
+# Build statusline (order: project → branch → context → model → cost → style)
 statusline=""
-statusline+="${BLUE}📁 ${project}${RESET}"
-statusline+=" ${WHITE}|${RESET} "
-statusline+="${GREEN}🌿 ${git_branch}${RESET}"
-statusline+=" ${WHITE}|${RESET} "
-statusline+="${MAGENTA}🧠 ${model}${RESET}"
-statusline+=" ${WHITE}|${RESET} "
-statusline+="${YELLOW}🎨 ${output_style}${RESET}"
+statusline+="${ICON_PROJECT} ${BLUE}${project}${RESET}"
+statusline+=" ${SEP} "
+statusline+="${ICON_BRANCH} ${GREEN}${git_branch}${RESET}"
+statusline+=" ${SEP} "
+statusline+="${ICON_CONTEXT} ${context_bar}"
+statusline+=" ${SEP} "
+statusline+="${model_icon} ${MAGENTA}${model}${RESET}"
+statusline+=" ${SEP} "
+statusline+="${ICON_COST} ${CYAN}${cost_display}${RESET}"
+if [ "$output_style" != "default" ]; then
+  statusline+=" ${SEP} "
+  statusline+="${ICON_STYLE} ${DIM}${output_style}${RESET}"
+fi
 
 echo -e "$statusline"
