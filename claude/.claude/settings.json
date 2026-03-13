@@ -30,9 +30,9 @@
     "type": "command",
     "command": "claude-statusline"
   },
-  "alwaysThinkingEnabled": true,
-  "effortLevel": "medium",
   "enabledPlugins": {
-    "superpowers@claude-plugins-official": true
-  }
+    "superpowers@claude-plugins-official": true,
+    "swift-lsp@claude-plugins-official": true
+  },
+  "alwaysThinkingEnabled": true
 }
