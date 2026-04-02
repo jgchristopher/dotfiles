@@ -9,3 +9,14 @@ tmux/*.log
 
 fish/.config/fish/fish_variables
 fish/.config/fish/fisher
+
+claude/.claude/backups
+claude/.claude/cache
+claude/.claude/file-history
+claude/.claude/image-cache
+claude/.claude/paste-cache
+claude/.claude/plugins
+claude/.claude/sessions
+claude/.claude/shell-snapshots
+claude/.claude/history.jsonl
+claude/.claude/projects
