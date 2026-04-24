@@ -1,3 +1,10 @@
+-- Picks the active LazyVim colorscheme based on macOS appearance:
+--   Dark  → tokyonight-night     (matches Ghostty dark theme)
+--   Light → solarized-osaka-day  (high-contrast Solarized Light variant)
+--
+-- Catppuccin is no longer the active scheme but is still useful as a soft
+-- fallback if other schemes fail to load — keeping the spec but without
+-- transparent_background so it doesn't fight light-mode contrast.
 local os_is_dark = function()
   return (vim.call(
     "system",
@@ -7,17 +14,10 @@ end
 
 return {
   {
-
     "catppuccin/nvim",
     name = "catppuccin",
     opts = {
-      dim_inactive = {
-        enabled = false,
-        shade = "dark",
-        percentage = 0.15,
-      },
-
-      transparent_background = true,
+      transparent_background = false,
       integrations = {
         alpha = true,
         cmp = true,
@@ -44,10 +44,7 @@ return {
         telescope = true,
         treesitter = true,
         which_key = true,
-        dap = {
-          enabled = true,
-          enable_ui = true,
-        },
+        dap = { enabled = true, enable_ui = true },
       },
     },
   },
@@ -55,10 +52,9 @@ return {
     "LazyVim/LazyVim",
     opts = function(_, opts)
       if os_is_dark() then
-        -- colorscheme catppuccin " catppuccin-latte, catppuccin-frappe, catppuccin-macchiato, catppuccin-mocha
-        opts.colorscheme = "catppuccin-mocha"
+        opts.colorscheme = "tokyonight-night"
       else
-        opts.colorscheme = "catppuccin-latte"
+        opts.colorscheme = "solarized-osaka-day"
       end
     end,
   },
@@ -66,14 +62,13 @@ return {
     "nvim-lualine/lualine.nvim",
     event = "VeryLazy",
     opts = {
-      theme = "catppuccin",
+      options = { theme = "auto" },
     },
   },
   {
     "rcarriga/nvim-notify",
     opts = {
-      transparent_background = true,
-      background_colour = "#000000",
+      background_colour = "#1a1b26",
     },
   },
 }
