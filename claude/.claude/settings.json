@@ -34,7 +34,6 @@
       "Read(~/gitprojects/**)"
     ]
   },
-  "model": "opus[1m]",
   "statusLine": {
     "type": "command",
     "command": "claude-statusline"
@@ -52,6 +51,7 @@
     "claude-code-setup@claude-plugins-official": true,
     "explanatory-output-style@claude-plugins-official": true
   },
-  "skipDangerousModePermissionPrompt": true,
-  "effortLevel": "medium"
+  "alwaysThinkingEnabled": true,
+  "effortLevel": "xhigh",
+  "skipDangerousModePermissionPrompt": true
 }
