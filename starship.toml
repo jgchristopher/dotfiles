@@ -1,7 +1,10 @@
 format = '$all'
 
 #palette = "everforest"
-palette = "catppuccin_macchiato"
+# Light is the default. sync-terminal-theme regenerates ~/.config/starship.dark.toml
+# (with palette swapped to "tokyonight") for dark mode, and fish points STARSHIP_CONFIG
+# at it when macOS is in Dark appearance.
+palette = "solarized_light"
 
 
 [aws]
@@ -391,3 +394,43 @@ grey2 = "#9da9a0"
 statusline1 = "#a7c080"
 statusline2 = "#d3c6aa"
 statusline3 = "#e67e80"
+
+[palettes.solarized_light]
+# Solarized Light — high-contrast for sun readability.
+# https://ethanschoonover.com/solarized/
+base03  = "#002b36"
+base02  = "#073642"
+base01  = "#586e75"
+base00  = "#657b83"
+base0   = "#839496"
+base1   = "#93a1a1"
+base2   = "#eee8d5"
+base3   = "#fdf6e3"
+yellow  = "#b58900"
+orange  = "#cb4b16"
+red     = "#dc322f"
+magenta = "#d33682"
+violet  = "#6c71c4"
+blue    = "#268bd2"
+cyan    = "#2aa198"
+green   = "#859900"
+
+[palettes.tokyonight]
+# TokyoNight Night palette for dark mode.
+# https://github.com/folke/tokyonight.nvim
+base03  = "#1a1b26"
+base02  = "#16161e"
+base01  = "#414868"
+base00  = "#565f89"
+base0   = "#a9b1d6"
+base1   = "#c0caf5"
+base2   = "#9aa5ce"
+base3   = "#cfc9c2"
+yellow  = "#e0af68"
+orange  = "#ff9e64"
+red     = "#f7768e"
+magenta = "#bb9af7"
+violet  = "#9d7cd8"
+blue    = "#7aa2f7"
+cyan    = "#7dcfff"
+green   = "#9ece6a"

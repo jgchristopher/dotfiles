@@ -13,8 +13,17 @@ OVERRIDES_SRC="$GHOSTTY_DIR/overrides.dark"
 OVERRIDES_DST="$GHOSTTY_DIR/overrides"
 STARSHIP_DIR="$HOME/.config/starship"
 PALETTE_FILE="$STARSHIP_DIR/active-palette"
+STARSHIP_SRC="$HOME/.config/starship.toml"
+STARSHIP_DARK="$HOME/.config/starship.dark.toml"
 
 mkdir -p "$STARSHIP_DIR"
+
+# Regenerate the dark-mode starship config from the (light) source on every sync,
+# so it never drifts. fish points STARSHIP_CONFIG at this file in dark mode.
+if [ -r "$STARSHIP_SRC" ]; then
+    sed 's/^palette = "solarized_light"$/palette = "tokyonight"/' "$STARSHIP_SRC" > "$STARSHIP_DARK.tmp"
+    mv "$STARSHIP_DARK.tmp" "$STARSHIP_DARK"
+fi
 
 # `defaults read` exits non-zero when AppleInterfaceStyle is unset (= Light).
 if defaults read -g AppleInterfaceStyle >/dev/null 2>&1; then
