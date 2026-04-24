@@ -36,12 +36,31 @@ case "$appearance" in
     dark)
         cp "$OVERRIDES_SRC" "$OVERRIDES_DST"
         printf 'tokyonight\n' > "$PALETTE_FILE"
+        claude_theme="dark-ansi"
         ;;
     light)
         rm -f "$OVERRIDES_DST"
         printf 'solarized_light\n' > "$PALETTE_FILE"
+        claude_theme="light-ansi"
         ;;
 esac
+
+# Update Claude Code's machine-local theme. Merge into the existing JSON so
+# any other local overrides the user has set are preserved. New `claude`
+# sessions pick up the change; in-flight sessions keep their startup theme.
+CLAUDE_LOCAL="$HOME/.claude/settings.local.json"
+python3 - "$CLAUDE_LOCAL" "$claude_theme" <<'PY' 2>/dev/null || true
+import json, sys, pathlib
+path = pathlib.Path(sys.argv[1])
+theme = sys.argv[2]
+try:
+    data = json.loads(path.read_text())
+except (FileNotFoundError, json.JSONDecodeError):
+    data = {}
+data["theme"] = theme
+path.parent.mkdir(parents=True, exist_ok=True)
+path.write_text(json.dumps(data, indent=2) + "\n")
+PY
 
 # Reload all running Ghostty processes (no-op if Ghostty isn't running).
 pkill -SIGUSR2 -x ghostty 2>/dev/null || true
