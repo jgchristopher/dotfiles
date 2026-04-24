@@ -1,0 +1,4 @@
+# Dark-mode-only overrides — copied to ./overrides by sync-terminal-theme
+# when macOS is in Dark appearance, removed when in Light appearance.
+background-opacity = 0.85
+background-blur-radius = 30
