@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>Label</key>
+    <string>com.jc.terminal-theme-sync</string>
+
+    <key>ProgramArguments</key>
+    <array>
+        <string>__HOME__/bin/sync-terminal-theme</string>
+    </array>
+
+    <key>RunAtLoad</key>
+    <true/>
+
+    <key>LaunchEvents</key>
+    <dict>
+        <key>com.apple.distributed_notifications.matching</key>
+        <dict>
+            <key>com.apple.theme-changed</key>
+            <dict>
+                <key>Notification</key>
+                <string>AppleInterfaceThemeChangedNotification</string>
+            </dict>
+        </dict>
+    </dict>
+
+    <key>StandardOutPath</key>
+    <string>__HOME__/.local/state/sync-terminal-theme/stdout.log</string>
+    <key>StandardErrorPath</key>
+    <string>__HOME__/.local/state/sync-terminal-theme/stderr.log</string>
+</dict>
+</plist>
