@@ -1,0 +1,22 @@
+#!/usr/bin/env bash
+# terminal-theme-watcher — long-lived listener for macOS appearance changes.
+# Run via launchd (com.jc.terminal-theme-sync); KeepAlive respawns on exit.
+#
+# dark-notify (cormacrelf/tap) prints "light" or "dark" to stdout on every
+# AppleInterfaceThemeChangedNotification. We don't trust its output as the
+# theme source — sync-terminal-theme reads `defaults` itself for consistency
+# with manual invocations — so each emitted line is just a trigger.
+
+set -euo pipefail
+
+# launchd's default PATH is minimal; ensure Homebrew bin is searchable.
+export PATH="/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin:$PATH"
+
+# Sync once at startup so initial state is correct even if appearance
+# changed while the watcher was down (reboot, brew upgrade, etc.).
+"$HOME/bin/sync-terminal-theme"
+
+# Stream dark-notify's output; sync on every line.
+dark-notify | while read -r _mode; do
+    "$HOME/bin/sync-terminal-theme"
+done

@@ -244,17 +244,14 @@ setup_terminal_theme_sync() {
         error "Template not found at $template"
     fi
 
-    local dark_notify
-    dark_notify="$(command -v dark-notify || true)"
-    if [ -z "$dark_notify" ]; then
-        error "dark-notify not found on PATH. Install with: brew install dark-notify (tap: cormacrelf/tap)"
+    if ! command -v dark-notify >/dev/null 2>&1; then
+        error "dark-notify not found on PATH. Install with: brew install cormacrelf/tap/dark-notify"
     fi
-    info "Using dark-notify at $dark_notify"
 
     mkdir -p "$HOME/Library/LaunchAgents"
     mkdir -p "$HOME/.local/state/sync-terminal-theme"
 
-    sed -e "s|__HOME__|$HOME|g" -e "s|__DARK_NOTIFY__|$dark_notify|g" "$template" > "$target"
+    sed "s|__HOME__|$HOME|g" "$template" > "$target"
     info "Wrote $target"
 
     # Replace any prior agent of the same Label, then load fresh.
