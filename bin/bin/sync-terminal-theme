@@ -1,0 +1,43 @@
+#!/usr/bin/env bash
+# sync-terminal-theme — invoked by launchd when macOS appearance changes,
+# also runs at login. Idempotent: safe to run repeatedly.
+#
+# Behavior:
+#   Dark mode  → copy overrides.dark to overrides, write tokyonight palette, signal Ghostty
+#   Light mode → remove overrides, write solarized_light palette, signal Ghostty
+
+set -euo pipefail
+
+GHOSTTY_DIR="$HOME/.config/ghostty"
+OVERRIDES_SRC="$GHOSTTY_DIR/overrides.dark"
+OVERRIDES_DST="$GHOSTTY_DIR/overrides"
+STARSHIP_DIR="$HOME/.config/starship"
+PALETTE_FILE="$STARSHIP_DIR/active-palette"
+
+mkdir -p "$STARSHIP_DIR"
+
+# `defaults read` exits non-zero when AppleInterfaceStyle is unset (= Light).
+if defaults read -g AppleInterfaceStyle >/dev/null 2>&1; then
+    appearance="dark"
+else
+    appearance="light"
+fi
+
+case "$appearance" in
+    dark)
+        cp "$OVERRIDES_SRC" "$OVERRIDES_DST"
+        printf 'tokyonight\n' > "$PALETTE_FILE"
+        ;;
+    light)
+        rm -f "$OVERRIDES_DST"
+        printf 'solarized_light\n' > "$PALETTE_FILE"
+        ;;
+esac
+
+# Reload all running Ghostty processes (no-op if Ghostty isn't running).
+pkill -SIGUSR2 -x ghostty 2>/dev/null || true
+
+# Write a tiny breadcrumb so launchd-driven runs are debuggable.
+LOG_DIR="$HOME/.local/state/sync-terminal-theme"
+mkdir -p "$LOG_DIR"
+printf '%s\t%s\n' "$(date '+%Y-%m-%d %H:%M:%S')" "$appearance" >> "$LOG_DIR/log"
