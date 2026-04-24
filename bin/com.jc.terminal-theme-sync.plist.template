@@ -5,25 +5,30 @@
     <key>Label</key>
     <string>com.jc.terminal-theme-sync</string>
 
+    <!--
+      Why dark-notify instead of LaunchEvents/distributed_notifications.matching:
+      modern macOS no longer reliably delivers AppleInterfaceThemeChangedNotification
+      to launchd's distributed_notifications stream. dark-notify (Swift, from
+      cormacrelf/tap) subscribes to NSDistributedNotificationCenter directly and
+      execs sync-terminal-theme on every appearance change.
+
+      KeepAlive ensures launchd respawns the listener if it ever exits. RunAtLoad
+      starts it at login. dark-notify itself fires the script once at startup so
+      the initial palette state is correct.
+    -->
+
     <key>ProgramArguments</key>
     <array>
+        <string>__DARK_NOTIFY__</string>
+        <string>--exec</string>
         <string>__HOME__/bin/sync-terminal-theme</string>
     </array>
 
     <key>RunAtLoad</key>
     <true/>
 
-    <key>LaunchEvents</key>
-    <dict>
-        <key>com.apple.distributed_notifications.matching</key>
-        <dict>
-            <key>com.apple.theme-changed</key>
-            <dict>
-                <key>Notification</key>
-                <string>AppleInterfaceThemeChangedNotification</string>
-            </dict>
-        </dict>
-    </dict>
+    <key>KeepAlive</key>
+    <true/>
 
     <key>StandardOutPath</key>
     <string>__HOME__/.local/state/sync-terminal-theme/stdout.log</string>
