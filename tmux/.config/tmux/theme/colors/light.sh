@@ -1,33 +1,44 @@
 #!/usr/bin/env bash
-# Light theme colors
+# Light theme colors — Solarized Light, mapped to TokyoNight-style @thm_* keys
+# expected by theme.tmux. https://ethanschoonover.com/solarized/
 
-tmux set -g @thm_bg "#f5f5f7"
-tmux set -g @thm_bg_dark "#eff1f5"
-tmux set -g @thm_bg_dark1 "#e6e9ef"
-tmux set -g @thm_bg_highlight "#dce0e8"
-tmux set -g @thm_blue "#1e66f5"
-tmux set -g @thm_blue0 "#7287fd"
-tmux set -g @thm_blue1 "#04a5e5"
-tmux set -g @thm_blue2 "#179299"
-tmux set -g @thm_blue5 "#209fb5"
-tmux set -g @thm_blue6 "#04a5e5"
-tmux set -g @thm_blue7 "#ccd0da"
-tmux set -g @thm_comment "#9ca0b0"
-tmux set -g @thm_cyan "#179299"
-tmux set -g @thm_dark3 "#acb0be"
-tmux set -g @thm_dark5 "#8c8fa1"
-tmux set -g @thm_fg "#4c4f69"
-tmux set -g @thm_fg_dark "#5c5f77"
-tmux set -g @thm_fg_gutter "#bcc0cc"
-tmux set -g @thm_green "#40a02b"
-tmux set -g @thm_green1 "#179299"
-tmux set -g @thm_green2 "#20a475"
-tmux set -g @thm_magenta "#8839ef"
-tmux set -g @thm_magenta2 "#ea76cb"
-tmux set -g @thm_orange "#fe640b"
-tmux set -g @thm_purple "#7287fd"
-tmux set -g @thm_red "#d20f39"
-tmux set -g @thm_red1 "#e64553"
-tmux set -g @thm_teal "#04a5e5"
-tmux set -g @thm_terminal_black "#acb0be"
-tmux set -g @thm_yellow "#df8e1d"
+# Backgrounds — base3 (#fdf6e3) is the lightest cream; base2 (#eee8d5) is the
+# subtle highlight band. base1 / base0 are darker tints used for separators.
+tmux set -g @thm_bg "#fdf6e3"
+tmux set -g @thm_bg_dark "#eee8d5"
+tmux set -g @thm_bg_dark1 "#eee8d5"
+tmux set -g @thm_bg_highlight "#eee8d5"
+
+# Foregrounds — base00 (#657b83) is body text on light bg; base01 deeper.
+tmux set -g @thm_fg "#586e75"
+tmux set -g @thm_fg_dark "#657b83"
+tmux set -g @thm_fg_gutter "#93a1a1"
+
+# Accents — Solarized canonical hues (deep saturated, not pastel)
+tmux set -g @thm_blue "#268bd2"
+tmux set -g @thm_blue0 "#268bd2"
+tmux set -g @thm_blue1 "#2aa198"
+tmux set -g @thm_blue2 "#268bd2"
+tmux set -g @thm_blue5 "#2aa198"
+tmux set -g @thm_blue6 "#586e75"
+tmux set -g @thm_blue7 "#eee8d5"
+
+tmux set -g @thm_cyan "#2aa198"
+tmux set -g @thm_teal "#2aa198"
+tmux set -g @thm_green "#859900"
+tmux set -g @thm_green1 "#859900"
+tmux set -g @thm_green2 "#2aa198"
+
+tmux set -g @thm_magenta "#d33682"
+tmux set -g @thm_magenta2 "#d33682"
+tmux set -g @thm_purple "#6c71c4"
+tmux set -g @thm_orange "#cb4b16"
+tmux set -g @thm_red "#dc322f"
+tmux set -g @thm_red1 "#dc322f"
+tmux set -g @thm_yellow "#b58900"
+
+# Muted / structural
+tmux set -g @thm_comment "#93a1a1"
+tmux set -g @thm_dark3 "#93a1a1"
+tmux set -g @thm_dark5 "#586e75"
+tmux set -g @thm_terminal_black "#586e75"

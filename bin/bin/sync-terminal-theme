@@ -46,6 +46,12 @@ esac
 # Reload all running Ghostty processes (no-op if Ghostty isn't running).
 pkill -SIGUSR2 -x ghostty 2>/dev/null || true
 
+# Re-source tmux config if a tmux server is running. theme.tmux re-detects
+# AppleInterfaceStyle and re-sources the matching colors/{light,dark}.sh.
+if command -v tmux >/dev/null 2>&1 && tmux info >/dev/null 2>&1; then
+    tmux source-file "$HOME/.config/tmux/tmux.conf" >/dev/null 2>&1 || true
+fi
+
 # Write a tiny breadcrumb so launchd-driven runs are debuggable.
 LOG_DIR="$HOME/.local/state/sync-terminal-theme"
 mkdir -p "$LOG_DIR"
