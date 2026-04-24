@@ -45,13 +45,11 @@
 
 # Theme settings
 # theme = dark:catppuccin-macchiato,light:catppuccin-latte
-theme = dark:TokyoNight Night,light:TokyoNight Day
-background-opacity = 0.85
-background-blur-radius = 30
-# background = #1c2021
-# background = #0B1215
-# background-opacity = 0.75
-# background-blur-radius = 40
+# theme = dark:TokyoNight Night,light:TokyoNight Day
+theme = dark:TokyoNight Night,light:iTerm2 Solarized Light
+# Base config is light-mode-safe: opacity 1.0, no blur.
+# Dark-mode opacity is layered in via ?./overrides (see overrides.dark + sync-terminal-theme).
+background-opacity = 1.0
 bold-is-bright = true
 
 # window settings
