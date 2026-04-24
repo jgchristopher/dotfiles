@@ -2,6 +2,19 @@ eval (/opt/homebrew/bin/brew shellenv)
 set -U fish_greeting # disable fish greeting
 set -Ux EDITOR nvim
 
+# Point Starship at the dark-mode config when macOS is in Dark appearance.
+# sync-terminal-theme regenerates ~/.config/starship.dark.toml on every appearance change.
+function _set_starship_config
+    if defaults read -g AppleInterfaceStyle >/dev/null 2>&1
+        if test -r "$HOME/.config/starship.dark.toml"
+            set -gx STARSHIP_CONFIG "$HOME/.config/starship.dark.toml"
+            return
+        end
+    end
+    set -e STARSHIP_CONFIG
+end
+_set_starship_config
+
 # updated my implementation from this https://github.com/oh-my-fish/plugin-node-binpath/blob/master/conf.d/plugin-node-binpath.fish
 # function __auto_add_local_node_bin --on-event fish_postexec
 #     set -l node_modules_path "$PWD/node_modules/.bin"
