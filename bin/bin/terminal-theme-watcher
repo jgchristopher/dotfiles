@@ -16,7 +16,13 @@ export PATH="/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin:$PATH"
 # changed while the watcher was down (reboot, brew upgrade, etc.).
 "$HOME/bin/sync-terminal-theme"
 
-# Stream dark-notify's output; sync on every line.
-dark-notify | while read -r _mode; do
-    "$HOME/bin/sync-terminal-theme"
+# Stream dark-notify's output; sync only when the mode actually changes.
+# macOS fires AppleInterfaceThemeChangedNotification twice per toggle
+# (animation start + end), so dedup against the previous emission.
+last=""
+dark-notify | while read -r mode; do
+    if [[ "$mode" != "$last" ]]; then
+        "$HOME/bin/sync-terminal-theme"
+        last="$mode"
+    fi
 done
