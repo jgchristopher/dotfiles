@@ -234,6 +234,33 @@ setup_macos() {
     fi
 }
 
+setup_terminal_theme_sync() {
+    title "Installing terminal-theme-sync LaunchAgent"
+
+    local template="$DOTFILES/bin/com.jc.terminal-theme-sync.plist.template"
+    local target="$HOME/Library/LaunchAgents/com.jc.terminal-theme-sync.plist"
+
+    if [ ! -f "$template" ]; then
+        error "Template not found at $template"
+    fi
+
+    mkdir -p "$HOME/Library/LaunchAgents"
+    mkdir -p "$HOME/.local/state/sync-terminal-theme"
+
+    sed "s|__HOME__|$HOME|g" "$template" > "$target"
+    info "Wrote $target"
+
+    # Replace any prior agent of the same Label, then load fresh.
+    launchctl bootout "gui/$(id -u)" "$target" 2>/dev/null || true
+    launchctl bootstrap "gui/$(id -u)" "$target"
+    launchctl enable "gui/$(id -u)/com.jc.terminal-theme-sync"
+
+    success "terminal-theme-sync agent loaded"
+
+    info "Running sync once to set initial state"
+    "$HOME/bin/sync-terminal-theme" || warning "Initial sync failed — agent will still trigger on appearance change"
+}
+
 case "$1" in
     backup)
         backup
@@ -253,6 +280,9 @@ case "$1" in
     terminfo)
         setup_terminfo
         ;;
+    terminal-theme-sync)
+        setup_terminal_theme_sync
+        ;;
     macos)
         setup_macos
         ;;
@@ -266,9 +296,10 @@ case "$1" in
         setup_shell
         setup_git
         setup_macos
+        setup_terminal_theme_sync
         ;;
     *)
-        echo -e $"\nUsage: $(basename "$0") {backup|link|git|homebrew|shell|terminfo|macos|all}\n"
+        echo -e $"\nUsage: $(basename "$0") {backup|link|git|homebrew|shell|terminfo|terminal-theme-sync|macos|all}\n"
         exit 1
         ;;
 esac
