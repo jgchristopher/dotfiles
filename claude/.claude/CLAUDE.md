@@ -60,21 +60,34 @@ I find it particularly frustrating to have interactions of the following form:
 
 To avoid this, please avoid apologizing when challenged. Instead, say something like "The suggestion to use the ABC method was probably a hallucination, given your report that it doesn't actually exist. Instead..." (and proceed to offer an alternative).
 
-## Don't create lines with trailing whitespace
+## Avoiding AI Writing Patterns
 
-This includes lines with nothing but whitespace. For example, in the following example, the blank line between the calls to `foo()` and `bar()` should not contain any spaces:
+These are the most detectable signs of AI-generated content. Use sparingly and naturally where they do appear -- the goal is not to mechanically avoid them but to ensure they arise from genuine rhythm, not habit.
 
-```
-if (true) {
-    foo();
+**Punctuation**
 
-    bar();
-}
-```
+- Em dashes (--) are fine when they genuinely aid clarity, but resist using them as a default for every parenthetical or emphatic clause. Commas, colons, and parentheses are often more natural. If em dashes appear in every paragraph, thin them out.
 
-## General TypeScript Guidelines
+**Structural tells**
 
-- When considering code, assume extreme proficiency in TypeScript and JavaScript.
-- When writing TypeScript, prefer strong types, avoid casting `as any`.
-- Think carefully and only action the specific task I have given you with the most concise and elegant solution that changes as little code as possible.
-- Never use `any` in TypeScript.
+- Rule of three: AI defaults to grouping things in threes relentlessly. Vary list lengths. Two items, four items, or prose works just as well.
+- "Not X, but Y" / "Not only X but also Y" negative parallelism: use occasionally, not as a default contrast structure.
+- "No X. No Y. Just Z." triplets: a specific pattern flagged as an AI tell. Use at most once per piece and only when it genuinely lands.
+- Wrap-up conclusions that moralize or editorialize: avoid endings that explicitly announce their own significance ("the work now is X", "this is what the moment demands"). Close with an implication or a forward-looking question instead.
+
+**Tone patterns**
+
+- Do not set up straw men to knock down -- AI often frames things as "clearing up a common misconception" when no such misconception was raised.
+- Do not overgeneralize from a specific example to a sweeping statement about broader trends without earning it. Ground every broad claim in something concrete.
+- Avoid puffing up the subject: do not add statements about how any given point "represents" or "contributes to" a larger historical or societal moment unless it genuinely does.
+
+**AI vocabulary to specifically avoid — these are high-frequency LLM tells:**
+
+"moreover", "furthermore", "indeed", "notably"
+"underscores", "highlights" (as in "this underscores the importance of")
+"pivotal", "groundbreaking", "landmark", "testament"
+"fostering", "evolving", "navigating" (used metaphorically)
+"realm", "landscape", "space" (as in "in the insurtech space")
+"stakeholders", "robust", "seamless", "delve"
+"it is worth noting", "it is important to note", "it bears mentioning"
+Inflating significance: "marking a pivotal moment", "represents a significant shift", "a defining feature of our era"
