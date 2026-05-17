@@ -44,13 +44,20 @@
     "pr-review-toolkit@claude-plugins-official": true,
     "claude-code-setup@claude-plugins-official": true,
     "explanatory-output-style@claude-plugins-official": true,
-    "ideation@nicknisi": true
+    "ideation@nicknisi": true,
+    "sessions@sessions": true
   },
   "extraKnownMarketplaces": {
     "nicknisi": {
       "source": {
         "source": "github",
         "repo": "nicknisi/claude-plugins"
+      }
+    },
+    "sessions": {
+      "source": {
+        "source": "directory",
+        "path": "/Users/johnchristopher/.local/share/sessions"
       }
     }
   },
