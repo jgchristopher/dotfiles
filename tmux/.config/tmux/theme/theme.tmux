@@ -59,6 +59,13 @@ tmux set -g status-right-length 100
 tmux set -g message-style "fg=${thm_cyan},bg=${thm_fg_gutter},align=centre"
 tmux set -g message-command-style "fg=${thm_cyan},bg=${thm_fg_gutter},align=centre"
 
+# Copy-mode / mouse selection
+tmux set -g mode-style "fg=${thm_bg},bg=${thm_blue}"
+tmux set -g copy-mode-selection-style "fg=${thm_bg},bg=${thm_blue}"
+tmux set -g copy-mode-position-style "fg=${thm_bg},bg=${thm_blue}"
+tmux set -g copy-mode-current-match-style "fg=${thm_bg},bg=${thm_orange}"
+tmux set -g copy-mode-match-style "fg=${thm_fg},bg=${thm_bg_highlight}"
+
 # Pane borders
 tmux set-window-option -g pane-active-border-style "fg=${thm_fg_gutter},bg=${thm_fg_gutter}"
 tmux set-window-option -g pane-border-style "fg=${thm_fg_gutter},bg=${thm_fg_gutter}"
