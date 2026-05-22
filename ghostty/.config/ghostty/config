@@ -81,7 +81,7 @@ font-family-italic = "Monaspace Radon Var Regular Italic"
 font-family-bold-italic = "Monaspace Radon Var Bold Italic"
 font-size = 16
 font-feature = +liga
-cursor-style = block
+cursor-style = bar
 adjust-underline-position = 4
 
 clipboard-read = allow
@@ -118,7 +118,6 @@ keybind = cmd+s>z=toggle_split_zoom
 keybind = cmd+s>e=equalize_splits
 
 copy-on-select = clipboard
-shell-integration-features = cursor,sudo,no-title
 
 config-file = ?./overrides
 keybind = shift+enter=text:\n
