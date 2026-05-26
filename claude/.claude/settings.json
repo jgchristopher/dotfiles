@@ -1,6 +1,5 @@
 {
   "$schema": "https://json.schemastore.org/claude-code-settings.json",
-
   "includeCoAuthoredBy": false,
   "permissions": {
     "allow": [
@@ -44,7 +43,16 @@
     "claude-md-management@claude-plugins-official": true,
     "pr-review-toolkit@claude-plugins-official": true,
     "claude-code-setup@claude-plugins-official": true,
-    "explanatory-output-style@claude-plugins-official": true
+    "explanatory-output-style@claude-plugins-official": true,
+    "ideation@nicknisi": true
+  },
+  "extraKnownMarketplaces": {
+    "nicknisi": {
+      "source": {
+        "source": "github",
+        "repo": "nicknisi/claude-plugins"
+      }
+    }
   },
   "alwaysThinkingEnabled": true,
   "effortLevel": "xhigh",
