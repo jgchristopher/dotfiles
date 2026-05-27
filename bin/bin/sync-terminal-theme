@@ -36,12 +36,12 @@ case "$appearance" in
     dark)
         cp "$OVERRIDES_SRC" "$OVERRIDES_DST"
         printf 'tokyonight\n' > "$PALETTE_FILE"
-        claude_theme="dark-ansi"
+        claude_theme="dark"
         ;;
     light)
         rm -f "$OVERRIDES_DST"
         printf 'solarized_light\n' > "$PALETTE_FILE"
-        claude_theme="light-ansi"
+        claude_theme="light"
         ;;
 esac
 
