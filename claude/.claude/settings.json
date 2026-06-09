@@ -53,8 +53,11 @@
       "ExitPlanMode(*)",
       "WebFetch(domain:*)",
       "WebSearch",
-      "mcp__plugin_*",
-      "mcp__claude_ai_*"
+      "mcp__datadog",
+      "mcp__github",
+      "mcp__obsidian-jcos",
+      "mcp__obsidian-personal",
+      "mcp__plugin_sidequest_omnifocus-enhanced"
     ],
     "deny": [
       "Read(./.env)",
@@ -83,6 +86,7 @@
     ],
     "defaultMode": "auto"
   },
+  "model": "us.anthropic.claude-opus-4-8[1m]",
   "statusLine": {
     "type": "command",
     "command": "claude-statusline"
