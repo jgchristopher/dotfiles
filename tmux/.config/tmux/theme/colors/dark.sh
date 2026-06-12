@@ -32,3 +32,6 @@ tmux set -g @thm_red1 "#db4b4b"
 tmux set -g @thm_teal "#1abc9c"
 tmux set -g @thm_terminal_black "#414868"
 tmux set -g @thm_yellow "#e0af68"
+
+# Tab palette — per-window window-status colors, cycled by window index
+tmux set -g @thm_tab_palette "#7aa2f7 #ff9e64 #9ece6a #bb9af7 #e0af68 #1abc9c #f7768e #C2AEE8 #7dcfff"

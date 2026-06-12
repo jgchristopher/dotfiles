@@ -73,12 +73,12 @@ tmux set-window-option -g pane-border-lines simple
 
 # Window status
 tmux setw -g window-status-activity-style "fg=${thm_fg},none"
-tmux setw -g window-status-separator "#[fg=${thm_comment}]"
+tmux setw -g window-status-separator ""
 tmux set -g status-style "bg=default,fg=white"
 
 # Icons and separators (Powerline symbols) - define first
-tm_separator_left=""
-tm_separator_right=""
+tm_separator_left=""
+tm_separator_right=""
 tm_icon=""
 tm_music_icon=""
 
@@ -118,7 +118,7 @@ create_section() {
 # Tunes component
 # tm_tunes="#(osascript -l JavaScript $DOTFILES/applescripts/tunes.js)"
 # tm_tunes_display="#(song=\${tm_tunes}); if [[ -n \"\$song\" ]]; then echo \"#[bg=default]#[fg=${thm_blue7}]${tm_separator_right}#[bg=${thm_blue7}]#[fg=${thm_blue6}] ${tm_music_icon}  \$song #[bg=default]#[fg=${thm_blue7}]${tm_separator_left}#[bg=default,fg=default]\"; fi)"
-tm_tunes_display="#(song=\$(osascript -l JavaScript $DOTFILES/applescripts/tunes.js); if [[ -n \"\$song\" ]]; then echo \"#[bg=default]#[fg=${thm_blue7}]${tm_separator_right}#[bg=${thm_blue7}]#[fg=${thm_blue6}] ${tm_music_icon}  \$song #[bg=default]#[fg=${thm_blue7}]${tm_separator_left}#[bg=default,fg=default]\"; fi)"
+tm_tunes_display="#(song=\$(osascript -l JavaScript $DOTFILES/applescripts/tunes.js); if [[ -n \"\$song\" ]]; then echo \"#[bg=default]#[fg=${thm_blue7}]#[bg=${thm_blue7}]#[fg=${thm_blue6}] ${tm_music_icon}  \$song #[bg=default]#[fg=${thm_blue7}]${tm_separator_left}#[bg=default,fg=default] \"; fi)"
 
 # Status line components
 session="$(create_section "left" "$tm_icon" "#S" "${thm_purple}" "${thm_bg}" "no-start")"
@@ -130,8 +130,15 @@ tmux set -g status-left "$session"
 tmux set -g status-right "${tm_claude_display}${tm_tunes_display}${tm_git_status}"
 
 # Window status formats
-tmux setw -g window-status-format "#[fg=${thm_comment}] #I #[fg=${thm_black4}]#{?#{window_name},#W,#{b:pane_current_path}} "
-tmux setw -g window-status-current-format "#[fg=${thm_orange}] #I #[fg=${thm_magenta},bold]#{?#{window_name},#W,#{b:pane_current_path}} "
+tmux setw -g window-status-format "#[fg=${thm_comment}]  #I #[fg=#{@tabcolor}]#{?#{s/ //g:window_name},#W,#{b:pane_current_path}}"
+tmux setw -g window-status-current-format "#[bg=default] #[bg=#{@tabcolor},fg=${thm_bg}]  #I #[bg=#{@tabcolor},fg=${thm_bg},bold]#{?#{s/ //g:window_name},#W,#{b:pane_current_path}}  #[bg=default,fg=#{@tabcolor}]"
+
+# Per-window distinct tab colors (logic lives in tab-colors.sh because this
+# tmux build can't do index math in format strings). Fallback for windows not
+# yet assigned, re-run on new windows, then assign all current windows.
+tmux set -g @tabcolor "${thm_comment}"
+tmux set-hook -g after-new-window "run-shell -b '${CURRENT_DIR}/tab-colors.sh'"
+"${CURRENT_DIR}/tab-colors.sh"
 
 # Clock mode
 tmux setw -g clock-mode-colour "${thm_blue0}"
