@@ -1,0 +1,56 @@
+#!/usr/bin/env bash
+# Smart tmux window naming with worktree detection
+
+COMMAND="$1"
+CURRENT_PATH="$2"
+
+# Claude sets its process title to its version number (e.g. 2.1.197 or
+# 2_1_197 depending on version), map it back to "claude"
+if [[ "$COMMAND" =~ ^[0-9]+[._][0-9]+[._][0-9]+$ ]]; then
+  COMMAND="claude"
+fi
+
+# Get icon from nerdwin
+ICON=$(nerdwin "$COMMAND")
+
+# Get smart directory name
+get_smart_name() {
+  local path="$1"
+  local dir_name=$(basename "$path")
+
+  # Check if we're in a git worktree (where .git is a file, not a directory)
+  if [ -f "$path/.git" ]; then
+    local parent_dir=$(dirname "$path")
+    local parent_name=$(basename "$parent_dir")
+    local branch=$(cd "$path" && git rev-parse --abbrev-ref HEAD 2>/dev/null)
+
+    # claude --work-tree pattern: <project>/.claude/worktrees/<worktree>
+    local grandparent_dir=$(dirname "$parent_dir")
+    if [ "$parent_name" = "worktrees" ] && [ "$(basename "$grandparent_dir")" = ".claude" ]; then
+      local project=$(basename "$(dirname "$grandparent_dir")")
+      if [ -n "$branch" ] && [ "$branch" != "HEAD" ]; then
+        echo "$project ($branch)"
+      else
+        echo "$project ($dir_name)"
+      fi
+      return
+    fi
+
+    # Bare-repo worktree pattern: <project>/.bare + <project>/<worktree>
+    if [ -d "$parent_dir/.bare" ]; then
+      local project=$(basename "$parent_dir")
+      if [ -n "$branch" ]; then
+        echo "$project ($branch)"
+        return
+      fi
+    fi
+  fi
+
+  # Default: just show directory name
+  echo "$dir_name"
+}
+
+NAME=$(get_smart_name "$CURRENT_PATH")
+
+# Output icon and name
+echo "$ICON $NAME"

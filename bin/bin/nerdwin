@@ -35,6 +35,9 @@ get_icon() {
   lazygit | git | tig)
     echo ""
     ;;
+  claude)
+    echo "󱙺"
+    ;;
   node)
     echo "󰎙"
     ;;
@@ -48,7 +51,7 @@ get_icon() {
     echo ""
     ;;
   beam | beam.smp) # Erlang runtime
-    echo ""
+    echo ""
     ;;
   rustc | rustup)
     echo ""
