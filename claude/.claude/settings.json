@@ -57,7 +57,16 @@
       "mcp__github",
       "mcp__obsidian-jcos",
       "mcp__obsidian-personal",
-      "mcp__plugin_sidequest_omnifocus-enhanced"
+      "mcp__plugin_sidequest_omnifocus-enhanced",
+      "mcp__plugin_sessions_sessions__*",
+      "mcp__plugin_sidequest_omnifocus-enhanced__*",
+      "mcp__claude_ai_Github_MCP__*",
+      "mcp__claude_ai_Gmail__*",
+      "mcp__claude_ai_Google_Calendar__*",
+      "mcp__claude_ai_Google_Drive__*",
+      "mcp__claude_ai_Granola__*",
+      "mcp__claude_ai_Slack__*",
+      "mcp__claude_ai_Netlify__*"
     ],
     "deny": [
       "Read(./.env)",
