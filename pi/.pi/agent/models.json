@@ -1,0 +1,15 @@
+{
+  "providers": {
+    "amazon-bedrock": {
+      "models": [
+        {
+          "id": "us.anthropic.claude-opus-4-8-v1:0",
+          "reasoning": true,
+          "input": ["text", "image"],
+          "contextWindow": 200000,
+          "maxTokens": 64000
+        }
+      ]
+    }
+  }
+}

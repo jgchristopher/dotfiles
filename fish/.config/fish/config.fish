@@ -81,3 +81,6 @@ end
 
 fish_add_path "/Applications/Obsidian.app/Contents/MacOS"
 export PATH="$HOME/.local/bin:$PATH"
+
+# Pi
+fish_add_path "/Users/johnchristopher/.asdf/installs/nodejs/26.2.0/bin"

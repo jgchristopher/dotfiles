@@ -91,3 +91,13 @@ These are the most detectable signs of AI-generated content. Use sparingly and n
 "stakeholders", "robust", "seamless", "delve"
 "it is worth noting", "it is important to note", "it bears mentioning"
 Inflating significance: "marking a pivotal moment", "represents a significant shift", "a defining feature of our era"
+
+# Datadog
+
+- Use the datadog MCP for all READ operations (metrics, logs, monitors.list/get, events).
+- For WRITE operations (create/update/delete monitors, dashboards), the MCP app key
+    lacks permission — use the Datadog REST API directly via curl.
+- Keys live in `~/.datadog` (format: <env-style / JSON — fill in>). Read them from there;
+    never hardcode or echo the key values into output or committed files.
+- Site: datadoghq.com. Monitor API: POST <https://api.datadoghq.com/api/v1/monitor>
+    with headers `DD-API-KEY` and `DD-APPLICATION-KEY`.

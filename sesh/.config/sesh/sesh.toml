@@ -1,1 +1,6 @@
 
+[[session]]
+name = "dotfiles"
+path = "~/gitprojects/dotfiles"
+startup_command = "nvim"
+preview_command = "bat --color=always ~/gitprojects/dotfiles/tmux/.config/tmux/tmux.conf"

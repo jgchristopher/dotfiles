@@ -1,5 +1,7 @@
 # Place a copy of this config to ~/.aerospace.toml
 # After that, you can edit ~/.aerospace.toml to your liking
+#
+config-version = 2
 
 # You can use it to add commands that run after login to macOS user session.
 # 'start-at-login' needs to be 'true' for 'after-login-command' to work
@@ -9,10 +11,20 @@ after-login-command = []
 # You can use it to add commands that run after AeroSpace startup.
 # 'after-startup-command' is run after 'after-login-command'
 # Available commands : https://nikitabobko.github.io/AeroSpace/commands
-after-startup-command = []
-
+after-startup-command = ['exec-and-forget sketchybar']
+#after-startup-command = []
 # Start AeroSpace at login
 start-at-login = true
+
+exec-on-workspace-change = [
+  '/bin/bash',
+  '-c',
+  'sketchybar --trigger aerospace_workspace_change FOCUSED_WORKSPACE=$AEROSPACE_FOCUSED_WORKSPACE PREV_WORKSPACE=$AEROSPACE_PREV_WORKSPACE',
+]
+
+on-focus-changed = [
+  'exec-and-forget sketchybar --trigger aerospace_focus_change',
+]
 
 # Normalizations. See: https://nikitabobko.github.io/AeroSpace/guide#normalization
 enable-normalization-flatten-containers = true
@@ -57,12 +69,14 @@ preset = 'qwerty'
 #                 See:
 #                 https://nikitabobko.github.io/AeroSpace/guide#assign-workspaces-to-monitors
 [gaps]
-inner.horizontal = 0
-inner.vertical = 0
-outer.left = 0
-outer.bottom = 0
-outer.top = 0
-outer.right = 0
+# Allow for more space on smaller screens
+inner.horizontal = [{ monitor."Built-in Retina Display" = 15 }, 20]
+inner.vertical = [{ monitor."Built-in Retina Display" = 15 }, 20]
+outer.left = [{ monitor."Built-in Retina Display" = 20 }, 25]
+outer.bottom = [{ monitor."Built-in Retina Display" = 20 }, 25]
+# outer.top clears the floating SketchyBar: y_offset 6 + height 36 + inner gap
+outer.top = [{ monitor."Built-in Retina Display" = 57 }, 62]
+outer.right = [{ monitor."Built-in Retina Display" = 20 }, 25]
 
 # 'main' binding mode declaration
 # See: https://nikitabobko.github.io/AeroSpace/guide#binding-modes
@@ -226,16 +240,18 @@ if.app-id = 'com.apple.Safari'
 run = 'move-node-to-workspace B'
 
 [[on-window-detected]]
-if.app-id = 'company.thebrowser.Browser'
-run = 'move-node-to-workspace B'
-
-[[on-window-detected]]
 if.app-id = 'app.zen-browser.zen'
 run = 'move-node-to-workspace B'
 
 [[on-window-detected]]
 if.app-id = 'com.google.Chrome'
 run = 'move-node-to-workspace B'
+
+
+## Work Browser
+[[on-window-detected]]
+if.app-id = 'net.imput.helium'
+run = 'move-node-to-workspace W'
 
 
 # Chat Apps - C

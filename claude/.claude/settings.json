@@ -95,7 +95,7 @@
     ],
     "defaultMode": "auto"
   },
-  "model": "claude-fable-5[1m]",
+  "model": "opus[1m]",
   "statusLine": {
     "type": "command",
     "command": "claude-statusline"
@@ -117,7 +117,8 @@
     "essentials@nicknisi": true,
     "sidequest@nicknisi": true,
     "fleet@fleet-local": true,
-    "ideation@ideation": true
+    "ideation@ideation": true,
+    "codex@openai-codex": true
   },
   "extraKnownMarketplaces": {
     "nicknisi": {
@@ -142,6 +143,12 @@
       "source": {
         "source": "directory",
         "path": "/Users/johnchristopher/Developer/nick_tools/ideation/main"
+      }
+    },
+    "openai-codex": {
+      "source": {
+        "source": "directory",
+        "path": "/Users/johnchristopher/Developer/ai_assistant_tools/codex-plugin-cc"
       }
     }
   },
@@ -208,10 +215,7 @@
       "Lighting the Beacons of Gondor",
       "Lobotomizing",
       "Looking at the Camera Meaningfully",
-      "Looking for Richter",
-      "Lubricating",
       "Lying Through Teeth",
-      "Macerating",
       "Making Chili",
       "Making the Body Disappear",
       "Moisturizing",
@@ -252,10 +256,7 @@
       "Scouring the Shire",
       "Searching for the Holy Grail of Sales",
       "Secreting",
-      "Seeing Them Driven Before You",
-      "Seeing You at the Party",
       "Serving the Second Breakfast",
-      "Sharting",
       "Sheltering in Rivendell",
       "Slaying the Witch-king",
       "Speaking Friend and Entering",
