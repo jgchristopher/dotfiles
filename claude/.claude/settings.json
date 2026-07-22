@@ -95,7 +95,7 @@
     ],
     "defaultMode": "auto"
   },
-  "model": "us.anthropic.claude-opus-4-8[1m]",
+  "model": "claude-fable-5[1m]",
   "statusLine": {
     "type": "command",
     "command": "claude-statusline"
@@ -112,11 +112,12 @@
     "pr-review-toolkit@claude-plugins-official": true,
     "claude-code-setup@claude-plugins-official": true,
     "explanatory-output-style@claude-plugins-official": true,
-    "ideation@nicknisi": true,
     "sessions@sessions": true,
     "spec-driven@nicknisi": true,
     "essentials@nicknisi": true,
-    "sidequest@nicknisi": true
+    "sidequest@nicknisi": true,
+    "fleet@fleet-local": true,
+    "ideation@ideation": true
   },
   "extraKnownMarketplaces": {
     "nicknisi": {
@@ -130,40 +131,42 @@
         "source": "directory",
         "path": "/Users/johnchristopher/.local/share/sessions"
       }
+    },
+    "fleet-local": {
+      "source": {
+        "source": "directory",
+        "path": "/Users/johnchristopher/.local/share/fleet-marketplace"
+      }
+    },
+    "ideation": {
+      "source": {
+        "source": "directory",
+        "path": "/Users/johnchristopher/Developer/nick_tools/ideation/main"
+      }
     }
   },
   "spinnerVerbs": {
     "mode": "replace",
     "verbs": [
+      "Looking good Billy Ray! Feeling good Louis!",
+      "Forty Six & 2 just ahead of me",
       "Assistant Regional Managing",
       "Attending Sensitivity Training",
       "Awakening the Ents",
-      "Bearing Beets",
-      "Beclowning",
-      "Being Back",
       "Being Old Not Obsolete",
-      "Being Rubber You Being Glue",
       "Breaking the Fellowship",
       "Buying Paper from a Paper Company",
       "Calling This Close Air Support",
       "Calling a Meeting in the Conference Room",
       "Carrying the Ring to Mordor",
       "Casting It into the Fire",
-      "Caulking",
-      "Chafing",
       "Challenging Sauron in the Palantir",
       "Climbing Mount Doom",
-      "Coagulating",
       "Coming With You If You Want to Live",
       "Confronting the Nazgul",
-      "Considering It a Divorce",
       "Counting the Fallen at Helm's Deep",
       "Crossing the Bridge of Khazad-dum",
       "Crowning the King",
-      "Crunching Detailed Files",
-      "Crunching Numbers",
-      "Crushing Enemies",
-      "Curdling",
       "Declaring Bankruptcy",
       "Defending Osgiliath",
       "Defending the Hornburg",
@@ -272,15 +275,15 @@
       "Tossing Gimli Across the Gap",
       "Trapping Gollum",
       "Turning It Off and On Again",
-      "Waiting for Pretzel Day",
-      "Waiting for You Cohaagen",
-      "Wielding Anduril, Flame of the West",
-      "Yeeting"
+      "Wielding Anduril, Flame of the West"
     ]
   },
   "alwaysThinkingEnabled": true,
   "effortLevel": "high",
+  "tui": "fullscreen",
   "skipDangerousModePermissionPrompt": true,
+  "skipWorkflowUsageWarning": true,
+  "inputNeededNotifEnabled": true,
   "agentPushNotifEnabled": true,
   "skipAutoPermissionPrompt": true
 }
