@@ -16,7 +16,7 @@ STATE_DIR="$HOME/.cache/sketchybar"
 mkdir -p "$STATE_DIR"
 
 FOCUSED="${FOCUSED_WORKSPACE:-$(aerospace list-workspaces --focused 2>/dev/null)}"
-# Read by space_hover.sh (restore-after-hover) and agents.sh (suppression)
+# Read by space_hover.sh (restore-after-hover)
 echo "$FOCUSED" >"$STATE_DIR/focused-workspace"
 
 declare -A APPS SEEN

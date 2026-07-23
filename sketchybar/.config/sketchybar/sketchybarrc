@@ -6,14 +6,14 @@
 #
 # Complements (never duplicates) the macOS menu bar OR the tmux statusline:
 # AeroSpace workspaces with per-app icons, focused window title + layout
-# glyph in the center, fleet-driven agent state with an attention chip,
+# glyph in the center, per-agent fleet pills showing current state,
 # PRs awaiting review, Claude usage when running hot, now-playing.
 #
 # Event flow (all push, polling only where no push exists):
 #   aerospace exec-on-workspace-change / on-focus-changed
 #     -> plugins/workspaces.sh (ONE batched render: pills, rings, center)
 #   fleet hook status files -> bin/sketchybar-fleet-watch (fswatch)
-#     -> fleet_state_change -> plugins/agents.sh (agents pill + chip)
+#     -> fleet_state_change -> plugins/fleet_pills.sh (per-agent pills)
 #   bin/claude-statusline tee -> claude_usage_update -> plugins/usage.sh
 #   music: 10s poll (AppleScript has no push surface)
 

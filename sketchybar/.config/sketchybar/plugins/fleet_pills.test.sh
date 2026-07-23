@@ -38,4 +38,12 @@ check "slot 4 off"              '--set agent.4 drawing=off' "$out2"
 refute "no popup rows on"       'agent.pop.1 drawing=on' "$out2"
 check "waiting glyph mapped"    'icon=⚠' "$out2"
 
+# 21 agents -> popup row 15 folds to the "+K more" escape hatch
+rows3="$TMP/rows3"; : >"$rows3"
+for n in $(seq 1 21); do printf 'working|%%%d|s%d|\n' "$n" "$n" >>"$rows3"; done
+out3=$(FLEET_ROWS_FILE="$rows3" SKETCHYBAR=echo bash "$SUT")
+check "escape hatch row on"  '--set agent.pop.15 drawing=on' "$out3"
+check "escape hatch label"   '+2 more' "$out3"
+check "overflow badge +16"   'label=+16' "$out3"
+
 exit $fail
