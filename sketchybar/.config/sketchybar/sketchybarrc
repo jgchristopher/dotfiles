@@ -143,23 +143,37 @@ sketchybar --add item title center \
   background.drawing=off \
   drawing=off
 
-# ── Right: agents · attention chip · reviews · usage · music ─────
-# agents: calm = dim green robot (fleet healthy); alerts light the edge
-# in fleet tier hues. Left-click = fleet popup, right-click = fleet next.
-sketchybar --add item agents right \
-  --subscribe agents fleet_state_change aerospace_workspace_change \
-  --set agents \
-  update_freq=60 \
-  click_script="$PLUGIN_DIR/agents_click.sh" \
-  script="$PLUGIN_DIR/agents.sh"
+# ── Right: fleet agent pills · spend ─────────────────────────────
+# One pill per live agent (fleet), rendered by fleet_pills.sh in a single
+# batched call. Inline pool agent.1..5; overflow into agent.more's popup
+# (agent.pop.1..15). Push via fleet_state_change (fswatch); update_freq is a
+# backstop that reaps pills whose pane closed without writing a status file.
+FLEET_POOL=5
+FLEET_POPUP_POOL=15
 
-# attention chip: rendered by agents.sh in the same batched call.
-# The loudest neon element — one saturated 1px edge, not a shout.
-sketchybar --add item attention right \
-  --set attention \
-  drawing=off \
-  label.max_chars=30 \
-  scroll_texts=on
+sketchybar --add item fleet_controller right \
+  --subscribe fleet_controller fleet_state_change aerospace_workspace_change \
+  --set fleet_controller drawing=off width=0 \
+  update_freq=30 \
+  script="$PLUGIN_DIR/fleet_pills.sh"
+
+# Inline pills. Added high-index-first so agent.1 sits leftmost in the group.
+for i in $(seq "$FLEET_POOL" -1 1); do
+  sketchybar --add item agent."$i" right \
+    --set agent."$i" \
+    drawing=off \
+    label.max_chars=8 \
+    icon.font="JetBrainsMono Nerd Font Mono:Regular:13.0"
+done
+
+# Overflow badge + popup rows (rows anchor on agent.more's popup).
+sketchybar --add item agent.more right \
+  --set agent.more drawing=off icon="⋯" icon.color="$GREY"
+for j in $(seq 1 "$FLEET_POPUP_POOL"); do
+  sketchybar --add item agent.pop."$j" popup.agent.more \
+    --set agent.pop."$j" drawing=off label.max_chars=40 \
+    icon.font="JetBrainsMono Nerd Font Mono:Regular:13.0"
+done
 
 # spend: running daily dollar total across claude/codex/pi via
 # `sessions report` — placed beside the agents it measures
@@ -172,8 +186,9 @@ sketchybar --add item spend right \
   script="$PLUGIN_DIR/spend.sh"
 
 # The agent instrument cluster shares one shelf outline, mirroring the
-# workspace shelf on the left
-sketchybar --add bracket agent_cluster spend attention agents \
+# workspace shelf on the left. Explicit item list (not a /agent\..*/ regex)
+# so the popup rows stay out of the bar bracket.
+sketchybar --add bracket agent_cluster spend agent.more agent.5 agent.4 agent.3 agent.2 agent.1 \
   --set agent_cluster \
   background.color="$TRANSPARENT" \
   background.border_width=1 \
