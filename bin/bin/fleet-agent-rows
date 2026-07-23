@@ -1,0 +1,60 @@
+#!/usr/bin/env bash
+# Emit "state|pane|session|tool" per LIVE agent, sorted by urgency then
+# session. Live pane ids arrive on stdin (one per line). State fuses each
+# fleet .status snapshot with the tail of its sibling .events.jsonl, mirroring
+# sketchybar's old agents pill (see git history of plugins/agents.sh). Derived
+# vocabulary is normalized to: waiting asking done working idle.
+# FLEET_STATUS_ROOT overrides the cache root (default ~/.cache) for tests.
+
+ROOT="${FLEET_STATUS_ROOT:-$HOME/.cache}"
+LIVE=$(cat)
+
+emit_row() {
+  local sf="$1"
+  tail -n 25 "${sf%.status}.events.jsonl" 2>/dev/null |
+    jq -crsR --slurpfile st "$sf" '
+      [splits("\n") | select(length > 0) | fromjson?] as $ev
+      | $st[0] as $s
+      | ($ev | last) as $l
+      | (if $l == null then null
+         elif $l.event == "Acknowledged" then "idle"
+         elif $l.event == "Stop" or $l.event == "SubagentStop" then
+           (if $l.background_tasks == true or $l.stop_reason == "tool_use"
+            then "working" else "done" end)
+         elif $l.event == "PreToolUse" then
+           (if $l.tool == "AskUserQuestion" then "question" else "working" end)
+         elif $l.event == "Notification" then
+           (if $l.notification_type == "elicitation_dialog" then "question"
+            elif $l.notification_type == "idle_prompt" then "done"
+            elif $l.notification_type == "permission_prompt" then
+              (($ev[0:-1] | reverse | map(select(
+                  .event == "Stop" or .event == "SubagentStop"
+                  or .event == "PreToolUse")) | first // null) as $t
+               | if $t != null and $t.event == "PreToolUse"
+                   and $t.tool == "AskUserQuestion"
+                 then "question" else "permit" end)
+            else null end)
+         else null end) as $derived
+      | ($derived // {waiting: "permit", completed: "done"}[$s.state] // $s.state) as $raw
+      | ($raw | if . == "permit" then "waiting"
+                elif . == "question" then "asking" else . end) as $state
+      | "\($state)|\($s.pane)|\($s.session)|\($s.tool)"
+    ' 2>/dev/null
+}
+
+for dir in claude codex pi; do
+  for sf in "$ROOT/${dir}-status"/*.status; do
+    [ -e "$sf" ] || continue
+    emit_row "$sf"
+  done
+done |
+  while IFS='|' read -r state pane session tool; do
+    [ -n "$pane" ] || continue
+    grep -qxF -- "$pane" <<<"$LIVE" || continue
+    printf '%s|%s|%s|%s\n' "$state" "$pane" "$session" "$tool"
+  done |
+  awk -F'|' '
+    { r = ($1=="waiting")?0:($1=="asking")?1:($1=="done")?2:($1=="working")?3:($1=="idle")?4:5
+      print r "|" $0 }' |
+  sort -t'|' -k1,1n -k4,4 |
+  cut -d'|' -f2-
