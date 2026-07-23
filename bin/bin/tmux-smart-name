@@ -3,10 +3,31 @@
 
 COMMAND="$1"
 CURRENT_PATH="$2"
+PANE_PID="$3"
 
-# Claude sets its process title to its version number (e.g. 2.1.197 or
-# 2_1_197 depending on version), map it back to "claude"
-if [[ "$COMMAND" =~ ^[0-9]+[._][0-9]+[._][0-9]+$ ]]; then
+# Claude Code runs as a native binary whose comm is `claude`, but tmux's
+# pane_current_command reports the pane's *foreground* process — for an active
+# session that's whatever tool it's running (bash/node/uv/...), never `claude`.
+# So detect Claude by scanning the pane's process subtree for a `claude`
+# process. Matches lowercase `claude` only, so the Claude.app desktop helpers
+# (comm `Claude`) can't false-positive.
+pane_has_claude() {
+  local root="$1"
+  [ -n "$root" ] || return 1
+  ps -axo pid=,ppid=,comm= | awk -v root="$root" '
+    { ppid[$1] = $2; comm[$1] = $3 }
+    END {
+      n = 0; queue[n++] = root
+      for (i = 0; i < n; i++) {
+        for (p in ppid) if (ppid[p] == queue[i]) queue[n++] = p
+        if (comm[queue[i]] ~ /(^|\/)claude$/) exit 0
+      }
+      exit 1
+    }
+  '
+}
+
+if pane_has_claude "$PANE_PID"; then
   COMMAND="claude"
 fi
 
