@@ -11,10 +11,35 @@ POOL=5
 POPUP_POOL=15
 SB="${SKETCHYBAR:-sketchybar}"
 
+# Discover the live agent panes: any tmux pane with a claude/codex/pi process
+# in its subtree. pane_current_command can't be trusted (it reports the agent's
+# foreground child — bash/node — not the agent), so walk the process tree from
+# each pane's pid using one ps snapshot. Emits "pane|session" (session =
+# current-path basename, a fallback fleet-agent-rows overrides when a status
+# file exists). This catches brand-new sessions that haven't written a status
+# file yet — the ones fleet's TUI shows but the status files don't.
+agent_panes() {
+  local snap; snap=$(ps -axo pid=,ppid=,comm=)
+  tmux list-panes -a -F '#{pane_id}|#{pane_pid}|#{pane_current_path}' 2>/dev/null |
+    while IFS='|' read -r pane ppid path; do
+      awk -v root="$ppid" '
+        { pp[$1] = $2; cm[$1] = $3 }
+        END {
+          n = 0; q[n++] = root
+          for (i = 0; i < n; i++) {
+            for (p in pp) if (pp[p] == q[i]) q[n++] = p
+            if (cm[q[i]] ~ /(^|\/)(claude|codex|pi)$/) exit 0
+          }
+          exit 1
+        }' <<<"$snap" || continue
+      printf '%s|%s\n' "$pane" "$(basename "$path")"
+    done
+}
+
 if [ -n "${FLEET_ROWS_FILE:-}" ]; then
   ROWS=$(cat "$FLEET_ROWS_FILE")
 else
-  ROWS=$(tmux list-panes -a -F '#{pane_id}' 2>/dev/null | "$HOME/bin/fleet-agent-rows")
+  ROWS=$(agent_panes | "$HOME/bin/fleet-agent-rows")
 fi
 
 COUNT=0

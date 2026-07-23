@@ -1,15 +1,19 @@
 #!/usr/bin/env bash
-# Emit "state|pane|session|tool" per LIVE agent, sorted by urgency then
-# session. Live pane ids arrive on stdin (one per line). State fuses each
-# fleet .status snapshot with the tail of its sibling .events.jsonl, mirroring
-# sketchybar's old agents pill (see git history of plugins/agents.sh). Derived
-# vocabulary is normalized to: waiting asking done working idle.
+# Emit "state|pane|session|tool" per live agent, sorted by urgency then
+# session. Reads "pane|session" lines on stdin — the live agent panes the
+# caller discovered (e.g. fleet_pills.sh scans tmux panes for a claude/codex/pi
+# descendant). For each pane, state fuses its fleet .status snapshot with the
+# tail of its .events.jsonl (mirroring fleet's own state engine); the status
+# file's session/tool are authoritative. A pane with NO status file — a
+# brand-new session that hasn't fired a hook yet — falls back to idle with the
+# passed-in session label, so it still shows up (matching fleet's TUI).
+# Normalized states: waiting asking done working idle.
 # FLEET_STATUS_ROOT overrides the cache root (default ~/.cache) for tests.
 
 ROOT="${FLEET_STATUS_ROOT:-$HOME/.cache}"
-LIVE=$(cat)
 
-emit_row() {
+# Derive "state|session|tool" from one .status file fused with its event log.
+derive() {
   local sf="$1"
   tail -n 25 "${sf%.status}.events.jsonl" 2>/dev/null |
     jq -crsR --slurpfile st "$sf" '
@@ -38,21 +42,27 @@ emit_row() {
       | ($derived // {waiting: "permit", completed: "done"}[$s.state] // $s.state) as $raw
       | ($raw | if . == "permit" then "waiting"
                 elif . == "question" then "asking" else . end) as $state
-      | "\($state)|\($s.pane)|\($s.session)|\($s.tool)"
+      | "\($state)|\($s.session)|\($s.tool)"
     ' 2>/dev/null
 }
 
-for dir in claude codex pi; do
-  for sf in "$ROOT/${dir}-status"/*.status; do
-    [ -e "$sf" ] || continue
-    emit_row "$sf"
+while IFS='|' read -r pane label; do
+  [ -n "$pane" ] || continue
+  num="${pane#%}"
+  sf=""
+  for dir in claude codex pi; do
+    f="$ROOT/${dir}-status/${num}.status"
+    [ -e "$f" ] && { sf="$f"; break; }
   done
-done |
-  while IFS='|' read -r state pane session tool; do
-    [ -n "$pane" ] || continue
-    grep -qxF -- "$pane" <<<"$LIVE" || continue
+  if [ -n "$sf" ]; then
+    IFS='|' read -r state session tool < <(derive "$sf")
+    [ -n "$state" ] || state="idle"
+    [ -n "$session" ] || session="$label"
     printf '%s|%s|%s|%s\n' "$state" "$pane" "$session" "$tool"
-  done |
+  else
+    printf 'idle|%s|%s|\n' "$pane" "$label"
+  fi
+done |
   awk -F'|' '
     { r = ($1=="waiting")?0:($1=="asking")?1:($1=="done")?2:($1=="working")?3:($1=="idle")?4:5
       print r "|" $0 }' |
