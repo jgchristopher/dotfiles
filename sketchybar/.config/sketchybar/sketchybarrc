@@ -158,6 +158,8 @@ sketchybar --add item fleet_controller right \
   script="$PLUGIN_DIR/fleet_pills.sh"
 
 # Inline pills. Added high-index-first so agent.1 sits leftmost in the group.
+# TODO: verify pill order once >5 agents run — agent.more currently renders
+# left of agent.1..5; flip this seq direction if the cluster reads backwards.
 for i in $(seq "$FLEET_POOL" -1 1); do
   sketchybar --add item agent."$i" right \
     --set agent."$i" \
