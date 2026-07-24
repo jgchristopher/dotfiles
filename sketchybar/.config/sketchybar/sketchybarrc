@@ -19,11 +19,11 @@
 
 CONFIG_DIR="${CONFIG_DIR:-${XDG_CONFIG_HOME:-$HOME/.config}/sketchybar}"
 PLUGIN_DIR="$CONFIG_DIR/plugins"
-DOTFILES_BIN="$HOME/bin"   # ~/bin -> dotfiles/bin/bin (stable, PATH-independent)
+DOTFILES_BIN="$HOME/bin" # ~/bin -> dotfiles/bin/bin (stable, PATH-independent)
 source "$CONFIG_DIR/colors.sh"
 
-GAUGE=$(printf '\xf3\xb0\x89\x81')  # nf-md-gauge  U+F0241
-GITHUB=$(printf '\xef\x82\x9b')     # nf-fa-github U+F09B
+GAUGE=$(printf '\xf3\xb0\x89\x81') # nf-md-gauge  U+F0241
+GITHUB=$(printf '\xef\x82\x9b')    # nf-fa-github U+F09B
 
 MONO="Monaspace Neon"
 
@@ -133,15 +133,15 @@ sketchybar --add item aerospace_mode left \
 # ── Center: ❯ window title · layout glyph ───────────────────────
 # Title floats on the glass (no chip) — the calm center's anchor.
 # Rendered by workspaces.sh on the same aerospace events as the pills.
-sketchybar --add item title center \
-  --set title \
-  icon.font="JetBrainsMono Nerd Font Mono:Regular:13.0" \
-  icon.drawing=off \
-  label.color="$FG_DIM" \
-  label.max_chars=64 \
-  scroll_texts=on \
-  background.drawing=off \
-  drawing=off
+# sketchybar --add item title center \
+#   --set title \
+#   icon.font="JetBrainsMono Nerd Font Mono:Regular:13.0" \
+#   icon.drawing=off \
+#   label.color="$FG_DIM" \
+#   label.max_chars=64 \
+#   scroll_texts=on \
+#   background.drawing=off \
+#   drawing=off
 
 # ── Right: fleet agent pills · spend ─────────────────────────────
 # One pill per live agent (fleet), rendered by fleet_pills.sh in a single
