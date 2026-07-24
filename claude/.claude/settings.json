@@ -118,7 +118,9 @@
     "sidequest@nicknisi": true,
     "fleet@fleet-local": true,
     "ideation@ideation": true,
-    "codex@openai-codex": true
+    "codex@openai-codex": true,
+    "imessage@claude-plugins-official": true,
+    "discord@claude-plugins-official": true
   },
   "extraKnownMarketplaces": {
     "nicknisi": {
