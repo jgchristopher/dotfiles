@@ -234,6 +234,26 @@ setup_macos() {
     fi
 }
 
+setup_tmux_plugins() {
+    title "Installing tmux plugins (tpm)"
+
+    # ~/.config/tmux is symlinked to this repo, so plugins/ lands in the
+    # gitignored tmux/.config/tmux/plugins. tpm and its plugins are third-party
+    # checkouts — bootstrapped here rather than committed.
+    local tpm_dir="$HOME/.config/tmux/plugins/tpm"
+
+    if [ ! -d "$tpm_dir" ]; then
+        info "Cloning tpm"
+        git clone https://github.com/tmux-plugins/tpm "$tpm_dir"
+    else
+        info "tpm already present. Updating."
+        git -C "$tpm_dir" pull --ff-only || warning "tpm update skipped"
+    fi
+
+    info "Installing plugins listed in tmux.conf"
+    "$tpm_dir/bin/install_plugins"
+}
+
 setup_terminal_theme_sync() {
     title "Installing terminal-theme-sync LaunchAgent"
 
@@ -287,6 +307,9 @@ case "$1" in
     terminal-theme-sync)
         setup_terminal_theme_sync
         ;;
+    tmux-plugins)
+        setup_tmux_plugins
+        ;;
     macos)
         setup_macos
         ;;
@@ -297,13 +320,14 @@ case "$1" in
         setup_symlinks
         setup_terminfo
         setup_homebrew
+        setup_tmux_plugins
         setup_shell
         setup_git
         setup_macos
         setup_terminal_theme_sync
         ;;
     *)
-        echo -e $"\nUsage: $(basename "$0") {backup|link|git|homebrew|shell|terminfo|terminal-theme-sync|macos|all}\n"
+        echo -e $"\nUsage: $(basename "$0") {backup|link|git|homebrew|shell|terminfo|terminal-theme-sync|tmux-plugins|macos|all}\n"
         exit 1
         ;;
 esac
