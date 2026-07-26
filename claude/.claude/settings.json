@@ -95,7 +95,7 @@
     ],
     "defaultMode": "auto"
   },
-  "model": "opus[1m]",
+  "model": "claude-fable-5[1m]",
   "statusLine": {
     "type": "command",
     "command": "claude-statusline"
@@ -120,7 +120,9 @@
     "ideation@ideation": true,
     "codex@openai-codex": true,
     "imessage@claude-plugins-official": true,
-    "discord@claude-plugins-official": true
+    "discord@claude-plugins-official": true,
+    "ideation@nicknisi": true,
+    "tmux@nicknisi": true
   },
   "extraKnownMarketplaces": {
     "nicknisi": {
