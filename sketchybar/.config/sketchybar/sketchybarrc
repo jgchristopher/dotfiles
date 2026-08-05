@@ -77,30 +77,16 @@ sketchybar --add event aerospace_workspace_change \
 
 # ── AeroSpace workspaces ─────────────────────────────────────────
 # Pills are dumb views (hover handler only); workspaces.sh renders all of
-# them in one batch. Each pill gets a personal bracket ring — the dim
-# outer stroke of the focused glow (bright inner border on the pill).
-for sid in $(aerospace list-workspaces --all); do
-  sketchybar --add item space."$sid" left \
-    --subscribe space."$sid" mouse.entered mouse.exited \
-    --set space."$sid" \
-    icon="$sid" \
-    icon.font="$MONO:Bold:11.0" \
-    label.font="JetBrainsMono Nerd Font Mono:Regular:13.0" \
-    label.drawing=off \
-    drawing=off \
-    updates=when_shown \
-    background.height=22 \
-    background.color="$PILL_BG" \
-    click_script="aerospace workspace $sid" \
-    script="$PLUGIN_DIR/space_hover.sh" \
-    --add bracket ring."$sid" space."$sid" \
-    --set ring."$sid" \
-    background.color="$TRANSPARENT" \
-    background.border_width=1 \
-    background.border_color="$TRANSPARENT" \
-    background.height=26 \
-    background.corner_radius=6
+# them in one batch. Construction args live in plugins/space_pill.sh, shared
+# with workspaces.sh, which reconciles the pill set on every event —
+# aerospace materializes workspaces lazily, so this startup loop is only a
+# warm-up over whatever exists right now (maybe nothing, during the race).
+source "$PLUGIN_DIR/space_pill.sh"
+pill_args=()
+for sid in $(aerospace list-workspaces --all 2>/dev/null); do
+  space_pill_add_args "$sid" pill_args
 done
+[ ${#pill_args[@]} -gt 0 ] && sketchybar "${pill_args[@]}"
 
 # Invisible controller: one batched render per event (pills+rings+center).
 # fleet_state_change is included so the title's robot LED recolors when the
@@ -113,13 +99,9 @@ sketchybar --add item spaces_controller left \
 
 # Workspace shelf: a drawn outline, not a fill — visible structure at
 # near-zero luminance. Part of what makes the calm bar look designed.
-sketchybar --add bracket spaces '/space\..*/' \
-  --set spaces \
-  background.color="$TRANSPARENT" \
-  background.border_width=1 \
-  background.border_color="$GLOW_TRACE" \
-  background.corner_radius=6 \
-  background.height=28
+shelf_args=()
+spaces_shelf_args shelf_args
+sketchybar "${shelf_args[@]}"
 
 # AeroSpace binding-mode badge — the bar's one inverted chip
 sketchybar --add item aerospace_mode left \

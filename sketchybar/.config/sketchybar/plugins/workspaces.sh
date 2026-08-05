@@ -11,13 +11,50 @@
 
 source "$CONFIG_DIR/colors.sh"
 source "$CONFIG_DIR/plugins/icons.sh"
+source "$CONFIG_DIR/plugins/space_pill.sh"
 
-STATE_DIR="$HOME/.cache/sketchybar"
+SB="${SKETCHYBAR:-sketchybar}"
+AERO="${AEROSPACE:-aerospace}"
+
+STATE_DIR="${STATE_DIR:-$HOME/.cache/sketchybar}"
 mkdir -p "$STATE_DIR"
 
-FOCUSED="${FOCUSED_WORKSPACE:-$(aerospace list-workspaces --focused 2>/dev/null)}"
+FOCUSED="${FOCUSED_WORKSPACE:-$($AERO list-workspaces --focused 2>/dev/null)}"
 # Read by space_hover.sh (restore-after-hover)
 echo "$FOCUSED" >"$STATE_DIR/focused-workspace"
+
+# ── Reconcile pills against the live workspace set ──────────────────
+# AeroSpace materializes workspaces lazily, so `list-workspaces --all` is a
+# moving target: sketchybarrc's startup loop only saw the set that existed
+# at launch (often just the per-monitor defaults during the startup race).
+# Diff live workspaces against existing space.* items: add missing pills,
+# remove stale ones, re-sort, and rebuild the shelf bracket. Skipped when
+# the query comes back empty (startup race / WM gone) — never mass-remove.
+mapfile -t WORKSPACES < <($AERO list-workspaces --all 2>/dev/null)
+if [ ${#WORKSPACES[@]} -gt 0 ]; then
+  declare -A WANT HAVE
+  for sid in "${WORKSPACES[@]}"; do WANT[$sid]=1; done
+  mapfile -t EXISTING < <($SB --query bar 2>/dev/null |
+    grep -oE '"space\.[^"]*"' | tr -d '"' | cut -c7-)
+  recon=()
+  for sid in "${EXISTING[@]}"; do
+    HAVE[$sid]=1
+    [ -n "${WANT[$sid]:-}" ] || recon+=(--remove "ring.$sid" --remove "space.$sid")
+  done
+  for sid in "${WORKSPACES[@]}"; do
+    [ -n "${HAVE[$sid]:-}" ] || space_pill_add_args "$sid" recon
+  done
+  if [ ${#recon[@]} -gt 0 ]; then
+    # New items land at the end of the left group; walking the sorted list
+    # and moving each pill before the controller leaves the row sorted.
+    for sid in "${WORKSPACES[@]}"; do
+      recon+=(--move "space.$sid" before spaces_controller)
+    done
+    recon+=(--remove spaces)
+    spaces_shelf_args recon
+    $SB "${recon[@]}"
+  fi
+fi
 
 declare -A APPS SEEN
 while IFS='|' read -r ws app; do
@@ -26,10 +63,10 @@ while IFS='|' read -r ws app; do
     SEEN[$ws|$app]=1
     APPS[$ws]+="$(app_icon "$app") "
   fi
-done < <(aerospace list-windows --all --format '%{workspace}|%{app-name}' 2>/dev/null)
+done < <($AERO list-windows --all --format '%{workspace}|%{app-name}' 2>/dev/null)
 
 args=()
-for sid in $(aerospace list-workspaces --all); do
+for sid in "${WORKSPACES[@]}"; do
   icons="${APPS[$sid]:-}"
   icons="${icons% }"
   if [ "$sid" = "$FOCUSED" ]; then
@@ -62,7 +99,7 @@ done
 # floats alone. The state prefix and the 󱙺 window glyph are stripped for
 # display (Monaspace lacks the glyph; byte prefixes matched raw since the
 # daemon locale may be C).
-RAW=$(aerospace list-windows --focused --format '%{window-title}' 2>/dev/null | head -1)
+RAW=$($AERO list-windows --focused --format '%{window-title}' 2>/dev/null | head -1)
 IS_AGENT=0
 LED_COLOR="$ACCENT"
 case "$RAW" in
@@ -88,4 +125,4 @@ else
   args+=(--set title drawing=off)
 fi
 
-sketchybar --animate tanh 10 "${args[@]}"
+$SB --animate tanh 10 "${args[@]}"

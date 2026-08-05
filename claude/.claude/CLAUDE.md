@@ -92,6 +92,30 @@ These are the most detectable signs of AI-generated content. Use sparingly and n
 "it is worth noting", "it is important to note", "it bears mentioning"
 Inflating significance: "marking a pivotal moment", "represents a significant shift", "a defining feature of our era"
 
+# Diagrams in Obsidian notes
+
+When I ask for a note with diagrams, build the diagrams as **Obsidian Canvas
+files (`.canvas`)**, not mermaid. This applies to every project, not just the
+one it came up in.
+
+- One `.canvas` per diagram, named `<Note Name> - <Diagram Name>.canvas`,
+  saved beside the note.
+- Reference them from the note with a `> [!info] Companion canvases` callout
+  listing `[[Name.canvas|Alias]]` links, and embed each one inline at the point
+  where it belongs with `![[Name.canvas]]`.
+- Canvas JSON is `{"nodes": [...], "edges": [...]}`. Nodes are all
+  `"type": "text"` with markdown in the `text` field. Avoid `group` nodes.
+  Colors are the string palette `"0"`–`"6"` (0 grey, 1 red, 2 orange, 3 yellow,
+  4 green, 5 cyan, 6 purple). Edges need explicit `fromSide`/`toSide` and take
+  an optional `label`.
+- Prefer a few rich cards over many tiny ones — put real content (code refs,
+  tables, the "why") inside each node.
+- **Canvas has no auto-layout, so compute positions and verify before saving.**
+  Generate the JSON with a script that flows each column from actual node
+  heights, then assert: no duplicate node ids, no edge pointing at a missing
+  node, and no two nodes overlapping. An overlap is permanent and has to be
+  dragged apart by hand.
+
 # Datadog
 
 - Use the datadog MCP for all READ operations (metrics, logs, monitors.list/get, events).
