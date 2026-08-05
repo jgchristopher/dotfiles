@@ -87,7 +87,6 @@
       "Bash(sudo rm -rf /* *)"
     ],
     "ask": [
-      "Bash(git commit *)",
       "Bash(git push *)",
       "Bash(gh pr merge *)",
       "Bash(docker push *)",
@@ -95,7 +94,7 @@
     ],
     "defaultMode": "auto"
   },
-  "model": "claude-fable-5[1m]",
+  "model": "opus",
   "statusLine": {
     "type": "command",
     "command": "claude-statusline"

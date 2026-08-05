@@ -84,3 +84,6 @@ export PATH="$HOME/.local/bin:$PATH"
 
 # Pi
 fish_add_path "/Users/johnchristopher/.asdf/installs/nodejs/26.2.0/bin"
+
+# Pi
+fish_add_path "/Users/johnchristopher/.asdf/installs/nodejs/24.6.0/bin"

@@ -273,6 +273,10 @@ run = ['move-node-to-workspace C']
 if.app-id = 'com.mitchellh.ghostty'
 run = ['move-node-to-workspace D']
 
+# Obsidian
+[[on-window-detected]]
+if.app-id = ' md.obsidian'
+run = ['move-node-to-workspace O']
 
 # Productivity - P
 [[on-window-detected]]
