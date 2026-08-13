@@ -94,7 +94,7 @@
     ],
     "defaultMode": "auto"
   },
-  "model": "fable",
+  "model": "opus",
   "statusLine": {
     "type": "command",
     "command": "claude-statusline"
@@ -115,7 +115,6 @@
     "spec-driven@nicknisi": true,
     "essentials@nicknisi": true,
     "sidequest@nicknisi": true,
-    "fleet@fleet-local": true,
     "ideation@ideation": true,
     "codex@openai-codex": true,
     "imessage@claude-plugins-official": true,
@@ -134,12 +133,6 @@
       "source": {
         "source": "directory",
         "path": "/Users/johnchristopher/.local/share/sessions"
-      }
-    },
-    "fleet-local": {
-      "source": {
-        "source": "directory",
-        "path": "/Users/johnchristopher/.local/share/fleet-marketplace"
       }
     },
     "ideation": {
