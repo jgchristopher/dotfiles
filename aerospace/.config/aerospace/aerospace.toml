@@ -357,10 +357,6 @@ if.app-id = 'com.apple.Preview'
 run = ['layout floating']
 
 [[on-window-detected]]
-if.app-id = 'md.obsidian'
-run = ['layout floating']
-
-[[on-window-detected]]
 if.app-id = 'com.sonos.macController2'
 run = ['layout floating']
 
@@ -440,9 +436,6 @@ run = 'layout floating'
 if.app-id = 'com.anthropic.claudefordesktop'
 run = 'layout floating'
 
-[[on-window-detected]]
-if.app-id = 'com.granola.app'
-run = 'layout floating'
 
 [[on-window-detected]]
 if.app-id = 'com.apple.Home'

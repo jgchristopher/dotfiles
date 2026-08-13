@@ -285,6 +285,39 @@ setup_terminal_theme_sync() {
     "$HOME/bin/sync-terminal-theme" || warning "Initial sync failed — agent will still trigger on appearance change"
 }
 
+setup_granola_nub_guard() {
+    title "Installing granola-nub-guard LaunchAgent"
+
+    local template="$DOTFILES/bin/com.jc.granola-nub-guard.plist.template"
+    local source="$DOTFILES/bin/bin/granola-nub-guard.swift"
+    local state_dir="$HOME/.local/state/granola-nub-guard"
+    local target="$HOME/Library/LaunchAgents/com.jc.granola-nub-guard.plist"
+
+    if [ ! -f "$template" ]; then
+        error "Template not found at $template"
+    fi
+
+    if ! command -v swiftc >/dev/null 2>&1; then
+        error "swiftc not found. Install the Xcode Command Line Tools: xcode-select --install"
+    fi
+
+    mkdir -p "$HOME/Library/LaunchAgents"
+    mkdir -p "$state_dir"
+
+    info "Compiling granola-nub-guard"
+    swiftc -O "$source" -o "$state_dir/granola-nub-guard"
+
+    sed "s|__HOME__|$HOME|g" "$template" > "$target"
+    info "Wrote $target"
+
+    # Replace any prior agent of the same Label, then load fresh.
+    launchctl bootout "gui/$(id -u)" "$target" 2>/dev/null || true
+    launchctl bootstrap "gui/$(id -u)" "$target"
+    launchctl enable "gui/$(id -u)/com.jc.granola-nub-guard"
+
+    success "granola-nub-guard agent loaded"
+}
+
 case "$1" in
     backup)
         backup
@@ -307,6 +340,9 @@ case "$1" in
     terminal-theme-sync)
         setup_terminal_theme_sync
         ;;
+    granola-nub-guard)
+        setup_granola_nub_guard
+        ;;
     tmux-plugins)
         setup_tmux_plugins
         ;;
@@ -325,9 +361,10 @@ case "$1" in
         setup_git
         setup_macos
         setup_terminal_theme_sync
+        setup_granola_nub_guard
         ;;
     *)
-        echo -e $"\nUsage: $(basename "$0") {backup|link|git|homebrew|shell|terminfo|terminal-theme-sync|tmux-plugins|macos|all}\n"
+        echo -e $"\nUsage: $(basename "$0") {backup|link|git|homebrew|shell|terminfo|terminal-theme-sync|granola-nub-guard|tmux-plugins|macos|all}\n"
         exit 1
         ;;
 esac
