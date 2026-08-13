@@ -76,7 +76,7 @@ macos-icon-screen-color = "#1E1E2D"
 mouse-hide-while-typing = true
 
 # Font settings
-font-family = "Monaspace Neon Regular"
+font-family = "Monaspace Neon"
 font-family-italic = "Monaspace Radon Var"
 font-variation-italic = wght=400
 font-variation-italic = wdth=100

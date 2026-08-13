@@ -19,6 +19,7 @@
       "Bash(stat *)",
       "Bash(tree *)",
       "Bash(git *)",
+      "Bash(git commit *)",
       "Bash(gh *)",
       "Bash(docker *)",
       "Bash(date *)",
@@ -119,7 +120,6 @@
     "codex@openai-codex": true,
     "imessage@claude-plugins-official": true,
     "discord@claude-plugins-official": true,
-    "ideation@nicknisi": true,
     "tmux@nicknisi": true
   },
   "extraKnownMarketplaces": {
@@ -276,7 +276,7 @@
     ]
   },
   "alwaysThinkingEnabled": true,
-  "effortLevel": "high",
+  "effortLevel": "xhigh",
   "tui": "fullscreen",
   "voice": {
     "enabled": true,
