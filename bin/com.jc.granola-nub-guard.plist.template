@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>Label</key>
+    <string>com.jc.granola-nub-guard</string>
+
+    <!--
+      Hides sketchybar while Granola's meeting-start banner (layer-1000+
+      window) is on screen — the banner flickers and its record button is
+      unclickable when it overlaps the bar. The binary is compiled from
+      bin/bin/granola-nub-guard.swift by `install.sh granola-nub-guard`;
+      launchd's KeepAlive respawns it if it exits.
+    -->
+
+    <key>ProgramArguments</key>
+    <array>
+        <string>__HOME__/.local/state/granola-nub-guard/granola-nub-guard</string>
+    </array>
+
+    <key>RunAtLoad</key>
+    <true/>
+
+    <key>KeepAlive</key>
+    <true/>
+
+    <key>StandardOutPath</key>
+    <string>__HOME__/.local/state/granola-nub-guard/stdout.log</string>
+    <key>StandardErrorPath</key>
+    <string>__HOME__/.local/state/granola-nub-guard/stderr.log</string>
+</dict>
+</plist>
