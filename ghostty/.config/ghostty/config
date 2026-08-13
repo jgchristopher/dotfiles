@@ -77,8 +77,14 @@ mouse-hide-while-typing = true
 
 # Font settings
 font-family = "Monaspace Neon Regular"
-font-family-italic = "Monaspace Radon Var Regular Italic"
-font-family-bold-italic = "Monaspace Radon Var Bold Italic"
+font-family-italic = "Monaspace Radon Var"
+font-variation-italic = wght=400
+font-variation-italic = wdth=100
+font-variation-italic = slnt=-11
+font-family-bold-italic = "Monaspace Radon Var"
+font-variation-bold-italic = wght=700
+font-variation-bold-italic = wdth=100
+font-variation-bold-italic = slnt=-11
 font-size = 16
 font-feature = +liga
 cursor-style = bar

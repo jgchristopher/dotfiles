@@ -446,5 +446,6 @@ if.app-id = 'com.apple.Home'
 run = 'layout floating'
 
 [workspace-to-monitor-force-assignment]
-D = 1
+D = 2
 C = 2
+B = 1

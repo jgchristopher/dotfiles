@@ -1,0 +1,453 @@
+#!/usr/bin/env python3
+"""Diff Claude Code MCP/plugin setup between this machine and a peer over Tailscale.
+
+This machine is treated as canonical. Run with no args to compare against
+jc-arbol-mbpro, or pass a Tailscale hostname/IP explicitly.
+
+Dual-mode: with --extract-json it just prints this machine's snapshot as JSON
+(used internally — the same file is piped over SSH and run remotely so both
+sides use identical extraction logic). With no flag it orchestrates: pull the
+local snapshot, ssh the peer and pull its snapshot, diff the two.
+"""
+import argparse
+import hashlib
+import json
+import os
+import subprocess
+import sys
+
+HOME = os.path.expanduser("~")
+DEFAULT_PEERS = ["jc-arbol-mbpro", "jc-mbp-personal"]
+
+SECRET_KEY_PATTERN = ("token", "key", "secret", "password", "auth", "pat", "credential")
+
+
+def is_secret_key(key):
+    lowered = key.lower()
+    return any(p in lowered for p in SECRET_KEY_PATTERN)
+
+
+def redact(value):
+    digest = hashlib.sha256(str(value).encode()).hexdigest()[:10]
+    return f"sha256:{digest}"
+
+
+def redact_dict(d):
+    """Redact secret-looking values in a flat str->str dict, keep keys visible."""
+    if not isinstance(d, dict):
+        return d
+    return {k: (redact(v) if is_secret_key(k) else v) for k, v in d.items()}
+
+
+def run(cmd, cwd=None):
+    try:
+        out = subprocess.run(cmd, cwd=cwd, capture_output=True, text=True, timeout=10)
+        return out.stdout.strip() if out.returncode == 0 else None
+    except Exception:
+        return None
+
+
+def load_json(path):
+    try:
+        with open(path) as f:
+            return json.load(f)
+    except Exception:
+        return None
+
+
+def resolve_repo_root():
+    """Locate the dotfiles checkout directly, independent of whether anything
+    is actually symlinked out of it — that symlink status is itself one of
+    the things we want to detect as drift, not a precondition for finding it."""
+    candidate = os.path.join(HOME, "gitprojects", "dotfiles")
+    if os.path.isdir(os.path.join(candidate, ".git")):
+        return candidate
+    return None
+
+
+def extract_dotfiles_repo():
+    repo_root = resolve_repo_root()
+    if repo_root is None:
+        return {"error": f"no dotfiles repo found at {os.path.join(HOME, 'gitprojects', 'dotfiles')}"}
+
+    settings_path = os.path.join(HOME, ".claude", "settings.json")
+    expected_target = os.path.realpath(os.path.join(repo_root, "claude", ".claude", "settings.json"))
+    settings_symlink_error = None
+    if not os.path.islink(settings_path):
+        settings_symlink_error = "~/.claude/settings.json is not a symlink"
+    elif os.path.realpath(settings_path) != expected_target:
+        settings_symlink_error = (
+            f"~/.claude/settings.json points to {os.path.realpath(settings_path)}, expected {expected_target}"
+        )
+
+    return {
+        "repo_root": repo_root,
+        "commit": run(["git", "rev-parse", "HEAD"], cwd=repo_root),
+        "branch": run(["git", "branch", "--show-current"], cwd=repo_root),
+        "dirty_files": (run(["git", "status", "--porcelain"], cwd=repo_root) or "").splitlines(),
+        "remote_url": run(["git", "remote", "get-url", "origin"], cwd=repo_root),
+        "settings_symlink_error": settings_symlink_error,
+    }
+
+
+# ---------------------------------------------------------------------------
+# Home directory config: which dotfiles-managed paths are actually symlinked
+# ---------------------------------------------------------------------------
+
+# Packages whose dot-named entry is itself a real directory with individual
+# tracked files symlinked inside it (rather than the whole dir being one
+# symlink) — discovered by inspection: ~/.claude and ~/.pi both work this way
+# on the canonical machine.
+SPECIAL_RECURSE = {".claude", ".pi"}
+
+# Also always check whether the *whole* container is a symlink. A machine
+# that symlinks ~/.claude wholesale (instead of per-file) dumps Claude's
+# entire live runtime state — session history, telemetry, caches — straight
+# into the repo's working tree. .gitignore may cover that today, but it's one
+# `git add -A` away from leaking into a public remote, so it's worth its own
+# explicit check rather than only being inferred from individual file diffs.
+WHOLE_DIR_TARGETS = {".claude": "claude/.claude", ".pi": "pi/.pi"}
+
+
+def repo_expected_targets(repo_root):
+    """Home-relative path -> repo-relative path, for everything the dotfiles
+    repo is set up to symlink into $HOME. Derived from `git ls-files` (not a
+    live directory listing) so a machine with stray runtime cruft sitting in
+    its checkout — gitignored files, or an accidentally-whole-dir-symlinked
+    ~/.claude — doesn't pollute the candidate set with noise; only content
+    actually tracked by git defines an expected target.
+
+    Two confirmed conventions: <pkg>/.config/<name> -> ~/.config/<name>, and
+    a dot-named top-level tracked path -> ~/.<name>. The `bin` package
+    additionally symlinks its (non-dot) tracked files straight into $HOME
+    (~/bin, plus the LaunchAgent plist template) — the one confirmed
+    non-dot case, so it's special-cased rather than generalized (generalizing
+    it would turn every tracked file in every package, e.g. docs/, into a
+    noisy candidate ~/<name> target)."""
+    targets = dict(WHOLE_DIR_TARGETS)
+    tracked = run(["git", "ls-files"], cwd=repo_root) or ""
+    for path in tracked.splitlines():
+        if "/" not in path:
+            continue
+        pkg, rest = path.split("/", 1)
+        if pkg.startswith("."):
+            continue
+        rest_parts = rest.split("/")
+        if rest_parts[0] == ".config" and len(rest_parts) >= 2:
+            leaf = f".config/{rest_parts[1]}"
+            repo_path = f"{pkg}/.config/{rest_parts[1]}"
+        elif rest_parts[0] in SPECIAL_RECURSE and len(rest_parts) >= 2:
+            leaf = f"{rest_parts[0]}/{rest_parts[1]}"
+            repo_path = f"{pkg}/{rest_parts[0]}/{rest_parts[1]}"
+        else:
+            top = rest_parts[0]
+            if not (top.startswith(".") or pkg == "bin"):
+                continue
+            leaf, repo_path = top, f"{pkg}/{top}"
+        targets[leaf] = repo_path
+    return targets
+
+
+def classify_home_entry(home_rel_key, repo_root):
+    path = os.path.join(HOME, home_rel_key)
+    if os.path.islink(path):
+        target = os.path.realpath(path)
+        entry = {"kind": "symlink", "broken": not os.path.exists(target)}
+        if target == repo_root or target.startswith(repo_root + os.sep):
+            entry["repo_path"] = os.path.relpath(target, repo_root)
+        else:
+            entry["external_target"] = target
+        return entry
+    if os.path.exists(path):
+        return {"kind": "real"}
+    return {"kind": "missing"}
+
+
+def extract_home_config(repo_root):
+    if not repo_root:
+        return {}
+    return {key: classify_home_entry(key, repo_root) for key in repo_expected_targets(repo_root)}
+
+
+def extract_mcp_server(cfg):
+    """Structural snapshot of one mcpServer entry with secrets redacted."""
+    out = {k: v for k, v in cfg.items() if k not in ("env", "headers")}
+    if "env" in cfg:
+        out["env"] = redact_dict(cfg["env"])
+    if "headers" in cfg:
+        out["headers"] = redact_dict(cfg["headers"])
+    return out
+
+
+def extract_mcp_servers(path):
+    servers = {}
+    data = load_json(path)
+    if data is None:
+        return servers
+    raw = data.get("mcpServers", data) if isinstance(data, dict) else {}
+    for name, cfg in (raw or {}).items():
+        servers[name] = extract_mcp_server(cfg)
+    return servers
+
+
+def extract_installed_plugins():
+    data = load_json(os.path.join(HOME, ".claude", "plugins", "installed_plugins.json"))
+    plugins = {}
+    if not data:
+        return plugins
+    for name, entries in (data.get("plugins") or {}).items():
+        for entry in entries:
+            if entry.get("scope") == "user":
+                plugins[name] = {
+                    "version": entry.get("version"),
+                    "gitCommitSha": entry.get("gitCommitSha"),
+                }
+    return plugins
+
+
+def extract_marketplaces():
+    data = load_json(os.path.join(HOME, ".claude", "plugins", "known_marketplaces.json"))
+    out = {}
+    if not data:
+        return out
+    for name, cfg in data.items():
+        source = cfg.get("source", {})
+        entry = {"source": source}
+        if source.get("source") == "directory":
+            path = source.get("path", "")
+            entry["path_exists_here"] = os.path.isdir(os.path.expanduser(path))
+        out[name] = entry
+    return out
+
+
+def extract():
+    dotfiles = extract_dotfiles_repo()
+    return {
+        "hostname": run(["hostname"]) or "",
+        "dotfiles": dotfiles,
+        "mcp_servers": extract_mcp_servers(os.path.join(HOME, ".claude.json")),
+        "project_mcp_servers": extract_mcp_servers(os.path.join(HOME, ".claude", ".mcp.json")),
+        "installed_plugins": extract_installed_plugins(),
+        "marketplaces": extract_marketplaces(),
+        "home_config": extract_home_config(dotfiles.get("repo_root")),
+    }
+
+
+# ---------------------------------------------------------------------------
+# Orchestration (runs locally, fetches the peer snapshot over SSH)
+# ---------------------------------------------------------------------------
+
+def resolve_tailscale_ip(name):
+    out = run(["tailscale", "status", "--json"])
+    if not out:
+        return None
+    try:
+        status = json.loads(out)
+    except Exception:
+        return None
+    needle = name.lower()
+    peers = dict(status.get("Peer") or {})
+    self_node = status.get("Self")
+    if self_node:
+        peers["self"] = self_node
+    for peer in peers.values():
+        hostname = (peer.get("HostName") or "").lower()
+        dns_name = (peer.get("DNSName") or "").lower()
+        if hostname == needle or dns_name.startswith(needle + "."):
+            ips = peer.get("TailscaleIPs") or []
+            if ips:
+                return ips[0]
+    return None
+
+
+def fetch_remote_snapshot(host_or_ip):
+    script_src = open(__file__).read()
+    proc = subprocess.run(
+        ["ssh", "-o", "ConnectTimeout=8", "-o", "BatchMode=yes", host_or_ip,
+         "python3 - --extract-json"],
+        input=script_src, capture_output=True, text=True, timeout=30,
+    )
+    if proc.returncode != 0:
+        print(f"error: ssh to {host_or_ip} failed:\n{proc.stderr.strip()}", file=sys.stderr)
+        return None
+    try:
+        return json.loads(proc.stdout)
+    except Exception:
+        print(f"error: could not parse remote output:\n{proc.stdout[:500]}", file=sys.stderr)
+        return None
+
+
+def diff_dict_keys(local, remote, label):
+    lk, rk = set(local), set(remote)
+    only_local = sorted(lk - rk)
+    only_remote = sorted(rk - lk)
+    if only_local:
+        print(f"  {label} only on THIS machine: {', '.join(only_local)}")
+    if only_remote:
+        print(f"  {label} only on REMOTE: {', '.join(only_remote)}")
+    return sorted(lk & rk)
+
+
+def report_dotfiles(local, remote):
+    print("\n=== dotfiles repo ===")
+    if "error" in local:
+        print(f"  THIS machine: {local['error']}")
+        return
+    if "error" in remote:
+        print(f"  REMOTE: {remote['error']}")
+        return
+    if local.get("settings_symlink_error"):
+        print(f"  THIS machine: {local['settings_symlink_error']}")
+    if remote.get("settings_symlink_error"):
+        print(f"  REMOTE: {remote['settings_symlink_error']}")
+    if local["commit"] == remote["commit"]:
+        print(f"  commit in sync: {local['commit'][:12]}")
+    else:
+        print(f"  COMMIT MISMATCH: this={local['commit'][:12]} remote={remote['commit'][:12]}")
+    if local["branch"] != remote["branch"]:
+        print(f"  BRANCH MISMATCH: this={local['branch']} remote={remote['branch']}")
+    if local["dirty_files"]:
+        print(f"  THIS machine has uncommitted changes: {len(local['dirty_files'])} file(s)")
+        for line in local["dirty_files"]:
+            print(f"    {line}")
+    if remote["dirty_files"]:
+        print(f"  REMOTE has uncommitted changes: {len(remote['dirty_files'])} file(s)")
+        for line in remote["dirty_files"]:
+            print(f"    {line}")
+    if (local["commit"] == remote["commit"] and not local["dirty_files"] and not remote["dirty_files"]
+            and not local.get("settings_symlink_error") and not remote.get("settings_symlink_error")):
+        print("  settings.json, CLAUDE.md, agents/ are guaranteed identical (same clean commit).")
+
+
+def describe_home_entry(entry):
+    if entry["kind"] == "symlink":
+        suffix = " [BROKEN]" if entry.get("broken") else ""
+        if "repo_path" in entry:
+            return f"symlink -> {entry['repo_path']}{suffix}"
+        return f"symlink -> {entry['external_target']} (outside dotfiles repo){suffix}"
+    if entry["kind"] == "real":
+        return "real file/dir (not a symlink — local edits won't reach git)"
+    return "missing"
+
+
+def report_home_config(local, remote):
+    print("\n=== home directory config (dotfiles-managed paths) ===")
+    if not local and not remote:
+        print("  (couldn't resolve dotfiles repo root on one or both machines, skipped)")
+        return
+    for whole_dir in WHOLE_DIR_TARGETS:
+        this_kind = local.get(whole_dir, {}).get("kind")
+        remote_kind = remote.get(whole_dir, {}).get("kind")
+        if "symlink" in (this_kind, remote_kind) and this_kind != remote_kind:
+            whole = "THIS machine" if this_kind == "symlink" else "REMOTE"
+            print(f"  NOTE: {whole} symlinks ~/{whole_dir} wholesale instead of per-file — "
+                  f"its entire live runtime state (history, sessions, telemetry, caches) sits "
+                  f"inside the repo's working tree. .gitignore covers it today, but a stray "
+                  f"`git add -A` there would be one step from leaking into a public remote.")
+    keys = sorted(set(local) | set(remote))
+    mismatches = 0
+    for key in keys:
+        l = local.get(key, {"kind": "missing"})
+        r = remote.get(key, {"kind": "missing"})
+        if l == r:
+            continue
+        mismatches += 1
+        print(f"  ~/{key}")
+        print(f"    this:   {describe_home_entry(l)}")
+        print(f"    remote: {describe_home_entry(r)}")
+    if mismatches == 0:
+        print(f"  {len(keys)} dotfiles-managed path(s) checked, all consistent.")
+    else:
+        print(f"  {mismatches} of {len(keys)} dotfiles-managed path(s) differ.")
+
+
+def report_mcp_servers(local, remote, label):
+    print(f"\n=== {label} ===")
+    if not local and not remote:
+        print("  (none configured on either machine)")
+        return
+    common = diff_dict_keys(local, remote, "server")
+    for name in common:
+        l, r = local[name], remote[name]
+        if l == r:
+            continue
+        print(f"  MISMATCH on '{name}':")
+        for key in sorted(set(l) | set(r)):
+            if l.get(key) != r.get(key):
+                print(f"    {key}: this={l.get(key)!r}  remote={r.get(key)!r}")
+    if common and all(local[n] == remote[n] for n in common):
+        print(f"  {len(common)} shared server(s), all matching (secrets compared by hash, not exposed).")
+
+
+def report_plugins(local, remote):
+    print("\n=== installed plugins (user scope) ===")
+    common = diff_dict_keys(local, remote, "plugin")
+    version_mismatches = [n for n in common if local[n] != remote[n]]
+    if version_mismatches:
+        for n in version_mismatches:
+            print(f"  VERSION MISMATCH '{n}': this={local[n]} remote={remote[n]}")
+    else:
+        print(f"  {len(common)} shared plugin(s), all same version.")
+
+
+def report_marketplaces(local, remote):
+    print("\n=== marketplaces ===")
+    common = diff_dict_keys(local, remote, "marketplace")
+    for name in common:
+        l, r = local[name], remote[name]
+        if l["source"] != r["source"]:
+            print(f"  SOURCE MISMATCH '{name}': this={l['source']} remote={r['source']}")
+        if l["source"].get("source") == "directory" and not l.get("path_exists_here", True):
+            print(f"  '{name}' directory source missing on THIS machine: {l['source'].get('path')}")
+        if r["source"].get("source") == "directory" and not r.get("path_exists_here", True):
+            print(f"  '{name}' directory source missing on REMOTE: {r['source'].get('path')}")
+
+
+def compare_one(local, peer):
+    ip = resolve_tailscale_ip(peer) if not peer.replace(".", "").isdigit() else peer
+    if ip is None:
+        print(f"error: could not resolve '{peer}' via `tailscale status`; pass an IP directly.",
+              file=sys.stderr)
+        return False
+
+    banner = f" {peer} ({ip}) "
+    print(f"\n{banner:=^70}")
+    remote = fetch_remote_snapshot(ip)
+    if remote is None:
+        return False
+
+    report_dotfiles(local["dotfiles"], remote["dotfiles"])
+    report_home_config(local["home_config"], remote["home_config"])
+    report_mcp_servers(local["mcp_servers"], remote["mcp_servers"], "global MCP servers (~/.claude.json)")
+    report_mcp_servers(local["project_mcp_servers"], remote["project_mcp_servers"],
+                        "~/.claude/.mcp.json servers")
+    report_plugins(local["installed_plugins"], remote["installed_plugins"])
+    report_marketplaces(local["marketplaces"], remote["marketplaces"])
+    return True
+
+
+def main():
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("peers", nargs="*", default=None,
+                         help=f"Tailscale hostnames/IPs of peers to compare against "
+                              f"(default: {', '.join(DEFAULT_PEERS)})")
+    parser.add_argument("--extract-json", action="store_true",
+                         help=argparse.SUPPRESS)  # internal: used when piped over ssh
+    args = parser.parse_args()
+
+    if args.extract_json:
+        print(json.dumps(extract()))
+        return
+
+    peers = args.peers or DEFAULT_PEERS
+    print(f"Comparing THIS machine ({run(['hostname'])}) as canonical against: {', '.join(peers)}")
+    local = extract()
+
+    ok = [compare_one(local, peer) for peer in peers]
+    print()
+    if not any(ok):
+        sys.exit(1)
+
+
+if __name__ == "__main__":
+    main()
