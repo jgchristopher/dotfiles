@@ -95,7 +95,7 @@
     ],
     "defaultMode": "auto"
   },
-  "model": "sonnet",
+  "model": "fable",
   "statusLine": {
     "type": "command",
     "command": "claude-statusline"
@@ -120,7 +120,8 @@
     "codex@openai-codex": true,
     "imessage@claude-plugins-official": true,
     "discord@claude-plugins-official": true,
-    "tmux@nicknisi": true
+    "tmux@nicknisi": true,
+    "ideation@nicknisi": true
   },
   "extraKnownMarketplaces": {
     "nicknisi": {
