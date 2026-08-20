@@ -112,16 +112,16 @@
     "pr-review-toolkit@claude-plugins-official": true,
     "claude-code-setup@claude-plugins-official": true,
     "explanatory-output-style@claude-plugins-official": true,
-    "sessions@sessions": true,
     "spec-driven@nicknisi": true,
     "essentials@nicknisi": true,
     "sidequest@nicknisi": true,
-    "ideation@ideation": true,
     "codex@openai-codex": true,
     "imessage@claude-plugins-official": true,
     "discord@claude-plugins-official": true,
     "tmux@nicknisi": true,
-    "ideation@nicknisi": true
+    "ideation@nicknisi": true,
+    "fleet@fleet-local": true,
+    "sessions@sessions": true
   },
   "extraKnownMarketplaces": {
     "nicknisi": {
@@ -130,22 +130,22 @@
         "repo": "nicknisi/claude-plugins"
       }
     },
-    "sessions": {
-      "source": {
-        "source": "directory",
-        "path": "/Users/johnchristopher/.local/share/sessions"
-      }
-    },
-    "ideation": {
-      "source": {
-        "source": "directory",
-        "path": "/Users/johnchristopher/Developer/nick_tools/ideation/main"
-      }
-    },
     "openai-codex": {
       "source": {
         "source": "directory",
         "path": "/Users/johnchristopher/Developer/ai_assistant_tools/codex-plugin-cc"
+      }
+    },
+    "fleet-local": {
+      "source": {
+        "source": "directory",
+        "path": "/Users/johnchristopher/.local/share/fleet-marketplace"
+      }
+    },
+    "sessions": {
+      "source": {
+        "source": "directory",
+        "path": "/Users/johnchristopher/.local/share/sessions"
       }
     }
   },
@@ -288,5 +288,46 @@
   "inputNeededNotifEnabled": true,
   "agentPushNotifEnabled": true,
   "skipAutoPermissionPrompt": true,
-  "voiceEnabled": true
+  "autoMode": {
+    "environment": [
+      "### Org-wide",
+      "**Organization**: None configured",
+      "**Cloud provider(s)**: None configured",
+      "**Repository visibility**: Not queryable here (no remote configured) — assume private",
+      "**Internal sharing / snippet hosting**: None configured — treat public paste/gist services as outside the trust boundary",
+      "**Secrets management**: None configured",
+      "**Default / protected branches**: Not queryable here (no remote configured; default branch unknown)",
+      "**CI/CD deploy targets**: None configured",
+      "**Network posture**: None configured",
+      "**Source control**: The trusted repo only — no remotes are configured for this checkout",
+      "**Trusted internal domains**: None configured",
+      "**Trusted cloud buckets**: None configured",
+      "**Key internal services**: None configured",
+      "**Internal package registry**: None configured",
+      "**Sensitive data locations & audiences**: any file or store holding personal data, confidential business data, credentials, regulated data, or similarly sensitive material; preserve exact handles when known and share only with audiences cleared at the [named+specifics] bar",
+      "**Data retention / declassification**: None configured",
+      "**Sensitive remote targets**: any namespace, host, or container whose name carries `prod` or `production` as a whole word or name segment (hyphen/underscore/dot-delimited); note dev.pricing.arbol.cloud and uat.pricing.arbol.cloud were contacted in this project's transcripts but are non-prod (dev/uat) environments, not sensitive targets themselves",
+      "**Protected deployment namespaces / environments**: None configured — fall back to the Sensitive remote targets heuristic",
+      "**Protected IaC scopes**: IAM, RBAC, networking, quota, and node-pool resources; anything whose name or tag carries `prod` or `production` as a whole word or name segment",
+      "### User-specific",
+      "**Primary use of Claude Code**: personal/hobby use — Obsidian vault (notes, diagrams, memory system) with software-development side projects",
+      "**Trusted repo**: /Users/johnchristopher/Obsidian/jcOS (this checkout) — no git remote is configured, so there is no remote destination to scope pushes to",
+      "**Org-specific CLIs**: None configured",
+      "routine under johnchristopher/ prefix: not established by evidence — no qualifier adopted"
+    ]
+  },
+  "voiceEnabled": true,
+  "hooks": {
+    "SessionStart": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "sessions context --hook",
+            "timeout": 10000
+          }
+        ]
+      }
+    ]
+  }
 }
