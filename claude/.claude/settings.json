@@ -96,6 +96,19 @@
     "defaultMode": "auto"
   },
   "model": "fable",
+  "hooks": {
+    "SessionStart": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "sessions context --hook",
+            "timeout": 10000
+          }
+        ]
+      }
+    ]
+  },
   "statusLine": {
     "type": "command",
     "command": "claude-statusline"
@@ -289,6 +302,11 @@
   "agentPushNotifEnabled": true,
   "skipAutoPermissionPrompt": true,
   "autoMode": {
+    "soft_deny": [
+      "$defaults",
+      "Bash(aws s3 rm:*)",
+      "Bash(aws secretsmanager delete-secret:*)"
+    ],
     "environment": [
       "### Org-wide",
       "**Organization**: None configured",
@@ -316,18 +334,5 @@
       "routine under johnchristopher/ prefix: not established by evidence — no qualifier adopted"
     ]
   },
-  "voiceEnabled": true,
-  "hooks": {
-    "SessionStart": [
-      {
-        "hooks": [
-          {
-            "type": "command",
-            "command": "sessions context --hook",
-            "timeout": 10000
-          }
-        ]
-      }
-    ]
-  }
+  "voiceEnabled": true
 }

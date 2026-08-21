@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>Label</key>
+    <string>com.jc.sketchybar-fleet-watch</string>
+
+    <!--
+      Pushes fleet agent-state changes to sketchybar. The watcher pipes
+      fswatch over the status dirs that fleet's Claude Code/Codex/pi hooks
+      write, and fires a `sketchybar --trigger fleet_state_change` per batch.
+
+      Why launchd instead of spawning from sketchybarrc: the old
+      `(nohup ... &)` on config load did not survive — a reload left nothing
+      running, so the pills fell back to fleet_controller's 30s update_freq
+      and read as "never updating". KeepAlive respawns it instead.
+
+      Requires `fswatch` (brew install fswatch) on PATH; the watcher exits 0
+      silently without it, which is what made the original breakage invisible.
+
+      The bar's aerospace_watchdog no longer pkills fswatch — launchd owns
+      this process now, and killing it there would just fight KeepAlive.
+    -->
+
+    <key>ProgramArguments</key>
+    <array>
+        <string>__HOME__/bin/sketchybar-fleet-watch</string>
+    </array>
+
+    <key>RunAtLoad</key>
+    <true/>
+
+    <key>KeepAlive</key>
+    <true/>
+
+    <!-- fswatch needs homebrew on PATH; launchd's default PATH omits it. -->
+    <key>EnvironmentVariables</key>
+    <dict>
+        <key>PATH</key>
+        <string>/opt/homebrew/bin:/opt/homebrew/sbin:/usr/bin:/bin:/usr/sbin:/sbin</string>
+    </dict>
+
+    <key>StandardOutPath</key>
+    <string>__HOME__/.local/state/sketchybar-fleet-watch/stdout.log</string>
+    <key>StandardErrorPath</key>
+    <string>__HOME__/.local/state/sketchybar-fleet-watch/stderr.log</string>
+</dict>
+</plist>

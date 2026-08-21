@@ -92,6 +92,37 @@ These are the most detectable signs of AI-generated content. Use sparingly and n
 "it is worth noting", "it is important to note", "it bears mentioning"
 Inflating significance: "marking a pivotal moment", "represents a significant shift", "a defining feature of our era"
 
+# Shell
+
+My shell is fish (`/opt/homebrew/bin/fish`). Give me fish syntax in every command
+and script block by default. Reach for bash or POSIX sh only when I ask, or when
+the target is genuinely bash: a committed `#!/bin/bash` script, a CI step, a
+Dockerfile `RUN`.
+
+Bash-isms pasted into fish fail in ways that look like the tool is broken rather
+than the shell being wrong. `read -rs SECRET` errors on the unknown `-r`, leaves
+the variable unset, and the next command then fails its own validation, so only
+one of the three error messages names the shell.
+
+The substitutions that come up most:
+
+| bash | fish |
+| --- | --- |
+| `read -rs VAR` | `read -s -P "prompt: " VAR` |
+| `unset VAR` | `set -e VAR` |
+| `export VAR=v` | `set -x VAR v` |
+| `$(cmd)` | `(cmd)` |
+| `${#VAR}` | `string length -- $VAR` |
+| `${VAR:-default}` | `set -q VAR; or set VAR default` |
+| `cmd &> /dev/null` | `cmd >/dev/null 2>&1` |
+| `for i in {1..5}` | `for i in (seq 5)` |
+| `if [ -f x ]; then` | `if test -f x` |
+| `source venv/bin/activate` | `source venv/bin/activate.fish` |
+
+`VAR=value cmd` works as-is in fish 3.1+, including inside a `(...)` capture.
+Always give a silent `read` a `-P` prompt: without one it is indistinguishable
+from a hung terminal.
+
 # Diagrams in Obsidian notes
 
 When I ask for a note with diagrams, build the diagrams as **Obsidian Canvas

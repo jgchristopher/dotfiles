@@ -214,11 +214,13 @@ sketchybar --add item music right \
 # when AeroSpace quits. Process exit has no push surface, so a slow poll.
 sketchybar --add item aerospace_watchdog left \
   --set aerospace_watchdog drawing=off width=0 update_freq=10 \
-  script="pgrep -xq AeroSpace || { pkill -f 'fswatch.*claude-status'; pkill -x sketchybar; }"
+  script="pgrep -xq AeroSpace || pkill -x sketchybar"
 
 # ── Fleet push watcher ───────────────────────────────────────────
-pkill -f 'fswatch.*claude-status' 2>/dev/null
-(nohup "$DOTFILES_BIN/sketchybar-fleet-watch" >/dev/null 2>&1 &)
+# Owned by launchd: com.jc.sketchybar-fleet-watch (RunAtLoad + KeepAlive),
+# installed by `./install.sh sketchybar-fleet-watch`. Spawning it from here
+# did not survive a config reload, which silently dropped the pills back to
+# fleet_controller's 30s update_freq and read as "never updating".
 
 # Force every item to run its script once so the bar starts populated
 sketchybar --update

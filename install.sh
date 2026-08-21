@@ -312,6 +312,34 @@ setup_granola_nub_guard() {
     success "granola-nub-guard agent loaded"
 }
 
+setup_sketchybar_fleet_watch() {
+    title "Installing sketchybar-fleet-watch LaunchAgent"
+
+    local template="$DOTFILES/bin/com.jc.sketchybar-fleet-watch.plist.template"
+    local target="$HOME/Library/LaunchAgents/com.jc.sketchybar-fleet-watch.plist"
+
+    if [ ! -f "$template" ]; then
+        error "Template not found at $template"
+    fi
+
+    if ! command -v fswatch >/dev/null 2>&1; then
+        error "fswatch not found on PATH. Install with: brew install fswatch"
+    fi
+
+    mkdir -p "$HOME/Library/LaunchAgents"
+    mkdir -p "$HOME/.local/state/sketchybar-fleet-watch"
+
+    sed "s|__HOME__|$HOME|g" "$template" > "$target"
+    info "Wrote $target"
+
+    # Replace any prior agent of the same Label, then load fresh.
+    launchctl bootout "gui/$(id -u)" "$target" 2>/dev/null || true
+    launchctl bootstrap "gui/$(id -u)" "$target"
+    launchctl enable "gui/$(id -u)/com.jc.sketchybar-fleet-watch"
+
+    success "sketchybar-fleet-watch agent loaded"
+}
+
 case "$1" in
     backup)
         backup
@@ -337,6 +365,9 @@ case "$1" in
     granola-nub-guard)
         setup_granola_nub_guard
         ;;
+    sketchybar-fleet-watch)
+        setup_sketchybar_fleet_watch
+        ;;
     tmux-plugins)
         setup_tmux_plugins
         ;;
@@ -353,9 +384,10 @@ case "$1" in
         setup_macos
         setup_terminal_theme_sync
         setup_granola_nub_guard
+        setup_sketchybar_fleet_watch
         ;;
     *)
-        echo -e $"\nUsage: $(basename "$0") {backup|link|git|homebrew|shell|terminfo|terminal-theme-sync|granola-nub-guard|tmux-plugins|macos|all}\n"
+        echo -e $"\nUsage: $(basename "$0") {backup|link|git|homebrew|shell|terminfo|terminal-theme-sync|granola-nub-guard|sketchybar-fleet-watch|tmux-plugins|macos|all}\n"
         exit 1
         ;;
 esac
