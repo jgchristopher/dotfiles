@@ -88,14 +88,12 @@
       "Bash(sudo rm -rf /* *)"
     ],
     "ask": [
-      "Bash(git push *)",
-      "Bash(gh pr merge *)",
       "Bash(docker push *)",
       "Bash(npm publish *)"
     ],
     "defaultMode": "auto"
   },
-  "model": "fable",
+  "model": "opus",
   "hooks": {
     "SessionStart": [
       {
@@ -117,7 +115,6 @@
     "superpowers@claude-plugins-official": true,
     "swift-lsp@claude-plugins-official": true,
     "code-review@claude-plugins-official": true,
-    "github@claude-plugins-official": true,
     "code-simplifier@claude-plugins-official": true,
     "feature-dev@claude-plugins-official": true,
     "commit-commands@claude-plugins-official": true,
