@@ -9,8 +9,17 @@
 # passed-in session label, so it still shows up (matching fleet's TUI).
 # Normalized states: waiting asking done working idle.
 # FLEET_STATUS_ROOT overrides the cache root (default ~/.cache) for tests.
+# FLEET_TMUX_PID overrides the live tmux server pid (default: ask tmux) for tests.
 
 ROOT="${FLEET_STATUS_ROOT:-$HOME/.cache}"
+
+# tmux pane ids are only unique within ONE server lifetime — they restart at %0
+# whenever the server does. So a bare "%N -> N.status" match happily adopts a
+# file written weeks ago by a dead server's pane, and the bar shows a plausible
+# but wrong session. Each status file records the tmux server pid that owned it;
+# anything from another server is treated as absent. If the live pid can't be
+# determined (no tmux), skip the check rather than dropping every agent.
+LIVE_TMUX_PID="${FLEET_TMUX_PID:-$(tmux display-message -p '#{pid}' 2>/dev/null)}"
 
 # Derive "state|session|tool" from one .status file fused with its event log.
 derive() {
@@ -52,7 +61,13 @@ while IFS='|' read -r pane label; do
   sf=""
   for dir in claude codex pi; do
     f="$ROOT/${dir}-status/${num}.status"
-    [ -e "$f" ] && { sf="$f"; break; }
+    [ -e "$f" ] || continue
+    if [ -n "$LIVE_TMUX_PID" ]; then
+      fpid=$(jq -r '.tmux_pid // empty' "$f" 2>/dev/null)
+      [ -n "$fpid" ] && [ "$fpid" != "$LIVE_TMUX_PID" ] && continue
+    fi
+    sf="$f"
+    break
   done
   if [ -n "$sf" ]; then
     IFS='|' read -r state session tool < <(derive "$sf")
