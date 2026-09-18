@@ -1,0 +1,92 @@
+#!/bin/sh
+# claude-omnifocus-wire — point this machine's Claude clients at ~/bin/omnifocus-mcp.
+#
+# WHY: the OmniFocus MCP shim exits after 30 idle minutes (upstream issue #80),
+# taking every OmniFocus tool with it until the client restarts. ~/bin/omnifocus-mcp
+# launches the server with OMNIFOCUS_MCP_IDLE_TIMEOUT_MINUTES=0, which disables that
+# timer. The wrapper travels via dotfiles; the client configs do not, because
+# ~/.claude.json is machine-local. This script covers that gap.
+#
+# Run once per machine after pulling dotfiles. Idempotent: re-running when everything
+# is already correct changes nothing and says so.
+#
+# Refuses to touch configs unless the wrapper AND the server it points at both exist,
+# so a machine missing the clone fails loudly here instead of silently losing
+# OmniFocus later.
+
+set -e
+
+WRAPPER="$HOME/bin/omnifocus-mcp"
+
+fail() { echo "ERROR: $*" >&2; exit 1; }
+
+[ -x "$WRAPPER" ] || fail "no executable $WRAPPER (pull dotfiles first)"
+
+# One source of truth for the server path: read it back out of the wrapper.
+SERVER=$(sed -n 's/^SERVER="\(.*\)"$/\1/p' "$WRAPPER" | head -1)
+[ -n "$SERVER" ] || fail "could not read SERVER= from $WRAPPER"
+
+if [ ! -f "$SERVER" ]; then
+  echo "ERROR: the wrapper points at a server this machine does not have:" >&2
+  echo "  $SERVER" >&2
+  echo >&2
+  echo "Set it up first:" >&2
+  echo "  mkdir -p \"$(dirname "$SERVER" | sed 's|/main$||')\"" >&2
+  echo "  git clone https://github.com/themotionmachine/OmniFocus-MCP.git \\" >&2
+  echo "    \"$(dirname "$SERVER")\"" >&2
+  echo "  cd \"$(dirname "$SERVER")\" && npm ci && npm run build" >&2
+  exit 1
+fi
+
+python3 - "$WRAPPER" <<'PY'
+import json, os, shutil, sys
+
+wrapper = sys.argv[1]
+targets = [
+    ("Claude Code", os.path.expanduser("~/.claude.json")),
+    ("Claude desktop", os.path.expanduser(
+        "~/Library/Application Support/Claude/claude_desktop_config.json")),
+]
+
+desired = {
+    "command": wrapper,
+    "args": [],
+    "env": {"OMNIFOCUS_MCP_IDLE_TIMEOUT_MINUTES": "0"},
+}
+
+for label, path in targets:
+    if not os.path.exists(path):
+        print(f"  {label}: no config at {path}, skipped")
+        continue
+    try:
+        with open(path) as fh:
+            cfg = json.load(fh)
+    except Exception as exc:
+        print(f"  {label}: could not parse ({exc}), skipped")
+        continue
+
+    servers = cfg.get("mcpServers")
+    if not servers or "omnifocus" not in servers:
+        print(f"  {label}: no omnifocus server configured, skipped")
+        continue
+
+    current = servers["omnifocus"]
+    # Preserve any keys this script does not own (type, disabled, etc).
+    updated = dict(current)
+    updated.update(desired)
+    updated["env"] = {**current.get("env", {}), **desired["env"]}
+
+    if updated == current:
+        print(f"  {label}: already wired, no change")
+        continue
+
+    shutil.copy2(path, path + ".bak-omnifocus-wire")
+    servers["omnifocus"] = updated
+    with open(path, "w") as fh:
+        json.dump(cfg, fh, indent=2)
+    print(f"  {label}: wired (was command={current.get('command')!r}), "
+          f"backup at {os.path.basename(path)}.bak-omnifocus-wire")
+PY
+
+echo
+echo "Done. Restart Claude Code and the Claude desktop app to pick this up."
