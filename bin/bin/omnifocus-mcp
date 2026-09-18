@@ -35,31 +35,28 @@ SERVER="/Users/johnchristopher/Developer/ai_assistant_tools/omnifocus-mcp/main/c
 # PATH is stripped — verified 2026-09-18. Prefer real binaries, and derive the
 # asdf install path from ~/.tool-versions so a node upgrade is picked up without
 # editing this file.
+# A candidate is only usable if it actually RUNS. ~/.asdf/shims/node is a shell
+# script that execs `asdf`, so it is executable, passes -x, and then dies with
+# "asdf: not found" under a stripped PATH. On some machines `command -v node`
+# resolves to that shim, so testing existence alone picks a broken interpreter.
+# Verified 2026-09-18 on both this machine and the Arbol laptop.
+usable() { [ -n "$1" ] && [ -x "$1" ] && "$1" --version >/dev/null 2>&1; }
+
 NODE=""
 
-if command -v node >/dev/null 2>&1; then
-  NODE="$(command -v node)"
-fi
-
-if [ -z "$NODE" ] && [ -r "$HOME/.tool-versions" ]; then
-  ver="$(awk '$1 == "nodejs" { print $2; exit }' "$HOME/.tool-versions")"
-  [ -n "$ver" ] && [ -x "$HOME/.asdf/installs/nodejs/$ver/bin/node" ] \
-    && NODE="$HOME/.asdf/installs/nodejs/$ver/bin/node"
-fi
-
-if [ -z "$NODE" ]; then
-  for candidate in \
-    "$(ls -1d "$HOME"/.asdf/installs/nodejs/*/bin/node 2>/dev/null | sort -V | tail -1)" \
-    /opt/homebrew/bin/node \
-    /usr/local/bin/node \
-    "$HOME/.asdf/shims/node"
-  do
-    if [ -n "$candidate" ] && [ -x "$candidate" ]; then NODE="$candidate"; break; fi
-  done
-fi
+for candidate in \
+  "$(command -v node 2>/dev/null)" \
+  "$([ -r "$HOME/.tool-versions" ] && awk '$1 == "nodejs" { printf "%s/.asdf/installs/nodejs/%s/bin/node", ENVIRON["HOME"], $2; exit }' "$HOME/.tool-versions")" \
+  "$(ls -1d "$HOME"/.asdf/installs/nodejs/*/bin/node 2>/dev/null | sort -V | tail -1)" \
+  /opt/homebrew/bin/node \
+  /usr/local/bin/node \
+  "$HOME/.asdf/shims/node"
+do
+  if usable "$candidate"; then NODE="$candidate"; break; fi
+done
 
 if [ -z "$NODE" ]; then
-  echo "[omnifocus-mcp] no usable node found (PATH, ~/.tool-versions, asdf installs, homebrew, /usr/local)" >&2
+  echo "[omnifocus-mcp] no working node found (PATH, ~/.tool-versions, asdf installs, homebrew, /usr/local, asdf shim)" >&2
   exit 127
 fi
 
