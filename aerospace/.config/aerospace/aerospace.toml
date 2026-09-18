@@ -333,6 +333,10 @@ run = ['move-node-to-workspace X']
 if.app-id = 'com.agiletortoise.Drafts-OSX'
 run = ['layout floating', 'move-node-to-workspace S']
 
+[[on-window-detected]]
+if.app-id = 'com.apple.news'
+run = ['move-node-to-workspace N']
+
 
 # Floating
 
@@ -446,6 +450,6 @@ if.app-id = 'com.apple.Home'
 run = 'layout floating'
 
 [workspace-to-monitor-force-assignment]
-D = 2
+D = 1
 C = 2
-B = 1
+B = 2

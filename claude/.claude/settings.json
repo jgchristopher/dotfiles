@@ -87,10 +87,7 @@
       "Bash(sudo rm -rf / *)",
       "Bash(sudo rm -rf /* *)"
     ],
-    "ask": [
-      "Bash(docker push *)",
-      "Bash(npm publish *)"
-    ],
+    "ask": ["Bash(docker push *)", "Bash(npm publish *)"],
     "defaultMode": "auto"
   },
   "model": "opus[1m]",
@@ -132,14 +129,16 @@
     "ideation@nicknisi": true,
     "fleet@fleet-local": true,
     "sessions@sessions": true,
-    "content@nicknisi": true
+    "content@nicknisi": true,
+    "sources@nicknisi": true
   },
   "extraKnownMarketplaces": {
     "nicknisi": {
       "source": {
         "source": "github",
         "repo": "nicknisi/claude-plugins"
-      }
+      },
+      "autoUpdate": true
     },
     "openai-codex": {
       "source": {

@@ -147,6 +147,21 @@ one it came up in.
   node, and no two nodes overlapping. An overlap is permanent and has to be
   dragged apart by hand.
 
+# Obsidian links
+
+Every time you mention an Obsidian note, in any project and any context, give
+it as a clickable markdown link wrapping the `obsidian://open` URI. Never a bare
+URI, never a vault path on its own. URL-encode the path (spaces `%20`, slashes
+`%2F`). Applies to handoffs, summaries, and passing mentions alike. Do it
+without being asked.
+
+```
+[Figma Credentials Handoff](obsidian://open?vault=jcos&file=Arbol%2FPhil%20Content%20Studio%2FFigma%20Credentials%20Handoff%20-%202026-09-14)
+```
+
+A bare `obsidian://` URI is not auto-linked in the terminal because it is not
+http(s), so it comes out as dead text.
+
 # Datadog
 
 - Use the datadog MCP for all READ operations (metrics, logs, monitors.list/get, events).
