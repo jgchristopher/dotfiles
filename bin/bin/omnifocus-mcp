@@ -1,0 +1,66 @@
+#!/bin/sh
+# omnifocus-mcp launcher. Used by both Claude Code (~/.claude.json) and the
+# Claude desktop app (~/Library/Application Support/Claude/claude_desktop_config.json).
+#
+# WHY THIS FILE EXISTS
+# The upstream shim arms a 30-minute idle timer on stdin (dist/daemon/shim.js)
+# that resets only on stdin DATA. Clients send nothing between tool calls, so the
+# timer measures time since the last OmniFocus call, not whether the client is
+# alive. After 30 idle minutes the shim exits 0 and the client will not respawn a
+# stdio server mid-session, so every OmniFocus tool disappears until restart.
+# Diagnosed 2026-09-18. Both clients were hitting it: the desktop app's own log
+# shows a server started 07:06:48 and killed at 07:36:49, exactly 30m later.
+#
+# 0 disables the timer outright: resolveIdleTimeoutMinutes treats it as off, and
+# installIdleTimeout then registers no listener and no timer at all. That is the
+# same behaviour as deleting the code, which is why no fork is needed.
+#
+# This lives in a file rather than in each client's config because Claude Code
+# rewrites ~/.claude.json as it runs, and a dropped env block would bring the bug
+# back silently. Both configs also set the variable, as a second layer.
+#
+# TRADEOFF: that timer is upstream's backstop for a shim orphaned by a SIGKILLed
+# client, where stdin never reaches EOF. With it off, a hard kill can strand one
+# node process. Find it with `ps aux | grep omnifocus` and kill it.
+#
+# NODE RESOLUTION: node lives only under asdf here, and a GUI-launched app is not
+# guaranteed a login shell's PATH. Resolve it explicitly rather than trusting the
+# environment, so a stripped PATH fails loudly instead of looking like the server
+# crashing for no reason.
+
+SERVER="/Users/johnchristopher/Developer/ai_assistant_tools/omnifocus-mcp/main/cli.cjs"
+
+# Order matters. ~/.asdf/shims/node is NOT usable as a fallback: the shim is a
+# shell script that execs `asdf`, so it dies with "asdf: not found" the moment
+# PATH is stripped — verified 2026-09-18. Prefer real binaries, and derive the
+# asdf install path from ~/.tool-versions so a node upgrade is picked up without
+# editing this file.
+NODE=""
+
+if command -v node >/dev/null 2>&1; then
+  NODE="$(command -v node)"
+fi
+
+if [ -z "$NODE" ] && [ -r "$HOME/.tool-versions" ]; then
+  ver="$(awk '$1 == "nodejs" { print $2; exit }' "$HOME/.tool-versions")"
+  [ -n "$ver" ] && [ -x "$HOME/.asdf/installs/nodejs/$ver/bin/node" ] \
+    && NODE="$HOME/.asdf/installs/nodejs/$ver/bin/node"
+fi
+
+if [ -z "$NODE" ]; then
+  for candidate in \
+    "$(ls -1d "$HOME"/.asdf/installs/nodejs/*/bin/node 2>/dev/null | sort -V | tail -1)" \
+    /opt/homebrew/bin/node \
+    /usr/local/bin/node \
+    "$HOME/.asdf/shims/node"
+  do
+    if [ -n "$candidate" ] && [ -x "$candidate" ]; then NODE="$candidate"; break; fi
+  done
+fi
+
+if [ -z "$NODE" ]; then
+  echo "[omnifocus-mcp] no usable node found (PATH, ~/.tool-versions, asdf installs, homebrew, /usr/local)" >&2
+  exit 127
+fi
+
+exec env OMNIFOCUS_MCP_IDLE_TIMEOUT_MINUTES=0 "$NODE" "$SERVER" "$@"
