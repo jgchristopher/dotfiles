@@ -278,9 +278,6 @@ run = ['move-node-to-workspace D']
 if.app-id = 'md.obsidian'
 run = ['move-node-to-workspace O', 'layout accordion']
 
-[[on-window-detected]]
-if.app-id = 'com.granola.app'
-run = ['move-node-to-workspace O', 'layout accordion']
 
 # Productivity - P
 [[on-window-detected]]
@@ -339,6 +336,10 @@ run = ['move-node-to-workspace N']
 
 
 # Floating
+
+[[on-window-detected]]
+if.app-id = 'com.granola.app'
+run = ['layout floating']
 
 [[on-window-detected]]
 if.app-id = 'com.apple.finder'
