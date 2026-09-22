@@ -121,7 +121,7 @@ create_section() {
 tm_tunes_display="#(song=\$(osascript -l JavaScript $DOTFILES/applescripts/tunes.js); if [[ -n \"\$song\" ]]; then echo \"#[bg=default]#[fg=${thm_blue7}]#[bg=${thm_blue7}]#[fg=${thm_blue6}] ${tm_music_icon}  \$song #[bg=default]#[fg=${thm_blue7}]${tm_separator_left}#[bg=default,fg=default] \"; fi)"
 
 # Status line components
-session="$(create_section "left" "$tm_icon" "#S" "${thm_purple}" "${thm_bg}" "no-start")"
+session="$(create_section "left" "$tm_icon" "#S #[nobold]@ #h" "${thm_purple}" "${thm_bg}" "no-start")"
 tm_claude_display="#(s=\$(claude-status #{session_name}); if [ \"\$s\" = \"working\" ]; then echo '#[fg=colour208] ⚡ '; else echo '#[fg=#a6e3a1] ✓ '; fi)"
 tm_git_status="$(create_section "right" "" "#(tmux-git-status '#{pane_current_path}')" "${thm_bg}" "${thm_fg}" "no-end")"
 
