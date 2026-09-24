@@ -451,6 +451,5 @@ if.app-id = 'com.apple.Home'
 run = 'layout floating'
 
 [workspace-to-monitor-force-assignment]
-D = 1
-C = 2
-B = 2
+D = 'Studio Display'
+B = ['Sidecar Display', 'Built-in Retina Display']

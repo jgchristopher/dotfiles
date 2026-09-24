@@ -87,10 +87,13 @@
       "Bash(sudo rm -rf / *)",
       "Bash(sudo rm -rf /* *)"
     ],
-    "ask": ["Bash(docker push *)", "Bash(npm publish *)"],
+    "ask": [
+      "Bash(docker push *)",
+      "Bash(npm publish *)"
+    ],
     "defaultMode": "auto"
   },
-  "model": "opus[1m]",
+  "model": "opus",
   "hooks": {
     "SessionStart": [
       {
@@ -304,7 +307,36 @@
       "Bash(aws s3 rm:*)",
       "Bash(aws secretsmanager delete-secret:*)",
       "Bash(fly * -a *prod*)",
-      "Bash(docker system prune -a *)"
+      "Bash(docker system prune -a *)",
+      "Bash(npm publish:*)",
+      "Bash(fly * -a *prod*) — already covered by existing soft_deny, not duplicated"
+    ],
+    "environment": [
+      "### Org-wide",
+      "**Organization**: None configured",
+      "**Cloud provider(s)**: AWS (aws CLI used in shell history; no bucket/service names corroborated in this repo)",
+      "**Repository visibility**: PUBLIC — jgchristopher/mcp-obsidian (confirmed via gh)",
+      "**Internal sharing / snippet hosting**: None configured — treat public paste/gist services as outside the trust boundary",
+      "**Secrets management**: None configured",
+      "**Default / protected branches**: Default branch `main`; no branch protection rules or rulesets listed via gh (jgchristopher/mcp-obsidian)",
+      "**CI/CD deploy targets**: npm (publish:dry, publish:beta, publish:latest scripts; NPM_TOKEN referenced in CI secrets)",
+      "**Network posture**: None configured",
+      "**Host containment**: None configured — assume Claude Code runs on an ordinary developer machine or CI runner with open internet",
+      "**Source control**: jgchristopher/mcp-obsidian (origin, public) and bitbonsai/mcpvault (upstream) — no additional orgs configured",
+      "**Trusted internal domains**: None configured",
+      "**Trusted cloud buckets**: None configured",
+      "**Key internal services**: None configured",
+      "**Internal package registry**: None configured — public npm registry only (package name @bitbonsai/mcpvault)",
+      "**Sensitive data locations & audiences**: `.env`, `.env.test`, `.env.production` (gitignored, not to be committed or exposed); Datadog API/app keys in `~/.datadog` (per user CLAUDE.md, never hardcode or echo)",
+      "**Data retention / declassification**: None configured",
+      "**Sensitive remote targets**: any namespace, host, or container whose name carries `prod` or `production` as a whole word or name segment (also matches fly.io apps per shipped soft-deny already covering `fly * -a *prod*`)",
+      "**Protected deployment namespaces / environments**: None configured — fall back to the Sensitive remote targets heuristic",
+      "**Protected IaC scopes**: IAM, RBAC, networking, quota, and node-pool resources; anything whose name or tag carries `prod` or `production` as a whole word or name segment",
+      "### User-specific",
+      "**Primary use of Claude Code**: software development (Obsidian MCP server tooling; also personal/hobby use per Claude subscription posture)",
+      "**Trusted repo**: /Users/johnchristopher/Developer/ai_assistant_tools/mcp-obsidian/main (origin: jgchristopher/mcp-obsidian, public; upstream: bitbonsai/mcpvault) — since public, only this repo's own work belongs here; content ported from elsewhere is not its own work",
+      "**Org-specific CLiIs**: None configured",
+      "routine under jgchristopher/ prefix: git push/pull to origin (jgchristopher/mcp-obsidian) is routine; pushes to upstream (bitbonsai/mcpvault) are not this user's own repo and warrant more caution"
     ]
   },
   "voiceEnabled": true
