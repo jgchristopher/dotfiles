@@ -340,6 +340,35 @@ setup_sketchybar_fleet_watch() {
     success "sketchybar-fleet-watch agent loaded"
 }
 
+setup_sketchybar_omniwm_watch() {
+    title "Installing sketchybar-omniwm-watch LaunchAgent"
+
+    local template="$DOTFILES/bin/com.jc.sketchybar-omniwm-watch.plist.template"
+    local target="$HOME/Library/LaunchAgents/com.jc.sketchybar-omniwm-watch.plist"
+
+    if [ ! -f "$template" ]; then
+        error "Template not found at $template"
+    fi
+
+    if ! command -v omniwmctl >/dev/null 2>&1; then
+        error "omniwmctl not found on PATH. Install with: brew install --cask omniwm"
+    fi
+
+    mkdir -p "$HOME/Library/LaunchAgents"
+    mkdir -p "$HOME/.local/state/sketchybar-omniwm-watch"
+
+    sed "s|__HOME__|$HOME|g" "$template" > "$target"
+    info "Wrote $target"
+
+    # Replace any prior agent of the same Label, then load fresh. Enable
+    # first: bootstrap refuses a label left disabled by `launchctl disable`.
+    launchctl bootout "gui/$(id -u)" "$target" 2>/dev/null || true
+    launchctl enable "gui/$(id -u)/com.jc.sketchybar-omniwm-watch"
+    launchctl bootstrap "gui/$(id -u)" "$target"
+
+    success "sketchybar-omniwm-watch agent loaded"
+}
+
 case "$1" in
     backup)
         backup
@@ -368,6 +397,9 @@ case "$1" in
     sketchybar-fleet-watch)
         setup_sketchybar_fleet_watch
         ;;
+    sketchybar-omniwm-watch)
+        setup_sketchybar_omniwm_watch
+        ;;
     tmux-plugins)
         setup_tmux_plugins
         ;;
@@ -385,9 +417,10 @@ case "$1" in
         setup_terminal_theme_sync
         setup_granola_nub_guard
         setup_sketchybar_fleet_watch
+        setup_sketchybar_omniwm_watch
         ;;
     *)
-        echo -e $"\nUsage: $(basename "$0") {backup|link|git|homebrew|shell|terminfo|terminal-theme-sync|granola-nub-guard|sketchybar-fleet-watch|tmux-plugins|macos|all}\n"
+        echo -e $"\nUsage: $(basename "$0") {backup|link|git|homebrew|shell|terminfo|terminal-theme-sync|granola-nub-guard|sketchybar-fleet-watch|sketchybar-omniwm-watch|tmux-plugins|macos|all}\n"
         exit 1
         ;;
 esac

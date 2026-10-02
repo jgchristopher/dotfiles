@@ -5,13 +5,12 @@
 # drawn with 1px luminous strokes, not fills; Monaspace labels.
 #
 # Complements (never duplicates) the macOS menu bar OR the tmux statusline:
-# AeroSpace workspaces with per-app icons, focused window title + layout
-# glyph in the center, per-agent fleet pills showing current state,
-# PRs awaiting review, Claude usage when running hot, now-playing.
+# per-agent fleet pills showing current state, PRs awaiting review, Claude
+# usage when running hot, now-playing. Workspaces live in OmniWM's own
+# workspace bar at the bottom edge (native app icons, no IPC round-trip);
+# this bar only carries what OmniWM's bar can't show.
 #
 # Event flow (all push, polling only where no push exists):
-#   aerospace exec-on-workspace-change / on-focus-changed
-#     -> plugins/workspaces.sh (ONE batched render: pills, rings, center)
 #   fleet hook status files -> bin/sketchybar-fleet-watch (fswatch)
 #     -> fleet_state_change -> plugins/fleet_pills.sh (per-agent pills)
 #   bin/claude-statusline tee -> claude_usage_update -> plugins/usage.sh
@@ -27,18 +26,21 @@ GITHUB=$(printf '\xef\x82\x9b')    # nf-fa-github U+F09B
 
 MONO="Monaspace Neon"
 
-# ── Bar: dark glass with a live edge ─────────────────────────────
+# ── Bar: invisible strip; the glass is the right_island bracket ──
+# y_offset 34 = the 30pt macOS menu bar + 4, so the bar stays clear of the
+# menu bar when it auto-shows. SketchyBar's margin is symmetric, so
+# the bar itself spans the screen with no fill, and the dark glass with
+# its live edge is drawn only behind the right-side items (see the end).
 sketchybar --bar \
   position=top \
-  height=36 \
-  margin=10 \
-  y_offset=6 \
-  corner_radius=10 \
+  height=30 \
+  margin=0 \
+  y_offset=34 \
+  corner_radius=0 \
   blur_radius=0 \
-  color="$BAR_COLOR" \
-  border_width=1 \
-  border_color="$BAR_BORDER" \
-  shadow=on \
+  color="$TRANSPARENT" \
+  border_width=0 \
+  shadow=off \
   padding_left=12 \
   padding_right=12 \
   display=all
@@ -69,61 +71,8 @@ sketchybar --default \
   popup.blur_radius=30
 
 # ── Events ───────────────────────────────────────────────────────
-sketchybar --add event aerospace_workspace_change \
-  --add event aerospace_focus_change \
-  --add event aerospace_mode_change \
-  --add event fleet_state_change \
+sketchybar --add event fleet_state_change \
   --add event claude_usage_update
-
-# ── AeroSpace workspaces ─────────────────────────────────────────
-# Pills are dumb views (hover handler only); workspaces.sh renders all of
-# them in one batch. Construction args live in plugins/space_pill.sh, shared
-# with workspaces.sh, which reconciles the pill set on every event —
-# aerospace materializes workspaces lazily, so this startup loop is only a
-# warm-up over whatever exists right now (maybe nothing, during the race).
-source "$PLUGIN_DIR/space_pill.sh"
-pill_args=()
-for sid in $(aerospace list-workspaces --all 2>/dev/null); do
-  space_pill_add_args "$sid" pill_args
-done
-[ ${#pill_args[@]} -gt 0 ] && sketchybar "${pill_args[@]}"
-
-# Invisible controller: one batched render per event (pills+rings+center).
-# fleet_state_change is included so the title's robot LED recolors when the
-# focused agent's state flips, even with no window/pane switch.
-sketchybar --add item spaces_controller left \
-  --subscribe spaces_controller aerospace_workspace_change \
-  aerospace_focus_change fleet_state_change display_change \
-  --set spaces_controller drawing=off width=0 \
-  script="$PLUGIN_DIR/workspaces.sh"
-
-# Workspace shelf: a drawn outline, not a fill — visible structure at
-# near-zero luminance. Part of what makes the calm bar look designed.
-shelf_args=()
-spaces_shelf_args shelf_args
-sketchybar "${shelf_args[@]}"
-
-# AeroSpace binding-mode badge — the bar's one inverted chip
-sketchybar --add item aerospace_mode left \
-  --subscribe aerospace_mode aerospace_mode_change \
-  --set aerospace_mode \
-  icon=󰒓 \
-  label.font="$MONO:Bold:11.0" \
-  drawing=off \
-  script="$PLUGIN_DIR/aerospace_mode.sh"
-
-# ── Center: ❯ window title · layout glyph ───────────────────────
-# Title floats on the glass (no chip) — the calm center's anchor.
-# Rendered by workspaces.sh on the same aerospace events as the pills.
-# sketchybar --add item title center \
-#   --set title \
-#   icon.font="JetBrainsMono Nerd Font Mono:Regular:13.0" \
-#   icon.drawing=off \
-#   label.color="$FG_DIM" \
-#   label.max_chars=64 \
-#   scroll_texts=on \
-#   background.drawing=off \
-#   drawing=off
 
 # ── Right: fleet agent pills · spend ─────────────────────────────
 # One pill per live agent (fleet), rendered by fleet_pills.sh in a single
@@ -134,7 +83,7 @@ FLEET_POOL=5
 FLEET_POPUP_POOL=15
 
 sketchybar --add item fleet_controller right \
-  --subscribe fleet_controller fleet_state_change aerospace_workspace_change \
+  --subscribe fleet_controller fleet_state_change \
   --set fleet_controller drawing=off width=0 \
   update_freq=30 \
   script="$PLUGIN_DIR/fleet_pills.sh"
@@ -169,8 +118,8 @@ sketchybar --add item spend right \
   drawing=off \
   script="$PLUGIN_DIR/spend.sh"
 
-# The agent instrument cluster shares one shelf outline, mirroring the
-# workspace shelf on the left. Explicit item list (not a /agent\..*/ regex)
+# The agent instrument cluster shares one shelf outline. Explicit item
+# list (not a /agent\..*/ regex)
 # so the popup rows stay out of the bar bracket.
 sketchybar --add bracket agent_cluster spend agent.more agent.5 agent.4 agent.3 agent.2 agent.1 \
   --set agent_cluster \
@@ -185,7 +134,7 @@ sketchybar --add item github right \
   icon="$GITHUB" \
   icon.color="$FG" \
   update_freq=300 \
-  click_script="aerospace workspace W; open https://github.com/pulls/review-requested" \
+  click_script="omniwmctl workspace focus-name W; open https://github.com/pulls/review-requested" \
   script="$PLUGIN_DIR/github.sh"
 
 # usage: hidden until the 5h Claude window runs hot (>=70%)
@@ -208,19 +157,30 @@ sketchybar --add item music right \
   drawing=off \
   script="$PLUGIN_DIR/music.sh"
 
-# ── AeroSpace lifeline ───────────────────────────────────────────
-# The bar only exists alongside the WM: AeroSpace launches it
-# (after-startup-command in aerospace.toml) and this watchdog exits it
-# when AeroSpace quits. Process exit has no push surface, so a slow poll.
-sketchybar --add item aerospace_watchdog left \
-  --set aerospace_watchdog drawing=off width=0 update_freq=10 \
-  script="pgrep -xq AeroSpace || pkill -x sketchybar"
+# ── OmniWM lifeline ──────────────────────────────────────────────
+# The bar only exists alongside the WM. OmniWM has no startup hook, so
+# bin/sketchybar-omniwm-watch (launchd: com.jc.sketchybar-omniwm-watch,
+# `./install.sh sketchybar-omniwm-watch`) launches the bar once OmniWM is
+# up and exits it when OmniWM's IPC connection drops. It sends no events:
+# nothing on this bar depends on workspace or focus state any more.
 
 # ── Fleet push watcher ───────────────────────────────────────────
 # Owned by launchd: com.jc.sketchybar-fleet-watch (RunAtLoad + KeepAlive),
 # installed by `./install.sh sketchybar-fleet-watch`. Spawning it from here
 # did not survive a config reload, which silently dropped the pills back to
 # fleet_controller's 30s update_freq and read as "never updating".
+
+# Right island: the old bar glass, behind every right-side item. Explicit
+# list so agent.more's popup rows stay out of it.
+sketchybar --add bracket right_island music usage github \
+  spend agent.more agent.5 agent.4 agent.3 agent.2 agent.1 \
+  --set right_island \
+  background.color="$BAR_COLOR" \
+  background.border_width=1 \
+  background.border_color="$BAR_BORDER" \
+  background.corner_radius=10 \
+  background.height=30 \
+  background.shadow.drawing=on
 
 # Force every item to run its script once so the bar starts populated
 sketchybar --update

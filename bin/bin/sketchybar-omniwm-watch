@@ -1,0 +1,25 @@
+#!/usr/bin/env bash
+# Description: tie sketchybar's lifetime to OmniWM
+#
+# Replaces AeroSpace's after-startup-command (launch the bar) and the bar's
+# old aerospace_watchdog poll (exit the bar when the WM quits). OmniWM's
+# own workspace bar shows workspaces, so no events are bridged.
+#
+# Owned by launchd (com.jc.sketchybar-omniwm-watch). Needs OmniWM's IPC on:
+# `ipcEnabled = true` in ~/.config/omniwm/settings.toml.
+#
+# Exit detection is push, not a poll: a subscription to a channel that
+# almost never fires (display-changed) blocks until OmniWM drops the
+# connection, then exits 2. No --reconnect, so that exit is the signal.
+
+command -v omniwmctl >/dev/null 2>&1 || exit 0
+command -v sketchybar >/dev/null 2>&1 || exit 0
+
+while true; do
+  until pgrep -xq OmniWM; do sleep 2; done
+  pgrep -xq sketchybar || { sketchybar >/dev/null 2>&1 & }
+  omniwmctl subscribe display-changed --no-send-initial --format ndjson >/dev/null
+  # Also returns at once while OmniWM is up but IPC is off or starting.
+  sleep 2
+  pgrep -xq OmniWM || pkill -x sketchybar
+done

@@ -68,7 +68,7 @@ while IFS='|' read -r state pane session tool; do
     args+=(--set "agent.$i" drawing=on icon="$GLYPH" icon.color="$ICOLOR"
       label="${session:0:8}" label.color="$ICOLOR"
       background.border_color="$BORDER" background.color="$FILL"
-      click_script="aerospace workspace D; fleet switch $pane")
+      click_script="omniwmctl workspace focus-name D; fleet switch $pane")
   else
     j=$((i - POOL))
     [ "$j" -le "$POPUP_POOL" ] || continue
@@ -85,7 +85,7 @@ while IFS='|' read -r state pane session tool; do
       [ -n "$task" ] || task="$tool"
       args+=(--set "agent.pop.$j" drawing=on icon="$GLYPH" icon.color="$ICOLOR"
         label="$session ${task:0:24}" label.color="$ICOLOR"
-        click_script="$SB --set agent.more popup.drawing=off; aerospace workspace D; fleet switch $pane")
+        click_script="$SB --set agent.more popup.drawing=off; omniwmctl workspace focus-name D; fleet switch $pane")
     fi
   fi
 done <<<"$ROWS"
