@@ -1,4 +1,4 @@
-monitorBarOverrides = []
+monitorBarOverrides = [{ id = "BBB4CEF3-F08E-53A6-868E-8F37AE48941A", monitorDisplayUUID = "735066A6-B923-43EF-BA3C-C2E9525C5804", monitorName = "Studio Display", xOffset = -1277.0, yOffset = -34.0 }]
 monitorDwindleOverrides = []
 monitorGapOverrides = []
 monitorNiriOverrides = []
@@ -96,14 +96,13 @@ rehideIntervalSeconds = 5.0
 [monitors]
 
 [[monitors.ranking]]
-displayUUID = "735066A6-B923-43EF-BA3C-C2E9525C5804"
 name = "Studio Display"
 
 [[monitors.ranking]]
 name = "Built-in Retina Display"
 
 [[monitors.ranking]]
-name = "Sidecar Display"
+name = "Sidecar Display (AirPlay)"
 
 [mouseWarp]
 constrainToArrangement = false
@@ -173,14 +172,14 @@ mode = "custom"
 id = "6CA226CE-49FB-4959-8502-8189FE1AA7F1"
 
 [[routing.arrangements.monitors]]
-gridColumn = 0
+gridColumn = 1
 gridRow = 0
 monitorDisplayUUID = "735066A6-B923-43EF-BA3C-C2E9525C5804"
 monitorName = "Studio Display"
 
 [[routing.arrangements.monitors]]
 gridColumn = 0
-gridRow = 1
+gridRow = 0
 monitorDisplayUUID = "C13AD93C-2746-4DBE-AAB7-DB89E022D3A5"
 monitorName = "Sidecar Display (AirPlay)"
 
@@ -216,8 +215,8 @@ solidBlackBackground = false
 systemStatsButton = false
 transparentBackground = false
 windowLevel = "popup"
-xOffset = -1277.0
-yOffset = -34.0
+xOffset = 0.0
+yOffset = 0.0
 
 [workspaceBar.iconOverrides]
 
