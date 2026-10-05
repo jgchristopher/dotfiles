@@ -28,14 +28,20 @@ MONO="Monaspace Neon"
 
 # ── Bar: invisible strip; the glass is the right_island bracket ──
 # y_offset 34 = the 30pt macOS menu bar + 4, so the bar stays clear of the
-# menu bar when it auto-shows. SketchyBar's margin is symmetric, so
-# the bar itself spans the screen with no fill, and the dark glass with
-# its live edge is drawn only behind the right-side items (see the end).
+# menu bar when it auto-shows. When the menu bar is always shown, SketchyBar
+# already places the bar below it, so no offset. SketchyBar's margin is
+# symmetric, so the bar itself spans the screen with no fill, and the dark
+# glass with its live edge is drawn only behind the right-side items.
+if [ "$(defaults read -g _HIHideMenuBar 2>/dev/null)" = "1" ]; then
+  BAR_Y_OFFSET=34
+else
+  BAR_Y_OFFSET=0
+fi
 sketchybar --bar \
   position=top \
   height=30 \
   margin=0 \
-  y_offset=34 \
+  y_offset="$BAR_Y_OFFSET" \
   corner_radius=0 \
   blur_radius=0 \
   color="$TRANSPARENT" \

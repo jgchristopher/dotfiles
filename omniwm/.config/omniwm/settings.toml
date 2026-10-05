@@ -1,4 +1,4 @@
-monitorBarOverrides = [{ id = "BBB4CEF3-F08E-53A6-868E-8F37AE48941A", monitorDisplayUUID = "735066A6-B923-43EF-BA3C-C2E9525C5804", monitorName = "Studio Display", xOffset = -1277.0, yOffset = -34.0 }]
+monitorBarOverrides = [{ id = "BBB4CEF3-F08E-53A6-868E-8F37AE48941A", monitorDisplayUUID = "735066A6-B923-43EF-BA3C-C2E9525C5804", monitorName = "Studio Display", xOffset = -1277.0, yOffset = -34.0 }, { id = "0F221366-F02D-4D9C-9CE5-0F92727933D2", monitorDisplayUUID = "37D8832A-2D66-02CA-B9F7-8F30A301B230", monitorName = "Built-in Retina Display", xOffset = -861.0, yOffset = 0.0 }]
 monitorDwindleOverrides = []
 monitorGapOverrides = []
 monitorNiriOverrides = []
