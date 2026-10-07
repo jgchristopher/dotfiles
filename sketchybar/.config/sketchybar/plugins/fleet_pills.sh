@@ -66,7 +66,7 @@ while IFS='|' read -r state pane session tool; do
   if [ "$i" -le "$POOL" ]; then
     used_inline=$i
     args+=(--set "agent.$i" drawing=on icon="$GLYPH" icon.color="$ICOLOR"
-      label="${session:0:8}" label.color="$ICOLOR"
+      label="${session:0:20}" label.color="$ICOLOR"
       background.border_color="$BORDER" background.color="$FILL"
       click_script="omniwmctl workspace focus-name D; fleet switch $pane")
   else

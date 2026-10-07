@@ -7,9 +7,12 @@
 # file's session/tool are authoritative. A pane with NO status file — a
 # brand-new session that hasn't fired a hook yet — falls back to idle with the
 # passed-in session label, so it still shows up (matching fleet's TUI).
+# If the user titled the Claude session (/rename), that title replaces the
+# session label — see the registry lookup below.
 # Normalized states: waiting asking done working idle.
 # FLEET_STATUS_ROOT overrides the cache root (default ~/.cache) for tests.
 # FLEET_TMUX_PID overrides the live tmux server pid (default: ask tmux) for tests.
+# FLEET_SESSIONS_DIR overrides Claude Code's session registry dir for tests.
 
 ROOT="${FLEET_STATUS_ROOT:-$HOME/.cache}"
 
@@ -20,6 +23,36 @@ ROOT="${FLEET_STATUS_ROOT:-$HOME/.cache}"
 # anything from another server is treated as absent. If the live pid can't be
 # determined (no tmux), skip the check rather than dropping every agent.
 LIVE_TMUX_PID="${FLEET_TMUX_PID:-$(tmux display-message -p '#{pid}' 2>/dev/null)}"
+
+# Claude Code keeps a live-session registry at ~/.claude/sessions/<pid>.json:
+# {pid, tmux: "sess:@win.%pane", name, nameSource, ...}. A title the user set
+# with /rename has nameSource "user"; auto-generated ones are "derived" and are
+# skipped. Entries outlive their process and pane ids recycle across tmux
+# servers, so an entry only counts while its claude pid is alive. Pipes and
+# control chars are scrubbed from the title because the row format is
+# pipe-delimited. Result: "pane<TAB>name" lines, one per user-named live pane.
+SESSIONS_DIR="${FLEET_SESSIONS_DIR:-$HOME/.claude/sessions}"
+NAMES=""
+if [ -d "$SESSIONS_DIR" ] && command -v jq >/dev/null 2>&1; then
+  for f in "$SESSIONS_DIR"/*.json; do
+    [ -e "$f" ] || continue
+    IFS=$'\t' read -r pid pane name < <(jq -r '
+      select(.nameSource == "user" and ((.name // "") != "")
+             and ((.tmux // "") | test("\\.%[0-9]+$")))
+      | [(.pid | tostring),
+         (.tmux | capture("\\.(?<p>%[0-9]+)$").p),
+         (.name | gsub("[|\\n\\r\\t]"; " "))]
+      | @tsv' "$f" 2>/dev/null)
+    [ -n "$pid" ] && [ -n "$pane" ] && [ -n "$name" ] || continue
+    kill -0 "$pid" 2>/dev/null || continue
+    NAMES="${NAMES}${pane}	${name}
+"
+  done
+fi
+
+name_for_pane() {
+  printf '%s' "$NAMES" | awk -F'\t' -v p="$1" '$1 == p { print $2; exit }'
+}
 
 # Derive "state|session|tool" from one .status file fused with its event log.
 derive() {
@@ -69,14 +102,15 @@ while IFS='|' read -r pane label; do
     sf="$f"
     break
   done
+  state="idle" session="$label" tool=""
   if [ -n "$sf" ]; then
     IFS='|' read -r state session tool < <(derive "$sf")
     [ -n "$state" ] || state="idle"
     [ -n "$session" ] || session="$label"
-    printf '%s|%s|%s|%s\n' "$state" "$pane" "$session" "$tool"
-  else
-    printf 'idle|%s|%s|\n' "$pane" "$label"
   fi
+  name=$(name_for_pane "$pane")
+  [ -n "$name" ] && session="$name"
+  printf '%s|%s|%s|%s\n' "$state" "$pane" "$session" "$tool"
 done |
   awk -F'|' '
     { r = ($1=="waiting")?0:($1=="asking")?1:($1=="done")?2:($1=="working")?3:($1=="idle")?4:5

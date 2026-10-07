@@ -101,7 +101,7 @@ for i in $(seq "$FLEET_POOL" -1 1); do
   sketchybar --add item agent."$i" right \
     --set agent."$i" \
     drawing=off \
-    label.max_chars=8 \
+    label.max_chars=20 \
     icon.font="JetBrainsMono Nerd Font Mono:Regular:13.0"
 done
 

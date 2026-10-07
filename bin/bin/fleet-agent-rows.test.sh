@@ -69,4 +69,56 @@ check "stale tmux_pid ignored" 'idle|%0|dotfiles|' "$out"
 out=$(FLEET_STATUS_ROOT="$TMP" FLEET_TMUX_PID=22247 "$SUT" <<<'%0|dotfiles' | cut -d'|' -f1,3)
 check "live tmux_pid honoured" 'working|jcOS' "$out"
 
+
+# ── Session names from Claude Code's live registry (~/.claude/sessions) ──────
+# A user-set title (/rename -> nameSource "user") replaces the label; derived
+# titles, dead pids, and other panes must not. FLEET_SESSIONS_DIR overrides the
+# registry dir. Fixtures use $$ (this test's pid) as the live pid; 99999 is
+# above macOS's pid ceiling so `kill -0` always fails for it.
+mkreg() { # pid pane name source
+  mkdir -p "$TMP/sessions"
+  printf '{"pid":%s,"tmux":"sess:@1.%s","name":"%s","nameSource":"%s"}\n' \
+    "$1" "$2" "$3" "$4" >"$TMP/sessions/$1.json"
+}
+run_named() { FLEET_STATUS_ROOT="$TMP" FLEET_TMUX_PID=1 FLEET_SESSIONS_DIR="$TMP/sessions" "$SUT"; }
+
+# Case 9: a user-named live session overrides the status file's session label
+rm -rf "$TMP"/claude-status "$TMP"/sessions; mkdir -p "$TMP/claude-status"
+mkstatus claude %3 dotfiles working
+mkreg $$ %3 "OmniWM Cheat" user
+out=$(run_named <<<'%3|dotfiles')
+check "user session name overrides label" 'working|%3|OmniWM Cheat|' "$out"
+
+# Case 10: a derived (auto-generated) title is ignored
+rm -rf "$TMP"/claude-status "$TMP"/sessions; mkdir -p "$TMP/claude-status"
+mkstatus claude %4 jcOS working
+mkreg $$ %4 "jcos-c1" derived
+out=$(run_named <<<'%4|jcOS' | cut -d'|' -f3)
+check "derived name ignored" 'jcOS' "$out"
+
+# Case 11: a registry entry whose claude pid is dead is ignored
+rm -rf "$TMP"/claude-status "$TMP"/sessions; mkdir -p "$TMP/claude-status"
+mkstatus claude %3 dotfiles working
+mkreg 99999 %3 "Ghost Session" user
+out=$(run_named <<<'%3|dotfiles' | cut -d'|' -f3)
+check "dead pid ignored" 'dotfiles' "$out"
+
+# Case 12: a pane with NO status file still gets the user-set name
+rm -rf "$TMP"/claude-status "$TMP"/sessions; mkdir -p "$TMP/claude-status"
+mkreg $$ %8 "IPX Tunnel" user
+out=$(run_named <<<'%8|scripts')
+check "file-less pane gets user name" 'idle|%8|IPX Tunnel|' "$out"
+
+# Case 13: a pipe in the title cannot break the pipe-delimited row format
+rm -rf "$TMP"/claude-status "$TMP"/sessions; mkdir -p "$TMP/claude-status"
+mkreg $$ %8 "a|b" user
+out=$(run_named <<<'%8|scripts' | awk -F'|' '{print NF}')
+check "pipe in name sanitized" '4' "$out"
+
+# Case 14: pane match is exact — a registry entry for %32 must not label %3
+rm -rf "$TMP"/claude-status "$TMP"/sessions; mkdir -p "$TMP/claude-status"
+mkreg $$ %32 "Other Pane" user
+out=$(run_named <<<'%3|dotfiles' | cut -d'|' -f3)
+check "pane suffix match is exact" 'dotfiles' "$out"
+
 exit $fail
