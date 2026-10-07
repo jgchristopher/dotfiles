@@ -1,4 +1,3 @@
-monitorBarOverrides = [{ id = "BBB4CEF3-F08E-53A6-868E-8F37AE48941A", monitorDisplayUUID = "735066A6-B923-43EF-BA3C-C2E9525C5804", monitorName = "Studio Display", xOffset = -1277.0, yOffset = -34.0 }, { id = "0F221366-F02D-4D9C-9CE5-0F92727933D2", monitorDisplayUUID = "37D8832A-2D66-02CA-B9F7-8F30A301B230", monitorName = "Built-in Retina Display", xOffset = -861.0, yOffset = 0.0 }]
 monitorDwindleOverrides = []
 monitorGapOverrides = []
 monitorNiriOverrides = []
@@ -59,6 +58,7 @@ right = 25.0
 top = 89.0
 
 [general]
+animationSpeed = 1.0
 animationsEnabled = true
 defaultLayoutType = "dwindle"
 hotkeysEnabled = true
@@ -183,6 +183,21 @@ gridRow = 0
 monitorDisplayUUID = "C13AD93C-2746-4DBE-AAB7-DB89E022D3A5"
 monitorName = "Sidecar Display (AirPlay)"
 
+[[routing.arrangements]]
+id = "7D1F8890-1CB1-4ED6-A8E7-76A52A0927C6"
+
+[[routing.arrangements.monitors]]
+gridColumn = 0
+gridRow = 0
+monitorDisplayUUID = "499AAC84-A1C6-42C6-8132-D175BC968456"
+monitorName = "Studio Display"
+
+[[routing.arrangements.monitors]]
+gridColumn = 0
+gridRow = 1
+monitorDisplayUUID = "37D8832A-2D66-02CA-B9F7-8F30A301B230"
+monitorName = "Built-in Retina Display"
+
 [scratchpads]
 
 [scratchpads.labels]
@@ -203,6 +218,8 @@ hideInNativeFullscreen = false
 hoverPreviewsEnabled = true
 notchActiveZoneWidth = 180.0
 notchMode = "moveBelowMenuBar"
+notificationBadgeRefreshIntervalSeconds = 5.0
+notificationBadges = "off"
 position = "belowMenuBar"
 reserveLayoutSpace = false
 revealHoldMilliseconds = 200.0
@@ -1474,7 +1491,7 @@ binding = "Unassigned"
 id = "preselectClear"
 
 [[hotkeys]]
-binding = "Control+Option+Space"
+binding = "Control+Option+Semicolon"
 id = "openCommandPalette"
 
 [[hotkeys]]
@@ -1528,6 +1545,27 @@ id = "toggleOverview"
 [[hotkeys]]
 binding = "Unassigned"
 id = "toggleSystemStats"
+
+[[monitorBarOverrides]]
+id = "BBB4CEF3-F08E-53A6-868E-8F37AE48941A"
+monitorDisplayUUID = "735066A6-B923-43EF-BA3C-C2E9525C5804"
+monitorName = "Studio Display"
+xOffset = -1277.0
+yOffset = -34.0
+
+[[monitorBarOverrides]]
+id = "0F221366-F02D-4D9C-9CE5-0F92727933D2"
+monitorDisplayUUID = "37D8832A-2D66-02CA-B9F7-8F30A301B230"
+monitorName = "Built-in Retina Display"
+xOffset = -861.0
+yOffset = 0.0
+
+[[monitorBarOverrides]]
+id = "3FE673E4-AE2C-4C26-A245-E26168B54B0E"
+monitorDisplayUUID = "499AAC84-A1C6-42C6-8132-D175BC968456"
+monitorName = "Studio Display"
+xOffset = -1437.0
+yOffset = 0.0
 
 [[workspaces]]
 id = "B16CD79C-537E-54C7-8850-FEDFC2E81E77"

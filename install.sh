@@ -83,14 +83,23 @@ setup_symlinks() {
         mkdir -p "$HOME/.config"
     fi
 
-    config_files=$(find "$DOTFILES/config" -maxdepth 1 2>/dev/null)
-    for config in $config_files; do
+    # Stow-style: dotfiles/<tool>/.config/<name> -> ~/.config/<name>.
+    # Relative when the repo lives under $HOME, matching existing links.
+    for config in "$DOTFILES"/*/.config/*; do
+        [ -e "$config" ] || continue
         target="$HOME/.config/$(basename "$config")"
-        if [ -e "$target" ]; then
-            info "~${target#$HOME} already exists... Skipping."
+        if [[ "$DOTFILES" == "$HOME"/* ]]; then
+            source="../${config#$HOME/}"
+        else
+            source="$config"
+        fi
+        if [ -L "$target" ] && [ "$(readlink "$target")" = "$source" ]; then
+            info "~${target#$HOME} already linked... Skipping."
+        elif [ -e "$target" ] || [ -L "$target" ]; then
+            warning "~${target#$HOME} exists and is not linked to $source... Skipping."
         else
             info "Creating symlink for $config"
-            ln -s "$config" "$target"
+            ln -s "$source" "$target"
         fi
     done
 }
