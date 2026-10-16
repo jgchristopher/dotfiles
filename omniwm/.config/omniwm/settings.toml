@@ -113,7 +113,7 @@ margin = 1
 alwaysCenterSingleColumn = false
 centerFocusedColumn = "never"
 containerPrimarySpanPresets = [0.3333333333333333, 0.5, 0.6666666666666666]
-defaultContainerPrimarySpan = 0.5
+defaultContainerPrimarySpan = 1.0
 edgeGaps = true
 infiniteLoop = false
 resizeStepPercent = 5
@@ -1395,7 +1395,7 @@ binding = "Unassigned"
 id = "cycleWindowSecondarySpanBackward"
 
 [[hotkeys]]
-binding = "Unassigned"
+binding = "Control+Option+Return"
 id = "toggleContainerFullPrimarySpan"
 
 [[hotkeys]]
@@ -1669,7 +1669,7 @@ type = "main"
 [[workspaces]]
 displayName = "D"
 id = "D674DE85-0E50-59E4-A917-5E868BB63672"
-layoutType = "default"
+layoutType = "niri"
 name = "13"
 
 [workspaces.monitorAssignment]
@@ -1741,7 +1741,7 @@ type = "main"
 [[workspaces]]
 displayName = "P"
 id = "F79935A1-78C3-51C1-A9BF-181FCC9E5126"
-layoutType = "default"
+layoutType = "niri"
 name = "21"
 
 [workspaces.monitorAssignment]
