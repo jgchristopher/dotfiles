@@ -204,10 +204,14 @@ monitorName = "Built-in Retina Display"
 
 [statusBar]
 showAppNames = false
+showIcon = true
 showWorkspaceName = false
 useWorkspaceId = false
 
 [workspaceBar]
+autoHide = false
+autoHideHideDelayMilliseconds = 0.0
+autoHideRevealDelayMilliseconds = 0.0
 backgroundOpacity = 0.1
 deduplicateAppIcons = false
 enabled = true
@@ -1500,6 +1504,10 @@ id = "raiseAllFloatingWindows"
 
 [[hotkeys]]
 binding = "Unassigned"
+id = "toggleFloatingFocus"
+
+[[hotkeys]]
+binding = "Unassigned"
 id = "rescueOffscreenWindows"
 
 [[hotkeys]]
@@ -1660,7 +1668,7 @@ type = "secondary"
 [[workspaces]]
 displayName = "C"
 id = "855602ED-31BF-5FFC-B19E-244D3F587B39"
-layoutType = "default"
+layoutType = "niri"
 name = "12"
 
 [workspaces.monitorAssignment]
