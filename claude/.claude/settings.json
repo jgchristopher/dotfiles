@@ -137,7 +137,8 @@
     "fleet@fleet-local": true,
     "sessions@sessions": true,
     "content@nicknisi": true,
-    "sources@nicknisi": true
+    "sources@nicknisi": true,
+    "slack@claude-plugins-official": true
   },
   "extraKnownMarketplaces": {
     "nicknisi": {
@@ -302,6 +303,7 @@
   },
   "skipDangerousModePermissionPrompt": true,
   "skipWorkflowUsageWarning": true,
+  "switchModelsOnFlag": false,
   "inputNeededNotifEnabled": true,
   "agentPushNotifEnabled": true,
   "skipAutoPermissionPrompt": true,
