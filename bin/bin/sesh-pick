@@ -1,0 +1,56 @@
+#!/bin/bash
+# sesh picker for tmux prefix-T.
+# enter: connect. ctrl-n: prompt for a new session name rooted at the selected entry's dir.
+set -uo pipefail
+
+self="$HOME/bin/sesh-pick"
+
+# Second stage, called back by command-prompt with the typed name
+if [[ ${1:-} == --create ]]; then
+  name=${2//[.:]/_}   # tmux disallows . and : in session names
+  [[ -n $name ]] || exit 0
+  dir=$(tmux show -gv @sesh_new_dir)
+  tmux has-session -t "=$name" 2>/dev/null || tmux new-session -d -s "$name" -c "$dir"
+  exec sesh connect "$name"
+fi
+
+# --expect prints the pressed key on line 1 (empty for enter), selection on line 2
+out=$(sesh list --icons | fzf-tmux -p 80%,70% \
+  --no-sort --ansi --border-label ' sesh ' --prompt '⚡  ' \
+  --header '  ^a all ^t tmux ^g configs ^x zoxide ^d tmux kill ^f find ^n new named' \
+  --expect ctrl-n \
+  --bind 'tab:down,btab:up' \
+  --bind 'ctrl-a:change-prompt(⚡  )+reload(sesh list --icons)' \
+  --bind 'ctrl-t:change-prompt(🪟  )+reload(sesh list -t --icons)' \
+  --bind 'ctrl-g:change-prompt(⚙️  )+reload(sesh list -c --icons)' \
+  --bind 'ctrl-x:change-prompt(📁  )+reload(sesh list -z --icons)' \
+  --bind 'ctrl-f:change-prompt(🔎  )+reload(fd -H -d 2 -t d -E .Trash . ~)' \
+  --bind 'ctrl-d:execute(tmux kill-session -t {2..})+change-prompt(⚡  )+reload(sesh list --icons)' \
+  --preview-window 'right:55%' \
+  --preview 'sesh preview {}') || exit 0
+
+key=$(sed -n 1p <<<"$out")
+sel=$(sed -n 2p <<<"$out")
+[[ -n $sel ]] || exit 0
+
+if [[ $key != ctrl-n ]]; then
+  exec sesh connect "$sel"
+fi
+
+# ctrl-f (fd) results are bare absolute paths; everything else has a leading icon
+if [[ $sel == /* ]]; then
+  dir=${sel%/}
+else
+  name=${sel#* }
+  dir=$(sesh list -j | jq -r --arg n "$name" 'map(select(.Name == $n)) | .[0].Path // empty')
+  [[ -n $dir ]] || dir=${name/#\~/$HOME}
+fi
+
+if [[ ! -d $dir ]]; then
+  tmux display-message "sesh-pick: can't resolve a directory for '$sel'"
+  exit 1
+fi
+
+tmux set -g @sesh_new_dir "$dir"
+tmux command-prompt -I "$(basename "$dir")-2" -p "new session in $(basename "$dir"):" \
+  "run-shell \"'$self' --create '%%'\""
