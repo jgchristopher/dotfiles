@@ -1,5 +1,8 @@
 {
   "$schema": "https://json.schemastore.org/claude-code-settings.json",
+  "env": {
+    "CLAUDE_CODE_DISABLE_BG_STABLE_PATH": "1"
+  },
   "includeCoAuthoredBy": false,
   "attribution": {
     "commit": "",
@@ -78,7 +81,7 @@
       "Read(./.env.*)",
       "Read(./secrets/**)",
       "Read(./config/credentials.json)",
-      "Read(./build/**)",
+      "Read(**/dist/**)",
       "Read(~/.aws/**)",
       "Read(~/.ssh/**)",
       "Bash(dd *)",
@@ -350,5 +353,6 @@
       "routine under jgchristopher/ prefix: git push/pull to origin (jgchristopher/mcp-obsidian) is routine; pushes to upstream (bitbonsai/mcpvault) are not this user's own repo and warrant more caution"
     ]
   },
-  "voiceEnabled": true
+  "voiceEnabled": true,
+  "switchModelsOnFlag": true
 }

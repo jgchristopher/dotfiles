@@ -24,8 +24,26 @@ output;
 EOF
 }
 
-# Try to get track info
-track_info=$(get_music_track)
+# Sonos desk pair, only while PLAYING. Pinned IP: SSDP discovery fails on
+# this Mac (en0 + en1 on the same subnet), direct SOAP to :1400 works.
+SONOS_IP="${SONOS_IP:-192.168.0.66}"
+
+get_sonos_track() {
+  command -v sonos >/dev/null || return
+  sonos status --ip "$SONOS_IP" --timeout 2s 2>/dev/null | awk '
+    /^State:/  { sub(/^State:[ \t]*/, "");  state = $0 }
+    /^Title:/  { sub(/^Title:[ \t]*/, "");  title = $0 }
+    /^Artist:/ { sub(/^Artist:[ \t]*/, ""); artist = $0 }
+    END {
+      if (state != "PLAYING" || title == "") exit
+      out = artist == "" ? title : title " - " artist
+      print substr(out, 1, 50)
+    }'
+}
+
+# Try to get track info: Sonos first, Music.app as fallback
+track_info=$(get_sonos_track)
+[ -n "$track_info" ] || track_info=$(get_music_track)
 
 # Output the result
 if [ -n "$track_info" ]; then
