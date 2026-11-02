@@ -115,10 +115,8 @@ create_section() {
 
 
 
-# Tunes component
-# tm_tunes="#(osascript -l JavaScript $DOTFILES/applescripts/tunes.js)"
-# tm_tunes_display="#(song=\${tm_tunes}); if [[ -n \"\$song\" ]]; then echo \"#[bg=default]#[fg=${thm_blue7}]${tm_separator_right}#[bg=${thm_blue7}]#[fg=${thm_blue6}] ${tm_music_icon}  \$song #[bg=default]#[fg=${thm_blue7}]${tm_separator_left}#[bg=default,fg=default]\"; fi)"
-tm_tunes_display="#(song=\$(osascript -l JavaScript $DOTFILES/applescripts/tunes.js); if [[ -n \"\$song\" ]]; then echo \"#[bg=default]#[fg=${thm_blue7}]#[bg=${thm_blue7}]#[fg=${thm_blue6}] ${tm_music_icon}  \$song #[bg=default]#[fg=${thm_blue7}]${tm_separator_left}#[bg=default,fg=default] \"; fi)"
+# Tunes component: same source as the sketchybar music chip (Sonos, then Music.app)
+tm_tunes_display="#(song=\$($DOTFILES/bin/bin/current-song 2>/dev/null); if [ -n \"\$song\" ]; then echo \"#[bg=default]#[fg=${thm_blue7}]#[bg=${thm_blue7}]#[fg=${thm_blue6}] ${tm_music_icon}  \$song #[bg=default]#[fg=${thm_blue7}]${tm_separator_left}#[bg=default,fg=default] \"; fi)"
 
 # Status line components
 session="$(create_section "left" "$tm_icon" "#S #[nobold]@ #h" "${thm_purple}" "${thm_bg}" "no-start")"

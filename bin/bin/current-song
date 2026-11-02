@@ -26,16 +26,30 @@ EOF
 
 # Sonos desk pair, only while PLAYING. Pinned IP: SSDP discovery fails on
 # this Mac (en0 + en1 on the same subnet), direct SOAP to :1400 works.
+#
+# Raw SOAP via /usr/bin/curl, not the `sonos` CLI: macOS Local Network
+# privacy blocks third-party binaries per responsible app. sketchybar has
+# the grant; a tmux server launched from Ghostty does not, so `sonos`
+# returned blanks there and tmux fell through to Music.app. Apple-signed
+# curl is exempt, so this works from any parent process.
 SONOS_IP="${SONOS_IP:-192.168.0.66}"
 
+sonos_soap() { # $1 = AVTransport action
+  curl -s -m 2 \
+    -H 'Content-Type: text/xml; charset="utf-8"' \
+    -H "SOAPACTION: \"urn:schemas-upnp-org:service:AVTransport:1#$1\"" \
+    -d "<?xml version=\"1.0\"?><s:Envelope xmlns:s=\"http://schemas.xmlsoap.org/soap/envelope/\" s:encodingStyle=\"http://schemas.xmlsoap.org/soap/encoding/\"><s:Body><u:$1 xmlns:u=\"urn:schemas-upnp-org:service:AVTransport:1\"><InstanceID>0</InstanceID></u:$1></s:Body></s:Envelope>" \
+    "http://$SONOS_IP:1400/MediaRenderer/AVTransport/Control"
+}
+
 get_sonos_track() {
-  command -v sonos >/dev/null || return
-  sonos status --ip "$SONOS_IP" --timeout 2s 2>/dev/null | awk '
-    /^State:/  { sub(/^State:[ \t]*/, "");  state = $0 }
-    /^Title:/  { sub(/^Title:[ \t]*/, "");  title = $0 }
-    /^Artist:/ { sub(/^Artist:[ \t]*/, ""); artist = $0 }
+  sonos_soap GetTransportInfo | grep -q '<CurrentTransportState>PLAYING<' || return
+  # TrackMetaData is entity-encoded DIDL-Lite: dc:title and dc:creator inside.
+  sonos_soap GetPositionInfo | sed -e 's/&lt;/</g' -e 's/&gt;/>/g' -e 's/&quot;/"/g' -e 's/&amp;/\&/g' | awk '
+    match($0, /<dc:title>[^<]*/)   { title  = substr($0, RSTART + 10, RLENGTH - 10) }
+    match($0, /<dc:creator>[^<]*/) { artist = substr($0, RSTART + 12, RLENGTH - 12) }
     END {
-      if (state != "PLAYING" || title == "") exit
+      if (title == "") exit
       out = artist == "" ? title : title " - " artist
       print substr(out, 1, 50)
     }'
