@@ -1,14 +1,16 @@
 #!/bin/bash
 
-# Function to get Music app track info
+# Music.app track, only while playing. A paused track left loaded from an
+# earlier session would otherwise show as "now playing" whenever Sonos is idle.
 get_music_track() {
   osascript -l JavaScript <<EOF
   let output = "";
 
 try {
-  if (Application("Music").running()) {
+  const music = Application("Music");
+  if (music.running() && music.playerState() === "playing") {
     try {
-      const track = Application("Music").currentTrack;
+      const track = music.currentTrack;
       const artist = track.artist();
       const title = track.name();
       output = \`\${title} - \${artist}\`.substr(0, 50);

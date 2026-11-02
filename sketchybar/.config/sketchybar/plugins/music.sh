@@ -1,7 +1,6 @@
 #!/usr/bin/env bash
-# Now-playing chip via bin/current-song ("Title - Artist", empty when no
-# player is running). Hidden when silent. Note: a paused track still
-# reports — current-song queries the track, not player state.
+# Now-playing chip via bin/current-song ("Title - Artist", empty unless
+# Sonos or Music.app is actively playing). Hidden when silent.
 
 source "$CONFIG_DIR/colors.sh"
 
