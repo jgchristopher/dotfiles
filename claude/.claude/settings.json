@@ -8,7 +8,6 @@
     "commit": "",
     "pr": ""
   },
-  "includeCoAuthoredBy": false,
   "permissions": {
     "allow": [
       "Read",
@@ -303,6 +302,7 @@
       "Wielding Anduril, Flame of the West"
     ]
   },
+  "cleanupPeriodDays": 365,
   "alwaysThinkingEnabled": true,
   "effortLevel": "xhigh",
   "tui": "fullscreen",
@@ -312,7 +312,6 @@
   },
   "skipDangerousModePermissionPrompt": true,
   "skipWorkflowUsageWarning": true,
-  "switchModelsOnFlag": false,
   "inputNeededNotifEnabled": true,
   "agentPushNotifEnabled": true,
   "skipAutoPermissionPrompt": true,
