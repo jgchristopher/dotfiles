@@ -1,0 +1,8 @@
+# Widgets mirrored from sketchybar sit left of Default's own trailing group.
+# Built-in lane list copied from shell/default/shell.toml (OmniWM 0.8.0);
+# re-check it after OmniWM updates, since this override replaces it wholesale.
+[profiles.default]
+trailing = [
+  "music", "usage", "github", "spend", "fleet",
+  "media", "notifications", "volume", "wifi", "battery-details", "control-center", "system-stats", "clock",
+]

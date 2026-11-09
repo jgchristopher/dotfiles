@@ -6,11 +6,13 @@
 # Phosphor: the chip's edge lights in the severity hue.
 
 source "$CONFIG_DIR/colors.sh"
+source "$CONFIG_DIR/plugins/omni_push.sh"
 
 CACHE="$HOME/.cache/claude-usage.json"
 
 hide() {
   sketchybar --set "$NAME" drawing=off
+  omni_push usage
   exit 0
 }
 
@@ -25,9 +27,9 @@ RESET=$(jq -r '.five_hour.resets_at // empty' "$CACHE" 2>/dev/null)
 USED=$(printf '%.0f' "$USED")
 [ "$USED" -lt 70 ] && hide
 
-COLOR="$YELLOW" EDGE="$YELLOW_BORDER" FILL="$YELLOW_FILL"
-[ "$USED" -ge 85 ] && COLOR="$ORANGE" EDGE="$ORANGE_BORDER" FILL="$ORANGE_FILL"
-[ "$USED" -ge 95 ] && COLOR="$RED" EDGE="$RED_BORDER" FILL="$RED_FILL"
+COLOR="$YELLOW" EDGE="$YELLOW_BORDER" FILL="$YELLOW_FILL" LEVEL=yellow
+[ "$USED" -ge 85 ] && COLOR="$ORANGE" EDGE="$ORANGE_BORDER" FILL="$ORANGE_FILL" LEVEL=orange
+[ "$USED" -ge 95 ] && COLOR="$RED" EDGE="$RED_BORDER" FILL="$RED_FILL" LEVEL=red
 
 LEFT=""
 if [ -n "$RESET" ] && [ "$RESET" -gt "$NOW" ]; then
@@ -42,3 +44,4 @@ fi
 sketchybar --animate tanh 15 --set "$NAME" drawing=on \
   label="5h ${USED}%${LEFT}" label.color="$COLOR" icon.color="$COLOR" \
   background.color="$FILL" background.border_color="$EDGE"
+omni_push usage "$(jq -nc --arg l "5h ${USED}%${LEFT}" --arg v "$LEVEL" '{label: $l, level: $v}')"

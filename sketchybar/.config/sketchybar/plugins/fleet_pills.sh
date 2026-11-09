@@ -6,6 +6,7 @@
 # Phosphor language: lit edge = active/needs-you; idle stays unlit and quiet.
 
 source "$CONFIG_DIR/colors.sh"
+source "$CONFIG_DIR/plugins/omni_push.sh"
 
 POOL=5
 POPUP_POOL=15
@@ -56,6 +57,7 @@ style() { # state -> GLYPH ICOLOR BORDER FILL
 }
 
 args=()
+omni_items=()
 used_inline=0
 used_popup=0
 i=0
@@ -63,6 +65,16 @@ while IFS='|' read -r state pane session tool; do
   [ -n "$state" ] || continue
   i=$((i + 1))
   style "$state"
+  # Overflow rows show the pane's task (its title); inline pills don't.
+  task=""
+  if [ "$i" -gt "$POOL" ]; then
+    command -v tmux >/dev/null 2>&1 &&
+      task=$(tmux display-message -p -t "$pane" '#{pane_title}' 2>/dev/null |
+        sed -E 's/^[^A-Za-z0-9]+ *//')
+    [ -n "$task" ] || task="$tool"
+  fi
+  omni_items+=("$(jq -nc --arg s "$state" --arg p "$pane" --arg n "$session" --arg t "$task" \
+    '{state: $s, pane: $p, session: $n, task: $t}')")
   if [ "$i" -le "$POOL" ]; then
     used_inline=$i
     args+=(--set "agent.$i" drawing=on icon="$GLYPH" icon.color="$ICOLOR"
@@ -78,11 +90,6 @@ while IFS='|' read -r state pane session tool; do
         label="+$((COUNT - POOL - POPUP_POOL + 1)) more" label.color="$GREY"
         click_script="$SB --set agent.more popup.drawing=off; tmux display-popup -E -w 90% -h 80% fleet")
     else
-      task=""
-      command -v tmux >/dev/null 2>&1 &&
-        task=$(tmux display-message -p -t "$pane" '#{pane_title}' 2>/dev/null |
-          sed -E 's/^[^A-Za-z0-9]+ *//')
-      [ -n "$task" ] || task="$tool"
       args+=(--set "agent.pop.$j" drawing=on icon="$GLYPH" icon.color="$ICOLOR"
         label="$session ${task:0:24}" label.color="$ICOLOR"
         click_script="$SB --set agent.more popup.drawing=off; omniwmctl workspace focus-name D; fleet switch $pane")
@@ -105,3 +112,10 @@ else
 fi
 
 "$SB" "${args[@]}"
+
+# OmniShell `fleet` widget: the full ordered list; it does its own 5 + popout split.
+if [ "${#omni_items[@]}" -gt 0 ]; then
+  omni_push fleet "$(printf '%s\n' "${omni_items[@]}" | jq -sc .)"
+else
+  omni_push fleet
+fi

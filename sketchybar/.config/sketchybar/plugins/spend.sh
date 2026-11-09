@@ -7,6 +7,7 @@
 # Neutral colors on purpose: spend is information, not an alarm.
 
 source "$CONFIG_DIR/colors.sh"
+source "$CONFIG_DIR/plugins/omni_push.sh"
 
 # `sessions report` unconditionally writes report.html + usage-report.json
 # into $PWD. A sketchybar script's $PWD is $CONFIG_DIR, and `--hotload true`
@@ -20,6 +21,7 @@ TOTAL=$( (cd "$CACHE_DIR" && sessions report --today --stdout 2>/dev/null) | jq 
 # Hide until the day has a real number
 if [ -z "$TOTAL" ] || [ "$(printf '%.0f' "$TOTAL")" -eq 0 ]; then
   sketchybar --set "$NAME" drawing=off
+  omni_push spend
   exit 0
 fi
 
@@ -32,3 +34,4 @@ fi
 
 sketchybar --animate tanh 15 --set "$NAME" drawing=on \
   label="$LABEL" label.color="$FG" icon.color="$GREY"
+omni_push spend "$(jq -nc --arg l "$LABEL" '{label: $l}')"

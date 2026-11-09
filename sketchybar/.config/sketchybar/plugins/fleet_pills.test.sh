@@ -5,6 +5,8 @@ HERE="$(cd "$(dirname "$0")" && pwd)"
 SUT="$HERE/fleet_pills.sh"
 export CONFIG_DIR="$(cd "$HERE/.." && pwd)"
 TMP="$(mktemp -d)"
+# Capture the OmniShell mirror instead of pushing test agents into the live bar.
+export OMNIWMCTL=echo
 trap 'rm -rf "$TMP"' EXIT
 
 fail=0
@@ -37,6 +39,13 @@ check "no overflow -> more off" '--set agent.more drawing=off' "$out2"
 check "slot 4 off"              '--set agent.4 drawing=off' "$out2"
 refute "no popup rows on"       'agent.pop.1 drawing=on' "$out2"
 check "waiting glyph mapped"    'icon=⚠' "$out2"
+check "omni push full list"     'shell set fleet [{"state":"waiting","pane":"%1","session":"a","task":""},' "$out2"
+check "omni push keeps order"   '{"state":"done","pane":"%3","session":"c","task":""}]' "$out2"
+
+# 0 agents -> omni widget unset (hidden)
+rows0="$TMP/rows0"; : >"$rows0"
+out0=$(FLEET_ROWS_FILE="$rows0" SKETCHYBAR=echo bash "$SUT")
+check "omni unset when empty"   'shell unset fleet' "$out0"
 
 # 21 agents -> popup row 15 folds to the "+K more" escape hatch
 rows3="$TMP/rows3"; : >"$rows3"
