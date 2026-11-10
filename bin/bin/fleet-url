@@ -1,0 +1,26 @@
+#!/bin/bash
+# fleet://switch/<n>  ->  fleet notification-open %<n> - com.mitchellh.ghostty
+#
+# Called by ~/Applications/FleetURL.app (./install.sh fleet-url-handler) when
+# an OmniShell fleet pill is clicked: OmniShell widgets can't run commands,
+# but they can open URLs. This is the only thing that URL can reach, so it
+# accepts exactly one shape and refuses everything else.
+#
+# notification-open (not `fleet switch`) because this runs outside tmux: it
+# picks the most recently active client, switches it to the pane, selects
+# the window + pane, then brings Ghostty forward. `fleet switch` with no
+# current client silently does nothing.
+set -euo pipefail
+export PATH="/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin"
+
+url="${1:-}"
+LOG="$HOME/.local/state/fleet-url.log"
+mkdir -p "${LOG%/*}"
+if [[ ! "$url" =~ ^fleet://switch/([0-9]+)$ ]]; then
+  echo "$(date '+%F %T') refuse $url" >>"$LOG"
+  echo "fleet-url: refusing '$url'" >&2
+  exit 64
+fi
+echo "$(date '+%F %T') switch %${BASH_REMATCH[1]}" >>"$LOG"
+
+exec "${FLEET:-fleet}" notification-open "%${BASH_REMATCH[1]}" - com.mitchellh.ghostty

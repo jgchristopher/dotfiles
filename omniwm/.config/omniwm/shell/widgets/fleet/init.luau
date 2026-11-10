@@ -22,10 +22,31 @@ local function style(state)
     return "●", { text = sb.color.grey, border = rest.border, fill = rest.fill }
 end
 
--- `fleet switch <pane>` needs a shell, which widget actions can't run; for now
--- a click only jumps to the D workspace where the agent terminals live.
-local function focusAgents(ctx, event)
-    omniwm.run("workspace focus-name D")
+-- Widgets can't run commands, but they can open URLs: fleet://switch/<n> goes
+-- to ~/Applications/FleetURL.app (./install.sh fleet-url-handler), which runs
+-- bin/fleet-url -> `fleet notification-open %<n>`: switch the most recent tmux
+-- client to the pane and bring Ghostty forward. Jump to workspace D first.
+local function openPane(pane: string?)
+    local n = pane and string.match(pane, "^%%(%d+)$")
+    if n then
+        omniwm.open("fleet://switch/" .. n)
+    end
+end
+
+local function focusAgent(ctx, pane)
+    local switch = sb.switchTo(ctx, "D")
+    return function(_, _)
+        sb.run(switch)
+        openPane(pane)
+    end
+end
+
+-- `omniwmctl shell trigger fleet open %5` does the same as clicking that pill.
+function trigger(ctx, event)
+    if event.name == "open" then
+        sb.run(sb.switchTo(ctx, "D"))
+        openPane(event.value)
+    end
 end
 
 local function agents(ctx)
@@ -48,7 +69,7 @@ function render(ctx)
         end
         local glyph, tone = style(a.state)
         row[#row + 1] = sb.chip{ key = a.pane, icon = glyph, label = string.sub(a.session or "", 1, 20),
-            tone = tone, onClick = focusAgents, help = a.session }
+            tone = tone, onClick = focusAgent(ctx, a.pane), help = a.session }
     end
     if #list > POOL then
         row[#row + 1] = sb.chip{ icon = "⋯", iconColor = sb.color.grey, label = "+" .. tostring(#list - POOL),
@@ -68,7 +89,7 @@ function popout(ctx)
             local glyph, tone = style(a.state)
             local label = (a.session or "") .. " " .. string.sub(a.task or "", 1, 24)
             col[#col + 1] = sb.chip{ key = a.pane, icon = glyph, label = label, tone = tone,
-                onClick = focusAgents }
+                onClick = focusAgent(ctx, a.pane) }
         end
     end
     return ui.column(col)

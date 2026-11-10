@@ -38,6 +38,29 @@ function M.tone(level: string?)
     return { text = "#" .. hex, border = "#" .. hex .. edge, fill = "#" .. hex .. fill }
 end
 
+-- Command that switches to the workspace named `name`, or nil if it doesn't
+-- exist. Widget actions only accept omniwmctl *commands*, which address
+-- workspaces by id (`workspace focus-name` is rejected and fails the widget).
+-- Resolve during render: reading ctx.data.workspaces there subscribes to it.
+function M.switchTo(ctx, name: string): string?
+    for _, ws in ctx.data.workspaces or {} do
+        if ws.name == name then
+            return "switch-workspace " .. ws.id
+        end
+    end
+    return nil
+end
+
+-- Run an action without letting a rejected command mark the widget failed.
+function M.run(command: string?)
+    if command then
+        local ok, err = pcall(omniwm.run, command)
+        if not ok then
+            omniwm.log("sb.run failed", command, err)
+        end
+    end
+end
+
 -- What a widget renders while it has nothing to show (render must return an element).
 function M.hidden()
     return ui.box{ w = 0, h = 0 }
@@ -64,6 +87,7 @@ function M.chip(p)
         fill = tone.fill,
         border = tone.border,
         borderWidth = 1,
+        key = p.key, -- retained identity for click handlers
         onClick = p.onClick,
         popout = p.popout,
         help = p.help,

@@ -378,6 +378,35 @@ setup_sketchybar_omniwm_watch() {
     success "sketchybar-omniwm-watch agent loaded"
 }
 
+setup_fleet_url_handler() {
+    title "Installing FleetURL.app (fleet:// URL handler)"
+
+    # OmniShell fleet pills open fleet://switch/<n>; this applet hands the URL
+    # to bin/fleet-url. Built here from source, never committed as an app.
+    local src="$DOTFILES/bin/fleet-url-handler/FleetURL.applescript"
+    local app="$HOME/Applications/FleetURL.app"
+    local plist="$app/Contents/Info.plist"
+    local lsregister="/System/Library/Frameworks/CoreServices.framework/Frameworks/LaunchServices.framework/Support/lsregister"
+
+    [ -f "$src" ] || error "Applet source not found at $src"
+    command -v fleet >/dev/null 2>&1 || warning "fleet not on PATH; clicks will fail until it is"
+
+    mkdir -p "$HOME/Applications"
+    rm -rf "$app"
+    osacompile -o "$app" "$src"
+
+    plutil -replace CFBundleIdentifier -string "com.jc.fleet-url" "$plist"
+    plutil -replace LSUIElement -bool true "$plist" # no Dock icon per click
+    plutil -replace CFBundleURLTypes -json \
+        '[{"CFBundleURLName":"com.jc.fleet-url","CFBundleURLSchemes":["fleet"]}]' "$plist"
+
+    # Editing Info.plist invalidates osacompile's signature; re-sign ad hoc.
+    codesign --force --deep --sign - "$app"
+    "$lsregister" -f "$app"
+
+    success "FleetURL.app registered for fleet://"
+}
+
 case "$1" in
     backup)
         backup
@@ -409,6 +438,9 @@ case "$1" in
     sketchybar-omniwm-watch)
         setup_sketchybar_omniwm_watch
         ;;
+    fleet-url-handler)
+        setup_fleet_url_handler
+        ;;
     tmux-plugins)
         setup_tmux_plugins
         ;;
@@ -427,9 +459,10 @@ case "$1" in
         setup_granola_nub_guard
         setup_sketchybar_fleet_watch
         setup_sketchybar_omniwm_watch
+        setup_fleet_url_handler
         ;;
     *)
-        echo -e $"\nUsage: $(basename "$0") {backup|link|git|homebrew|shell|terminfo|terminal-theme-sync|granola-nub-guard|sketchybar-fleet-watch|sketchybar-omniwm-watch|tmux-plugins|macos|all}\n"
+        echo -e $"\nUsage: $(basename "$0") {backup|link|git|homebrew|shell|terminfo|terminal-theme-sync|granola-nub-guard|sketchybar-fleet-watch|sketchybar-omniwm-watch|fleet-url-handler|tmux-plugins|macos|all}\n"
         exit 1
         ;;
 esac

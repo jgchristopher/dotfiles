@@ -4,17 +4,17 @@ local sb = require("../lib/sb")
 
 local URL = "https://github.com/pulls/review-requested"
 
-local function open(ctx, event)
-    omniwm.run("workspace focus-name W")
-    omniwm.open(URL)
-end
-
 function render(ctx)
     local v = sb.var(ctx, "github")
     if not v or not v.label then
         return sb.hidden()
     end
     local hot = v.level and v.level ~= ""
+    local switch = sb.switchTo(ctx, "W")
+    local function open(_, _)
+        sb.run(switch)
+        omniwm.open(URL)
+    end
     return sb.chip{ symbol = "arrow.triangle.pull", iconColor = sb.color.fg, label = v.label,
         labelColor = if hot then sb.tone(v.level).text else sb.color.fg,
         onClick = open, help = "Review requests" }
