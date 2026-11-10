@@ -454,9 +454,9 @@ bundleId = "com.apple.news"
 id = "EA423AA7-8C1C-5EA8-B1DB-A054BE35984D"
 
 [[appRules]]
+assignToWorkspace = "19"
 bundleId = "com.granola.app"
 id = "977D42F8-7112-5936-942A-07FC9CEA20CE"
-layout = "float"
 
 [[appRules]]
 bundleId = "com.apple.finder"
