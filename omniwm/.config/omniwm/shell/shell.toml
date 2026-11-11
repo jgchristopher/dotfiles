@@ -2,6 +2,8 @@
 # Built-in lane list copied from shell/default/shell.toml (OmniWM 0.8.0);
 # re-check it after OmniWM updates, since this override replaces it wholesale.
 [profiles.default]
+# active-window-wide hides itself on the notched built-in display.
+center = ["active-window-wide"]
 trailing = [
   "music", "usage", "github", "spend", "fleet",
   "media", "notifications", "volume", "wifi", "battery-details", "control-center", "system-stats", "clock",

@@ -5,6 +5,18 @@
 local sb = require("../lib/sb")
 
 local POOL = 5
+-- The built-in display's bar only has the strip right of the notch for the
+-- trailing lane, so five pills overflow under the notch. Collapse there.
+local URGENCY = { "waiting", "asking", "done", "working" }
+
+local function compact(ctx): boolean
+    local bar = ctx.data.bar
+    return bar ~= nil and string.find(bar.monitor or "", "Built%-in") ~= nil
+end
+
+local function pool(ctx): number
+    return if compact(ctx) then 0 else POOL
+end
 
 local STYLE = {
     waiting = { glyph = "⚠", level = "yellow" },
@@ -62,6 +74,24 @@ function render(ctx)
     if not list then
         return sb.hidden()
     end
+    if compact(ctx) then
+        -- One chip: the most urgent state's glyph plus the agent count.
+        local top = nil
+        for _, state in URGENCY do
+            for _, a in list do
+                if a.state == state then
+                    top = state
+                    break
+                end
+            end
+            if top then
+                break
+            end
+        end
+        local glyph, tone = style(top)
+        return sb.chip{ icon = glyph, label = tostring(#list), tone = tone, popout = true,
+            help = tostring(#list) .. " agents" }
+    end
     local row = { gap = 4 }
     for i, a in list do
         if i > POOL then
@@ -80,12 +110,13 @@ end
 
 function popout(ctx)
     local list = agents(ctx)
-    if not list or #list <= POOL then
+    local skip = pool(ctx)
+    if not list or #list <= skip then
         return sb.hidden()
     end
     local col = { gap = 4, pad = 8 }
     for i, a in list do
-        if i > POOL then
+        if i > skip then
             local glyph, tone = style(a.state)
             local label = (a.session or "") .. " " .. string.sub(a.task or "", 1, 24)
             col[#col + 1] = sb.chip{ key = a.pane, icon = glyph, label = label, tone = tone,
