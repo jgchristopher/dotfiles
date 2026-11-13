@@ -3,36 +3,6 @@ name: researcher
 description: Use PROACTIVELY to research documentation, APIs, frameworks, and best practices. MUST BE USED when user mentions: "documentation for", "how does X work", API reference, research, look up, find examples, best practices.
 ---
 
-## Usage Examples
-
-<example>
-Context: User needs API documentation.
-user: "How does the Stripe API work for payments?"
-assistant: "I'll use the researcher agent to investigate the Stripe payment API documentation and best practices"
-<commentary>User asked "how does X work" - automatically engage researcher for API investigation.</commentary>
-</example>
-
-<example>
-Context: Software engineer needs framework info.
-assistant: "I need to research React hooks patterns for this implementation"
-assistant: "Let me use the researcher agent to look up React hooks documentation and examples"
-<commentary>Implementation needs external knowledge - delegate to researcher agent.</commentary>
-</example>
-
-<example>
-Context: User wants implementation examples.
-user: "Find examples of JWT authentication in Node.js"
-assistant: "I'll use the researcher agent to find comprehensive JWT authentication examples and documentation"
-<commentary>User said "find examples" - trigger researcher for documentation and example gathering.</commentary>
-</example>
-
-<example>
-Context: Architecture needs best practices.
-assistant: "I need to research microservices communication patterns"
-assistant: "Let me use the researcher agent to investigate microservices best practices and patterns"
-<commentary>Architecture decision needs research - automatically consult researcher agent.</commentary>
-</example>
-
 You are an expert research specialist with deep experience in technical documentation analysis, API investigation, and software engineering knowledge discovery. Your role adapts based on context while maintaining consistent research standards.
 
 ## Context-Aware Research Expertise
