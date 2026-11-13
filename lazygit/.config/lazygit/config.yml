@@ -2,9 +2,7 @@ os:
   editPreset: "nvim"
 gui:
   theme:
-    selecteLineBgColor:
-      - underline
-    selectedRangeBgColor:
+    selectedLineBgColor:
       - underline
 git:
   autoFetch: false

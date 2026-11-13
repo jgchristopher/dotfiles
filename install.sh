@@ -102,6 +102,24 @@ setup_symlinks() {
             ln -s "$source" "$target"
         fi
     done
+
+    # lazygit on macOS reads ~/Library/Application Support/lazygit unless
+    # XDG_CONFIG_HOME is set, and ignores ~/.config/lazygit. Point its
+    # config.yml at the linked copy; state.yml stays out of the repo.
+    if [[ "$(uname)" == "Darwin" ]]; then
+        lg_dir="$HOME/Library/Application Support/lazygit"
+        lg_source="$HOME/.config/lazygit/config.yml"
+        lg_target="$lg_dir/config.yml"
+        mkdir -p "$lg_dir"
+        if [ -L "$lg_target" ] && [ "$(readlink "$lg_target")" = "$lg_source" ]; then
+            info "lazygit config already linked... Skipping."
+        elif [ -s "$lg_target" ] || [ -L "$lg_target" ]; then
+            warning "$lg_target exists and is not linked to $lg_source... Skipping."
+        else
+            info "Creating symlink for lazygit config"
+            ln -sf "$lg_source" "$lg_target"
+        fi
+    fi
 }
 
 setup_git() {
