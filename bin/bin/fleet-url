@@ -1,26 +1,80 @@
 #!/bin/bash
-# fleet://switch/<n>  ->  fleet notification-open %<n> - com.mitchellh.ghostty
+# fleet://switch/<n>  ->  show tmux pane %<n> in Ghostty
 #
 # Called by ~/Applications/FleetURL.app (./install.sh fleet-url-handler) when
 # an OmniShell fleet pill is clicked: OmniShell widgets can't run commands,
 # but they can open URLs. This is the only thing that URL can reach, so it
 # accepts exactly one shape and refuses everything else.
 #
-# notification-open (not `fleet switch`) because this runs outside tmux: it
-# picks the most recently active client, switches it to the pane, selects
-# the window + pane, then brings Ghostty forward. `fleet switch` with no
-# current client silently does nothing.
+# 1. A Ghostty window is already attached to the pane's session: select the
+#    pane's window + pane in tmux, then focus that Ghostty window through
+#    OmniWM. Windows are found by title, which tmux sets to "<session> · ..."
+#    (set-titles-string in tmux.conf).
+# 2. No client is attached to the session: open a new Ghostty window that
+#    attaches to it.
+# 3. A client is attached but its window can't be found (title not updated
+#    yet, OmniWM down): fall back to `fleet notification-open`, which switches
+#    the most recent client to the pane and brings Ghostty forward.
 set -euo pipefail
 export PATH="/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin"
 
 url="${1:-}"
 LOG="$HOME/.local/state/fleet-url.log"
 mkdir -p "${LOG%/*}"
+log() { echo "$(date '+%F %T') $*" >>"$LOG"; }
+
 if [[ ! "$url" =~ ^fleet://switch/([0-9]+)$ ]]; then
-  echo "$(date '+%F %T') refuse $url" >>"$LOG"
+  log "refuse $url"
   echo "fleet-url: refusing '$url'" >&2
   exit 64
 fi
-echo "$(date '+%F %T') switch %${BASH_REMATCH[1]}" >>"$LOG"
+pane="%${BASH_REMATCH[1]}"
 
-exec "${FLEET:-fleet}" notification-open "%${BASH_REMATCH[1]}" - com.mitchellh.ghostty
+if ! session=$(tmux display-message -p -t "$pane" '#{session_name}' 2>/dev/null); then
+  log "switch $pane: no such pane"
+  exit 0
+fi
+
+if [[ -z "$(tmux list-clients -t "=$session" -F x 2>/dev/null)" ]]; then
+  log "switch $pane: open new Ghostty window for '$session'"
+  tmux select-window -t "$pane"
+  tmux select-pane -t "$pane"
+  # Ghostty has no macOS IPC for "new window running X", so this starts a
+  # second Ghostty process. Without these flags it would also restore saved
+  # windows and outlive its only window.
+  exec open -na Ghostty.app --args --window-save-state=never \
+    --quit-after-last-window-closed=true -e tmux attach-session -t "=$session"
+fi
+
+tmux select-window -t "$pane"
+tmux select-pane -t "$pane"
+
+find_window() {
+  omniwmctl query windows --bundle-id com.mitchellh.ghostty --format json 2>/dev/null |
+    SESSION="$session" python3 -c '
+import json, os, sys
+prefix = os.environ["SESSION"] + " · "
+wins = json.load(sys.stdin)["result"]["payload"]["windows"]
+hits = [w for w in wins if w.get("title", "").startswith(prefix)]
+hits.sort(key=lambda w: w.get("focusRank", 1 << 30))
+print(hits[0]["id"] if hits else "")
+' 2>/dev/null || true
+}
+
+# tmux only resends a title when it changes, so a window can carry a pre-
+# "<session> · " title until its pane title next moves. The select-window
+# above usually triggers that; give it a moment to reach Ghostty.
+window=""
+for _ in 1 2 3 4 5 6; do
+  window=$(find_window)
+  [[ -n "$window" ]] && break
+  sleep 0.25
+done
+
+if [[ -n "$window" ]] && omniwmctl window focus "$window" >/dev/null 2>&1; then
+  log "switch $pane: focus '$session' window"
+  exit 0
+fi
+
+log "switch $pane: fallback notification-open"
+exec "${FLEET:-fleet}" notification-open "$pane" - com.mitchellh.ghostty
