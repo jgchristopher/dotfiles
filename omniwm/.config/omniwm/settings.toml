@@ -95,7 +95,7 @@ workspaceSwipeFingerCount = 3
 
 [hiddenBar]
 enabled = true
-hiddenBundleIDs = ["com.getcleanshot.app-setapp"]
+hiddenBundleIDs = ["com.getcleanshot.app-setapp", "anomaly.hex", "com.raycast.macos", "com.apple.SSMenuAgent"]
 rehideIntervalSeconds = 5.0
 
 [island]
@@ -235,7 +235,7 @@ weather = true
 [statusBar]
 showAppNames = false
 showIcon = true
-showWorkspaceName = false
+showWorkspaceName = true
 useWorkspaceId = false
 
 [statusMenu]

@@ -1,10 +1,9 @@
-# Widgets mirrored from sketchybar sit left of Default's own trailing group.
-# Built-in lane list copied from shell/default/shell.toml (OmniWM 0.8.0);
-# re-check it after OmniWM updates, since this override replaces it wholesale.
+
+[profiles]
+
 [profiles.default]
-# No focused-window title in the center lane.
 center = []
-trailing = [
-  "music", "usage", "github", "spend", "fleet",
-  "media", "notifications", "volume", "wifi", "battery-details", "control-center", "system-stats", "clock",
-]
+trailing = ["music", "usage", "github", "spend", "fleet", "displays", "media", "notifications", "volume", "wifi", "battery-details", "control-center", "system-stats", "clock"]
+
+[profiles.default.hiddenBar]
+rehideIntervalSeconds = 7.0
