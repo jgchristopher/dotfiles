@@ -53,7 +53,7 @@ size = 20.0
 bottom = 25.0
 left = 25.0
 right = 25.0
-top = 89.0
+top = 57.0
 
 [general]
 animationSpeed = 1.0
@@ -95,7 +95,7 @@ workspaceSwipeFingerCount = 3
 
 [hiddenBar]
 enabled = true
-hiddenBundleIDs = []
+hiddenBundleIDs = ["com.getcleanshot.app-setapp"]
 rehideIntervalSeconds = 5.0
 
 [island]
@@ -1654,7 +1654,7 @@ binding = "Unassigned"
 id = "toggleWorkspaceBarVisibility"
 
 [[hotkeys]]
-binding = "Unassigned"
+binding = "Control+Option+B"
 id = "toggleHiddenBarPanel"
 
 [[hotkeys]]
