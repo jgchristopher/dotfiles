@@ -8,7 +8,6 @@
     "commit": "",
     "pr": ""
   },
-  "includeCoAuthoredBy": false,
   "permissions": {
     "allow": [
       "Read",
@@ -75,7 +74,8 @@
       "mcp__claude_ai_Google_Drive__*",
       "mcp__claude_ai_Granola__*",
       "mcp__claude_ai_Slack__*",
-      "mcp__claude_ai_Netlify__*"
+      "mcp__claude_ai_Netlify__*",
+      "mcp__claude-in-chrome__computer"
     ],
     "deny": [
       "Read(./.env)",
